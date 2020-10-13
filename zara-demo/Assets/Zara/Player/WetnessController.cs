@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
-using UnityEngine;
 
 namespace ZaraEngine.Player
 {
@@ -43,9 +42,9 @@ namespace ZaraEngine.Player
 
         }
 
-        public void Check()
+        public void Check(float deltaTime)
         {
-            CheckForRain();
+            CheckForRain(deltaTime);
 
             if (CheckForUnderwater())
                 return;
@@ -56,13 +55,13 @@ namespace ZaraEngine.Player
             CheckForDrying();
         }
 
-        private void CheckForRain()
+        private void CheckForRain(float deltaTime)
         {
             if (_gc.Weather.RainIntensity > 0.05f)
             {
                 IsWet = _wetnessValue >= 1f;
 
-                var wetRate = _gc.Weather.RainIntensity * Time.deltaTime * RainWetnessGainRate;
+                var wetRate = _gc.Weather.RainIntensity * deltaTime * RainWetnessGainRate;
 
                 // Check for clothes water resistance
                 var waterResistance = _gc.Body.Clothes.Sum(x => x.WaterResistance);
@@ -73,7 +72,7 @@ namespace ZaraEngine.Player
 
                 wetRate *= (1 - waterResistance / 100f);
 
-                //Debug.Log("Wet rate " + wetRate + "% per second");
+                ////("Wet rate " + wetRate + "% per second");
 
                 _wetnessValue += wetRate;
 
@@ -125,7 +124,7 @@ namespace ZaraEngine.Player
             var heatBonus = 0f;
             var dryingRate = currentRate + heatBonus;
 
-            //Debug.Log("Drying rate " + dryingRate + "% per second");
+            ////("Drying rate " + dryingRate + "% per second");
 
             _wetnessValue -= dryingRate;
 

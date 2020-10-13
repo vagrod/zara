@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace ZaraEngine
 {
@@ -152,7 +151,7 @@ namespace ZaraEngine
             return false;
         } }
 
-        public bool Check()
+        public bool Check(float deltaTime)
         {
             if (_gc == null)
                 return false;
@@ -163,13 +162,13 @@ namespace ZaraEngine
             if (IsHappened && IsEnded)
             {
                 if (ChainedEvent != null)
-                    return ChainedEvent.Check();
+                    return ChainedEvent.Check(deltaTime);
             }
 
             if (_coundownTimer < _realSecondsBetweenChecks)
             {
-                if (Mathf.Abs(_updateRate) < 0.00001)
-                    _coundownTimer += Time.deltaTime;
+                if (Math.Abs(_updateRate) < 0.00001)
+                    _coundownTimer += deltaTime;
                 else 
                     _coundownTimer += _updateRate;
             }
@@ -189,10 +188,10 @@ namespace ZaraEngine
 
                         if (DurationPercentRandomizer != null)
                         {
-                            var durationPart = UnityEngine.Random.Range(DurationPercentRandomizer.First, DurationPercentRandomizer.Second) / 100f;
+                            var durationPart = Helpers.RollDice(DurationPercentRandomizer.First, DurationPercentRandomizer.Second) / 100f;
                             RealDuration = TimeSpan.FromSeconds(Duration.TotalSeconds * durationPart);
 
-                            Debug.Log(_name + " happened and will last for game's " + RealDuration.Hours + "h:" + RealDuration.Minutes + "m:" + RealDuration.Seconds + "s (until " + (_gc.WorldTime.Value + RealDuration).ToString("HH:mm") + ")");
+                            //(_name + " happened and will last for game's " + RealDuration.Hours + "h:" + RealDuration.Minutes + "m:" + RealDuration.Seconds + "s (until " + (_gc.WorldTime.Value + RealDuration).ToString("HH:mm") + ")");
                         }
 
                         _gameSecondsSinceEventStarted = 0;
@@ -211,7 +210,7 @@ namespace ZaraEngine
                         if (_eventEndHappenningAction != null)
                             _eventEndHappenningAction.Invoke(this);
 
-                        Debug.Log(_name + " ended");
+                        //(_name + " ended");
 
                         if (AutoReset)
                             Reset();
@@ -219,7 +218,7 @@ namespace ZaraEngine
                         {
                             //  Smooth transitions between chain nodes
                             if (ChainedEvent != null)
-                                return ChainedEvent.Check();
+                                return ChainedEvent.Check(deltaTime);
                         } 
                     }
                     else
@@ -237,11 +236,11 @@ namespace ZaraEngine
             return IsHappened && !IsEnded;
         }
 
-        public bool Check(int chanceOfHappening)
+        public bool Check(int chanceOfHappening, float deltaTime)
         {
             _chanceOfHappening = chanceOfHappening;
 
-            return Check();
+            return Check(deltaTime);
         }
 
         public void Debug_SetProbability(int value)

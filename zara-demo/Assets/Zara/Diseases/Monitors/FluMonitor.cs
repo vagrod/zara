@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
-using UnityEngine;
 
 namespace ZaraEngine.Diseases
 {
@@ -80,9 +79,9 @@ namespace ZaraEngine.Diseases
                             return;
                         }
 
-                        Debug.Log("You were wet in a cold weather. Flu will become active at " + _nextCheckTime.Value);
+                        //("You were wet in a cold weather. Flu will become active at " + _nextCheckTime.Value);
 
-                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(UnityEngine.Random.Range(FluDelayMinutesMin, FluDelayMinutesMax));
+                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(FluDelayMinutesMin, FluDelayMinutesMax));
                         _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Flu), _nextCheckTime.Value));
                     }
                 }
@@ -99,7 +98,7 @@ namespace ZaraEngine.Diseases
 
                     if (chance.WillHappen())
                     {
-                        Debug.Log("You were wet in a cold weather. Flu is active now.");
+                        //("You were wet in a cold weather. Flu is active now.");
 
                         if (activeFlu != null)
                         {
@@ -110,7 +109,7 @@ namespace ZaraEngine.Diseases
                             return;
                         }
 
-                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(UnityEngine.Random.Range(FluDelayMinutesMin, FluDelayMinutesMax));
+                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(FluDelayMinutesMin, FluDelayMinutesMax));
                         _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Flu), _nextCheckTime.Value));
                     }
                 }
@@ -127,7 +126,7 @@ namespace ZaraEngine.Diseases
 
                     if (chance.WillHappen())
                     {
-                        Debug.Log("You were wet in a cold weather. Flu is active now.");
+                        //("You were wet in a cold weather. Flu is active now.");
 
                         if (activeFlu != null)
                         {
@@ -138,7 +137,7 @@ namespace ZaraEngine.Diseases
                             return;
                         }
 
-                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(UnityEngine.Random.Range(FluDelayMinutesMin, FluDelayMinutesMax));
+                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(FluDelayMinutesMin, FluDelayMinutesMax));
                         _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Flu), _nextCheckTime.Value));
                     }
                 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
 using ZaraEngine.Player;
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine
 {
@@ -45,12 +44,12 @@ namespace ZaraEngine.HealthEngine
             _intenseRunningOffEvent = new FixedEvent("Intence running off trigger", ev => Events.NotifyAll(l => l.IntenseRunningTriggeredOff())) { AutoReset = true };
         }
 
-        public void Update(float gameSecondsSinceLastCall)
+        public void Update(float gameSecondsSinceLastCall, float deltaTime)
         {
-            ProcessRunningEffects(gameSecondsSinceLastCall);
+            ProcessRunningEffects(gameSecondsSinceLastCall, deltaTime);
         }
 
-        private void ProcessRunningEffects(float gameSecondsSinceLastCall)
+        private void ProcessRunningEffects(float gameSecondsSinceLastCall, float deltaTime)
         {
             if (_healthController.UnconsciousMode)
                 return;
@@ -75,16 +74,16 @@ namespace ZaraEngine.HealthEngine
 
             var runningPerc = _gameSecondsInRunningState / SecondsUntilMaxRunningDeltaReached;
 
-            BloodPressureTopBonus = Mathf.Lerp(0f, MaxBloodPressureBonus, runningPerc);
-            BloodPressureBottomBonus = Mathf.Lerp(0f, MaxBloodPressureBonus, runningPerc);
-            HeartRateBonus = Mathf.Lerp(0f, MaxHeartRateBonus, runningPerc);
-            BodyTemperatureBonus = Mathf.Lerp(0f, MaxBodyTemperatureBonus, runningPerc);
+            BloodPressureTopBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, runningPerc);
+            BloodPressureBottomBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, runningPerc);
+            HeartRateBonus = Helpers.Lerp(0f, MaxHeartRateBonus, runningPerc);
+            BodyTemperatureBonus = Helpers.Lerp(0f, MaxBodyTemperatureBonus, runningPerc);
 
             if (_gameSecondsInRunningState > SecondsOfRunningBeforeWheeze)
             {
                 if (!_isWheezeEventTriggered)
                 {
-                    _intenseRunningOnEvent.Invoke();
+                    _intenseRunningOnEvent.Invoke(deltaTime);
                     _isWheezeEventTriggered = true;
                 }
             }
@@ -94,7 +93,7 @@ namespace ZaraEngine.HealthEngine
                 {
                     if (_isWheezeEventTriggered)
                     {
-                        _intenseRunningOffEvent.Invoke();
+                        _intenseRunningOffEvent.Invoke(deltaTime);
                         _isWheezeEventTriggered = false;
                     }
                 }

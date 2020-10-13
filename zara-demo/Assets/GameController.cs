@@ -11,8 +11,6 @@ using ZaraEngine.HealthEngine;
 public class GameController : MonoBehaviour, IGameController
 {
 
-    private DateTime? _worldTime;
-
     private IPlayerStatus _player;
 
     private BodyStatusController _body;
@@ -34,7 +32,8 @@ public class GameController : MonoBehaviour, IGameController
     // Start is called before the first frame update
     void Start()
     {
-        _worldTime = DateTime.Now;
+        ZaraEngine.Helpers.InitializeRandomizer((a, b) => UnityEngine.Random.Range(a, b));
+
         _timeOfDay = TimesOfDay.Evening;
         _health = new HealthController(this);
         _body = new BodyStatusController(this);
@@ -51,7 +50,7 @@ public class GameController : MonoBehaviour, IGameController
     // Update is called once per frame
     void Update()
     {
-        _body.Check();
+        _body.Check(Time.deltaTime);
         _health.Check(Time.deltaTime);
 
         BodyTempText.text = _health.Status.BodyTemperature.ToString("00.0");
@@ -59,7 +58,7 @@ public class GameController : MonoBehaviour, IGameController
 
     #region IGameController Implementation
 
-    public DateTime? WorldTime => _worldTime;
+    public DateTime? WorldTime => DateTime.Now;
 
     public IPlayerStatus Player => _player;
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace ZaraEngine
 {
@@ -66,9 +65,9 @@ namespace ZaraEngine
             
         }
 
-        public void Check()
+        public void Check(float deltaTime)
         {
-            if (!_gc.WorldTime.HasValue || _isPaused || Mathf.Abs(_lerpDurationInGameSeconds) < 0.00001)
+            if (!_gc.WorldTime.HasValue || _isPaused || Math.Abs(_lerpDurationInGameSeconds) < 0.00001)
                 return;
 
             if (_previousCheckGameTime == default(DateTime))
@@ -90,11 +89,11 @@ namespace ZaraEngine
                 }
 
                 _previousCheckGameTime = _gc.WorldTime.Value;
-                _setValueAction(Mathf.Lerp(_currentStartValue, _currentTargetValue, _lerpDuration / _lerpDurationInGameSeconds));
+                _setValueAction(Helpers.Lerp(_currentStartValue, _currentTargetValue, _lerpDuration / _lerpDurationInGameSeconds));
             }
             else
             {
-                _lerpCounter += Time.deltaTime;
+                _lerpCounter += deltaTime;
             }
         }
             

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine
 {
@@ -29,19 +28,19 @@ namespace ZaraEngine.HealthEngine
             _freezedByInventoryOverloadEvent = new FixedEvent("Player freezed by inventory overload", ev => Events.NotifyAll(l => l.InventoryOverload())) { AutoReset = true };
         }
 
-        public void Update()
+        public void Update(float deltaTime)
         {
-            ProcessInventoryEffects();
+            ProcessInventoryEffects(deltaTime);
         }
 
-        private void ProcessInventoryEffects()
+        private void ProcessInventoryEffects(float deltaTime)
         {
             if (_gc.Inventory.RoughWeight >= InventoryController.MaximumInventoryWeight)
             {
                 if (!IsFreezed)
                 {
                     IsFreezed = true;
-                    _freezedByInventoryOverloadEvent.Invoke();
+                    _freezedByInventoryOverloadEvent.Invoke(deltaTime);
                 }
 
                 return;
@@ -51,9 +50,9 @@ namespace ZaraEngine.HealthEngine
 
             var invPerc = _gc.Inventory.RoughWeight / InventoryController.MaximumInventoryWeight;
 
-            PlayerRunSpeedBonus = -Mathf.Lerp(0f, _gc.Player.RunSpeed / 2f, invPerc);
-            PlayerWalkSpeedBonus = -Mathf.Lerp(0f, _gc.Player.WalkSpeed / 2f, invPerc);
-            PlayerCrouchSpeedBonus = -Mathf.Lerp(0f, _gc.Player.CrouchSpeed / 3f, invPerc);
+            PlayerRunSpeedBonus = -Helpers.Lerp(0f, _gc.Player.RunSpeed / 2f, invPerc);
+            PlayerWalkSpeedBonus = -Helpers.Lerp(0f, _gc.Player.WalkSpeed / 2f, invPerc);
+            PlayerCrouchSpeedBonus = -Helpers.Lerp(0f, _gc.Player.CrouchSpeed / 3f, invPerc);
         }
 
     }

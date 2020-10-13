@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace ZaraEngine
 {
@@ -109,11 +108,11 @@ namespace ZaraEngine
             _chanceOfHappening = value;
         }
 
-        public bool Check(int chanceOfHappening)
+        public bool Check(int chanceOfHappening, float deltaTime)
         {
             _chanceOfHappening = chanceOfHappening;
 
-            return Check();
+            return Check(deltaTime);
         }
 
         public bool ChainEnded()
@@ -138,20 +137,20 @@ namespace ZaraEngine
             }
         }
 
-        public bool Check()
+        public bool Check(float deltaTime)
         {
             if (IsHappened)
             {
                 if (ChainedEvent != null)
-                    return ChainedEvent.Check();
+                    return ChainedEvent.Check(deltaTime);
 
                 return false;
             }
 
             if (_coundownTimer < _realSecondsBetweenChecks)
             {
-                if (Mathf.Abs(_updateRate) < 0.000001)
-                    _coundownTimer += Time.deltaTime;
+                if (Math.Abs(_updateRate) < 0.000001)
+                    _coundownTimer += deltaTime;
                 else 
                     _coundownTimer += _updateRate;
             }
@@ -160,7 +159,7 @@ namespace ZaraEngine
                 if (_coundownTimer >= _realSecondsBetweenChecks)
                     _coundownTimer = 0;
 
-                Debug.Log(_name);
+                //(_name);
 
                 // Check for event chance
                 var willHappen = _chanceOfHappening.WillHappen();

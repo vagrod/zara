@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using ZaraEngine.HealthEngine;
 using ZaraEngine.Inventory;
 using Foundation.Databinding;
-using UnityEngine;
 
 namespace ZaraEngine.Player
 {
@@ -105,7 +104,7 @@ namespace ZaraEngine.Player
             return (finalTemp * (1f - coldResistance / 100f)) - (comfortTemperatureNaked - coldResistance / 2f) + finalTemp * (coldResistance / 100f);
         }
 
-        public void Check()
+        public void Check(float deltaTime)
         {
 
             #region Lerping Warmth Level
@@ -114,16 +113,16 @@ namespace ZaraEngine.Player
             {
 
                 if (_warmthLerpCounter < WarmthLevelUpdateInterval)
-                    _warmthLerpCounter += Time.deltaTime;
+                    _warmthLerpCounter += deltaTime;
 
-                WarmthLevelCached = Mathf.Lerp(_warmthLerpBase, _warmthLerpTarget, _warmthLerpCounter.Value / WarmthLevelUpdateInterval);
+                WarmthLevelCached = Helpers.Lerp(_warmthLerpBase, _warmthLerpTarget, _warmthLerpCounter.Value / WarmthLevelUpdateInterval);
             }
 
             #endregion
 
             #region Warmth Level Refresh
 
-            _warmthLevelTimeoutCounter += Time.deltaTime;
+            _warmthLevelTimeoutCounter += deltaTime;
 
             if (_warmthLevelTimeoutCounter > WarmthLevelUpdateInterval)
             {
@@ -140,13 +139,13 @@ namespace ZaraEngine.Player
 
             #region Wetness Level Refresh
 
-            _wetnessLevelTimeoutCounter += Time.deltaTime;
+            _wetnessLevelTimeoutCounter += deltaTime;
 
             if (_wetnessLevelTimeoutCounter > WetnessLevelUpdateInterval)
             {
                 _wetnessLevelTimeoutCounter = 0f;
 
-                _wetnessController.Check();
+                _wetnessController.Check(deltaTime);
             }
 
             #endregion

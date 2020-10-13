@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Diseases;
 using ZaraEngine.Injuries;
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine
 {
-    [Serializable]
     public class HealthState
     {
 
@@ -18,67 +16,46 @@ namespace ZaraEngine.HealthEngine
             ActiveInjuries = new List<ActiveInjury>();
         }
 
-        [SerializeField]
         public float BloodPressureTop { get; set; }
 
-        [SerializeField]
         public float BloodPressureBottom { get; set; }
 
-        [SerializeField]
         public float HeartRate { get; set; }
 
-        [SerializeField]
         public float BloodPercentage { get; set; }
 
-        [SerializeField]
         public float FoodPercentage { get; set; }
 
-        [SerializeField]
         public float WaterPercentage { get; set; }
 
-        [SerializeField]
         public float StaminaPercentage { get; set; }
 
-        [SerializeField]
         public float FatiguePercentage { get; set; }
 
-        [SerializeField]
         public float BodyTemperature { get; set; }
 
-        [SerializeField]
         public List<ActiveDisease> ActiveDiseases { get; set; }
 
-        [SerializeField]
         public List<ActiveInjury> ActiveInjuries { get; set; }
 
-        [SerializeField]
         public DateTime LastSleepTime { get; set; }
 
-        [SerializeField]
         public DateTime CheckTime { get; set; }
 
-        [SerializeField]
         public bool IsBloodLoss { get; set; }
 
-        [SerializeField]
         public bool IsActiveInjury { get; set; }
 
-        [SerializeField]
         public bool IsActiveDisease { get; set; }
 
-        [SerializeField]
         public bool IsFoodDisgust { get; set; }
 
-        [SerializeField]
         public bool IsSleepDisorder { get; set; }
 
-        [SerializeField]
         public bool CannotRun { get; set; }
 
-        [SerializeField]
         public bool IsLegFracture { get; set; }
 
-        [SerializeField]
         public DiseaseLevels ActiveDiseasesWorstLevel { get; set; }
 
         public static HealthState Empty { get { return default(HealthState); } }

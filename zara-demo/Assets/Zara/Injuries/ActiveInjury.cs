@@ -3,7 +3,6 @@ using System.Linq;
 using ZaraEngine.Diseases;
 using ZaraEngine.Injuries.Stages;
 using ZaraEngine.Inventory;
-using UnityEngine;
 
 namespace ZaraEngine.Injuries
 {
@@ -78,13 +77,10 @@ namespace ZaraEngine.Injuries
             get { return _isInjuryActivated; }
         }
 
-        [SerializeField]
         public BodyParts BodyPart { get; set; }
 
-        [SerializeField]
         public InjuryBase Injury { get; set; }
 
-        [SerializeField]
         public DateTime InjuryTriggerTime { get; set; }
 
         public InjuryStage TreatedStage { get; private set; }
@@ -200,7 +196,7 @@ namespace ZaraEngine.Injuries
                 {
                     if (stage.Level != DiseaseLevels.Critical)
                     {
-                        stage.StageDuration = TimeSpan.FromMinutes(UnityEngine.Random.Range(7, 14));
+                        stage.StageDuration = TimeSpan.FromMinutes(Helpers.RollDice(7, 14));
                     }
                 }
                 else

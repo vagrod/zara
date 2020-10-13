@@ -26,7 +26,7 @@ namespace ZaraEngine
 
         bool IsActive { get; }
 
-        bool Check();
+        bool Check(float deltaTime);
 
         void Reset();
 

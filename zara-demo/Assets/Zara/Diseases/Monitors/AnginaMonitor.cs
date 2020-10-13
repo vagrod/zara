@@ -87,7 +87,7 @@ namespace ZaraEngine.Diseases
 
             if (mustTriggerDisease)
             {
-                var diseaseStime = _gc.WorldTime.Value.AddMinutes(UnityEngine.Random.Range(AnginaDelayMinutesMin, AnginaDelayMinutesMax));
+                var diseaseStime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(AnginaDelayMinutesMin, AnginaDelayMinutesMax));
                 _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Angina), diseaseStime));
             }
         }

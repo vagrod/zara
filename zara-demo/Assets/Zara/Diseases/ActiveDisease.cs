@@ -6,7 +6,6 @@ using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Diseases.Stages.Fluent;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
-using UnityEngine;
 
 namespace ZaraEngine.Diseases
 {
@@ -88,10 +87,8 @@ namespace ZaraEngine.Diseases
             get { return _isSelfHealActive; }
         }
 
-        [SerializeField]
         public DiseaseDefinitionBase Disease { get; private set; }
 
-        [SerializeField]
         public DateTime DiseaseStartTime { get; private set; }
 
         #endregion
@@ -149,7 +146,7 @@ namespace ZaraEngine.Diseases
         {
             if (stage.SelfHealChance.WillHappen())
             {
-                Debug.Log(Disease.Name + " will self-heal");
+                //(Disease.Name + " will self-heal");
 
                 _isSelfHealActive = true;
 
@@ -168,7 +165,7 @@ namespace ZaraEngine.Diseases
                 symtomesToRemove.Clear();
 
                 // Adding heal disease stage
-                var healStage = HealthyStageFactory.Get(DiseaseLevels.HealthyStage, UnityEngine.Random.Range(15, 65));
+                var healStage = HealthyStageFactory.Get(DiseaseLevels.HealthyStage, Helpers.RollDice(15, 65));
 
                 // Compute timing 
                 healStage.WillTriggerAt = stage.WillEndAt;
@@ -259,7 +256,7 @@ namespace ZaraEngine.Diseases
 
                     if (stage.Level != DiseaseLevels.Critical)
                     {
-                        stage.StageDuration = TimeSpan.FromMinutes(UnityEngine.Random.Range(7, 14));
+                        stage.StageDuration = TimeSpan.FromMinutes(Helpers.RollDice(7, 14));
                     }
                 }
 

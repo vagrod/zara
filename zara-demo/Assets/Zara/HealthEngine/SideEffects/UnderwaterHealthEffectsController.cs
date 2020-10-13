@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Player;
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine
 {
@@ -50,12 +49,12 @@ namespace ZaraEngine.HealthEngine
             _playHardBreath     = new FixedEvent("Off-water hard breath",   ev => Events.NotifyAll(l => l.SwimmingOffWaterHardBreath())) { AutoReset = true };
         }
 
-        public void Update(float gameSecondsSinceLastCall)
+        public void Update(float gameSecondsSinceLastCall, float deltaTime)
         {
-            ProcessUnderwaterEffects(gameSecondsSinceLastCall);
+            ProcessUnderwaterEffects(gameSecondsSinceLastCall, deltaTime);
         }
 
-        private void ProcessUnderwaterEffects(float gameSecondsSinceLastCall)
+        private void ProcessUnderwaterEffects(float gameSecondsSinceLastCall, float deltaTime)
         {
             if (!_lastUnderWaterState && !_gc.Player.IsUnderWater)
             {
@@ -67,24 +66,24 @@ namespace ZaraEngine.HealthEngine
                     if (OxygenLevel > 100f)
                         OxygenLevel = 100f;
 
-                    CalculateVitalsBonus();
+                    CalculateVitalsBonus(deltaTime);
                 }
             }
             else
             {
                 // Drain oxygen level
                 OxygenLevel -= UnderwaterOxygenDrainRate * gameSecondsSinceLastCall + MaxFatigueImpactOnOxygenConsuming * (_healthController.Status.FatiguePercentage / 100f);
-                CalculateVitalsBonus();
+                CalculateVitalsBonus(deltaTime);
             }
 
             if (_lastUnderWaterState && !_gc.Player.IsUnderWater)
             {
-                //if (OxygenLevel < 20f)
-                //    _playHardBreath.Invoke();
-                //else if (OxygenLevel < 40f)
-                //    _playMediumBreath.Invoke();
-                //else if (OxygenLevel < 70f)
-                //    _playLightBreath.Invoke();
+                if (OxygenLevel < 20f)
+                    _playHardBreath.Invoke(deltaTime);
+                else if (OxygenLevel < 40f)
+                    _playMediumBreath.Invoke(deltaTime);
+                else if (OxygenLevel < 70f)
+                    _playLightBreath.Invoke(deltaTime);
 
                 _lastUnderWaterState = _gc.Player.IsUnderWater;
             }
@@ -95,20 +94,20 @@ namespace ZaraEngine.HealthEngine
             }            
         }
 
-        private void CalculateVitalsBonus()
+        private void CalculateVitalsBonus(float deltaTime)
         {
             if (OxygenLevel <= 0f)
             {
-                _drowningDeathEvent.Invoke();
+                _drowningDeathEvent.Invoke(deltaTime);
 
                 return;
             }
 
             var oxyPercent = 1 - OxygenLevel / 100f;
 
-            BloodPressureTopBonus = Mathf.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
-            BloodPressureBottomBonus = Mathf.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
-            HeartRateBonus = Mathf.Lerp(0f, MaxHeartRateBonus, oxyPercent);
+            BloodPressureTopBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
+            BloodPressureBottomBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
+            HeartRateBonus = Helpers.Lerp(0f, MaxHeartRateBonus, oxyPercent);
         }
 
     }

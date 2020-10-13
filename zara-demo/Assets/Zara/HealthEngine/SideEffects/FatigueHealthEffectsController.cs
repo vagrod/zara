@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Player;
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine
 {
@@ -38,9 +37,9 @@ namespace ZaraEngine.HealthEngine
             if (fatiguePerc > 1f)
                 fatiguePerc = 1f;
 
-            BloodPressureTopBonus = -Mathf.Lerp(0f, MaxBloodPressureBonus, fatiguePerc);
-            BloodPressureBottomBonus = -Mathf.Lerp(0f, MaxBloodPressureBonus, fatiguePerc);
-            HeartRateBonus = -Mathf.Lerp(0f, MaxHeartRateBonus, fatiguePerc);
+            BloodPressureTopBonus = -Helpers.Lerp(0f, MaxBloodPressureBonus, fatiguePerc);
+            BloodPressureBottomBonus = -Helpers.Lerp(0f, MaxBloodPressureBonus, fatiguePerc);
+            HeartRateBonus = -Helpers.Lerp(0f, MaxHeartRateBonus, fatiguePerc);
         }
 
     }

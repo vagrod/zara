@@ -20,7 +20,7 @@ namespace ZaraEngine
 
         public float GetRandom()
         {
-            return UnityEngine.Random.Range(Minimum, Maximum);
+            return Helpers.RollDice(Minimum, Maximum);
         }
 
     }

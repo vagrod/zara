@@ -5,7 +5,6 @@ using System.Text;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
 using ZaraEngine.Player;
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine {
     public class MedicalAgentsSideEffectsController {

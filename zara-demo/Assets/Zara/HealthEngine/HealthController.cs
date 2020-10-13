@@ -9,7 +9,6 @@ using ZaraEngine.Injuries;
 using ZaraEngine.Injuries.Stages;
 using ZaraEngine.Inventory;
 using Foundation.Databinding;
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine {
     [Serializable]
@@ -358,7 +357,6 @@ namespace ZaraEngine.HealthEngine {
             _clothesSideEffects.Initialize();
         }
 
-        [SerializeField]
         public HealthState Status { get; set; }
 
         public void Check(float deltaTime) {
@@ -397,9 +395,9 @@ namespace ZaraEngine.HealthEngine {
             _lastUpdateGameTime = _gc.WorldTime.Value;
 
             // Side effects update
-            _underwaterEffects.Update(gameSecondsSinceLastCall);
-            _runningEffects.Update(gameSecondsSinceLastCall);
-            _inventoryEffects.Update();
+            _underwaterEffects.Update(gameSecondsSinceLastCall, deltaTime);
+            _runningEffects.Update(gameSecondsSinceLastCall, deltaTime);
+            _inventoryEffects.Update(deltaTime);
             _medicalAgentsEffects.Check();
             _consumablesSideEffects.Check();
             _clothesSideEffects.Check();
@@ -431,7 +429,7 @@ namespace ZaraEngine.HealthEngine {
             newState.BloodPressureBottom = _healthyStatus.BloodPressureBottom;
 
             AddSideEffectsVitalsBonuses(newState);
-            ProcessStaminaEffects(newState, gameSecondsSinceLastCall);
+            ProcessStaminaEffects(newState, gameSecondsSinceLastCall, deltaTime);
 
             #endregion
 
@@ -550,20 +548,20 @@ namespace ZaraEngine.HealthEngine {
 
             #region Blood Regain
 
-            newState.BloodPercentage += Mathf.Lerp(0f, MaximumBloodRegainRatePerSecond, newState.FoodPercentage / 100f);
+            newState.BloodPercentage += Helpers.Lerp(0f, MaximumBloodRegainRatePerSecond, newState.FoodPercentage / 100f);
 
             #endregion
 
-            ProcessCommonEffects(newState);
-            ProcessFatigueEffects(newState);
-            ProcessSedativeEffects();
+            ProcessCommonEffects(newState, deltaTime);
+            ProcessFatigueEffects(newState, deltaTime);
+            ProcessSedativeEffects(deltaTime);
 
             // Check for deaths from natural causes 
-            CheckVitalsDeath(newState);
-            CheckCommonDeath(newState);
-            CheckDiseaseDeath(superStage);
-            CheckOverdoseDeath();
-            CheckHeartFailureDeath();
+            CheckVitalsDeath(newState, deltaTime);
+            CheckCommonDeath(newState, deltaTime);
+            CheckDiseaseDeath(superStage, deltaTime);
+            CheckOverdoseDeath(deltaTime);
+            CheckHeartFailureDeath(deltaTime);
 
             // We're done with all checks
             Status = newState;
@@ -656,7 +654,7 @@ namespace ZaraEngine.HealthEngine {
 
             _vitalsFluctuateEquilibrium += multiplier;
 
-            if (Mathf.Abs(_vitalsFluctuateEquilibrium) > VitalsFluctuateEquilibriumMargin)
+            if (Math.Abs(_vitalsFluctuateEquilibrium) > VitalsFluctuateEquilibriumMargin)
                 return;
 
             newState.HeartRate += HeartRateFluctuationDelta * multiplier;
@@ -664,16 +662,16 @@ namespace ZaraEngine.HealthEngine {
             newState.BloodPressureTop += BloodPressureTopFluctuationDelta * multiplier;
             newState.BloodPressureBottom -= BloodPressureBottomFluctuationDelta * multiplier;
 
-            if (Mathf.Abs(_etalonStatus.HeartRate - newState.HeartRate) > VitalsFluctuateEquilibriumMargin * HeartRateFluctuationDelta)
+            if (Math.Abs(_etalonStatus.HeartRate - newState.HeartRate) > VitalsFluctuateEquilibriumMargin * HeartRateFluctuationDelta)
                 newState.HeartRate -= HeartRateFluctuationDelta * multiplier;
 
-            if (Mathf.Abs(_etalonStatus.BodyTemperature - newState.BodyTemperature) > VitalsFluctuateEquilibriumMargin * BodyTemperatureFluctuationDelta)
+            if (Math.Abs(_etalonStatus.BodyTemperature - newState.BodyTemperature) > VitalsFluctuateEquilibriumMargin * BodyTemperatureFluctuationDelta)
                 newState.BodyTemperature += BodyTemperatureFluctuationDelta * multiplier;
 
-            if (Mathf.Abs(_etalonStatus.BloodPressureTop - newState.BloodPressureTop) > VitalsFluctuateEquilibriumMargin * BloodPressureTopFluctuationDelta)
+            if (Math.Abs(_etalonStatus.BloodPressureTop - newState.BloodPressureTop) > VitalsFluctuateEquilibriumMargin * BloodPressureTopFluctuationDelta)
                 newState.BloodPressureTop -= BloodPressureTopFluctuationDelta * multiplier;
 
-            if (Mathf.Abs(_etalonStatus.BloodPressureBottom - newState.BloodPressureBottom) > VitalsFluctuateEquilibriumMargin * BloodPressureBottomFluctuationDelta)
+            if (Math.Abs(_etalonStatus.BloodPressureBottom - newState.BloodPressureBottom) > VitalsFluctuateEquilibriumMargin * BloodPressureBottomFluctuationDelta)
                 newState.BloodPressureBottom += BloodPressureBottomFluctuationDelta * multiplier;
         }
 
@@ -699,14 +697,14 @@ namespace ZaraEngine.HealthEngine {
             }
         }
 
-        private void ProcessStaminaEffects(HealthState state, float gameSecondsSinceLastCall) {
+        private void ProcessStaminaEffects(HealthState state, float gameSecondsSinceLastCall, float deltaTime) {
             if (UnconsciousMode)
                 return;
 
             if (state.StaminaPercentage < 0.001f && (_gc.Player.IsSwimming || _gc.Player.IsUnderWater))
             {
                 // Drown
-                _drowningEvent.Invoke();
+                _drowningEvent.Invoke(deltaTime);
             }
 
             // Reading cached value here
@@ -720,7 +718,7 @@ namespace ZaraEngine.HealthEngine {
             // Leg is broken
             if (Status.IsLegFracture)
             {
-                Debug.Log("Player speed reduced by leg fracture");
+                //("Player speed reduced by leg fracture");
 
                 Events.NotifyAll(l => l.MovementSpeedChange(CriticalCrouchSpeed,CriticalCrouchSpeed,CriticalCrouchSpeed));
 
@@ -745,12 +743,12 @@ namespace ZaraEngine.HealthEngine {
             }
 
             if (Status.StaminaPercentage < StaminaLevelAffectingPlayerSpeed) {
-                Debug.Log("Player speed reduced by stamina");
+                //("Player speed reduced by stamina");
 
                 Events.NotifyAll(l => l.MovementSpeedChange(CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
             } else {
                 if (state.FatiguePercentage > StaminaLevelRecoveringPlayerSpeed) {
-                    Debug.Log("Player speed reduced by fatigue");
+                    //("Player speed reduced by fatigue");
 
                     Events.NotifyAll(l => l.MovementSpeedChange(CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
                 } else {
@@ -769,7 +767,7 @@ namespace ZaraEngine.HealthEngine {
 
         private void ProcessDiseaseLevelEffects(DiseaseStage superStage) {
             if (superStage.CannotRun || superStage.Level == DiseaseLevels.Critical) {
-                Debug.Log("Player speed reduced by disease");
+                //("Player speed reduced by disease");
 
                 Events.NotifyAll(l => l.MovementSpeedChange(CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
             }
@@ -790,22 +788,22 @@ namespace ZaraEngine.HealthEngine {
                 // Take away bonus effects for a snapshot. We need 'clean' one.
                 TakeAwaySideEffectsVitalsBonuses(_healthSnapshot);
 
-                Debug.Log ("Health snapshot taken");
+                //("Health snapshot taken");
             }
 
             _previousDiseaseVitalsChangeRate = vitalsChangeRate;
 
             if (superStage.TargetBodyTemperature.HasValue)
-                newState.BodyTemperature = Mathf.Lerp(_healthSnapshot.BodyTemperature, superStage.TargetBodyTemperature.Value, vitalsChangeRate);
+                newState.BodyTemperature = Helpers.Lerp(_healthSnapshot.BodyTemperature, superStage.TargetBodyTemperature.Value, vitalsChangeRate);
 
             if (superStage.TargetHeartRate.HasValue)
-                newState.HeartRate = Mathf.Lerp(_healthSnapshot.HeartRate, superStage.TargetHeartRate.Value, vitalsChangeRate);
+                newState.HeartRate = Helpers.Lerp(_healthSnapshot.HeartRate, superStage.TargetHeartRate.Value, vitalsChangeRate);
 
             if (superStage.TargetBloodPressureTop.HasValue)
-                newState.BloodPressureTop = Mathf.Lerp(_healthSnapshot.BloodPressureTop, superStage.TargetBloodPressureTop.Value, vitalsChangeRate);
+                newState.BloodPressureTop = Helpers.Lerp(_healthSnapshot.BloodPressureTop, superStage.TargetBloodPressureTop.Value, vitalsChangeRate);
 
             if (superStage.TargetBloodPressureBottom.HasValue)
-                newState.BloodPressureBottom = Mathf.Lerp(_healthSnapshot.BloodPressureBottom, superStage.TargetBloodPressureBottom.Value, vitalsChangeRate);
+                newState.BloodPressureBottom = Helpers.Lerp(_healthSnapshot.BloodPressureBottom, superStage.TargetBloodPressureBottom.Value, vitalsChangeRate);
 
             if (!UnconsciousMode) {
                 if (superStage.StaminaDrainPerSecond.HasValue)
@@ -857,43 +855,43 @@ namespace ZaraEngine.HealthEngine {
 
         #region Checking Events Chances
 
-        private void CheckVitalsDeath(HealthState newState) {
+        private void CheckVitalsDeath(HealthState newState, float deltaTime) {
             if (newState.BloodPressureTop <= DangerousBloodPressureTop || newState.BloodPressureBottom <= DangerousBloodPressureBottom ||
                 newState.BloodPressureTop > CriticalBloodPressureTop ||
                 newState.HeartRate > CriticalMaximumHeartRate || newState.HeartRate <= CriticalMinimumHeartRate || 
                 newState.BloodPressureBottom > CriticalBloodPressureBottom || newState.BodyTemperature > CriticalMaximumBodyTemperature || newState.BodyTemperature <= CriticalMinimumBodyTemperature) {
-                _vitalsDeathEvent.Check();
+                _vitalsDeathEvent.Check(deltaTime);
             }
         }
 
-        private void CheckCommonDeath(HealthState newState)
+        private void CheckCommonDeath(HealthState newState, float deltaTime)
         {
             if (newState.BloodPercentage < BloodLevelDeathLevel)
             {
                 // Bloood death chance
-                _bloodLevelDeathEvent.Check();
+                _bloodLevelDeathEvent.Check(deltaTime);
             }
 
             if (newState.WaterPercentage < WaterLevelDeathLevel)
             {
                 // Dehydration death chance
-                _dehydrationDeathEvent.Check();
+                _dehydrationDeathEvent.Check(deltaTime);
             }
 
             if (newState.FoodPercentage < FoodLevelDeathLevel)
             {
                 // Starvation death chance
-                _starvationDeathEvent.Check();
+                _starvationDeathEvent.Check(deltaTime);
             }
         }
 
-        private void ProcessCommonEffects(HealthState newState)
+        private void ProcessCommonEffects(HealthState newState, float deltaTime)
         {
             if (newState.BloodPressureTop > HighTopBloodPressureLevel)
             {
                 if (!_isHighPressureEventTriggered)
                 {
-                    _highPressureEvent.Invoke();
+                    _highPressureEvent.Invoke(deltaTime);
                     _isHighPressureEventTriggered = true;
                 }
             }
@@ -903,7 +901,7 @@ namespace ZaraEngine.HealthEngine {
                 {
                     if (_isHighPressureEventTriggered)
                     {
-                        _normalPressureEvent.Invoke();
+                        _normalPressureEvent.Invoke(deltaTime);
                         _isHighPressureEventTriggered = false;
                     }
                 }
@@ -912,61 +910,61 @@ namespace ZaraEngine.HealthEngine {
             if (newState.BodyTemperature < LowBodyTemperatureDizzinessLevel)
             {
                 // Low body temperature dizziness chance
-                _lowBodyTemperatureDizzinessEvent.Check();
+                _lowBodyTemperatureDizzinessEvent.Check(deltaTime);
             }
 
             if (newState.BodyTemperature < LowBodyTemperatureBlackoutLevel)
             {
                 // Low body temperature blackout chance
-                _lowBodyTemperatureBlackoutsEvent.Check();
+                _lowBodyTemperatureBlackoutsEvent.Check(deltaTime);
             }
 
             if (newState.BloodPercentage < BloodLevelDizzinessLevel)
             {
                 // Bloood dizziness chance
-                _bloodLevelDizzinessEvent.Check();
+                _bloodLevelDizzinessEvent.Check(deltaTime);
             }
 
             if (newState.BloodPercentage < BloodLevelBlackoutLevel)
             {
                 // Bloood blackout chance
-                _bloodLevelBlackoutsEvent.Check();
+                _bloodLevelBlackoutsEvent.Check(deltaTime);
             }
 
             if (_gc.Health.Medicine.IsMorphineActive && _gc.Health.Medicine.MorphineAgent.ActiveDosesCount >= MorphineLsdEffectValue)
             {
                 // LSD visual effect chance
-                _lsdEffect.Check();
+                _lsdEffect.Check(deltaTime);
             }
         }
 
-        private void ProcessFatigueEffects(HealthState newState)
+        private void ProcessFatigueEffects(HealthState newState, float deltaTime)
         {
             if (newState.FatiguePercentage > FatigueDizzinessLevel)
             {
                 // Fatigue dizziness chance
-                _fatigueDizzinessEvent.Check();
+                _fatigueDizzinessEvent.Check(deltaTime);
             }
 
             if (newState.FatiguePercentage > FatigueBlackoutLevel)
             {
                 // Fatigue blackouts chance
-                _fatigueBlackoutsEvent.Check();
+                _fatigueBlackoutsEvent.Check(deltaTime);
             }
 
             if (newState.FatiguePercentage > FatigueSleepLevel)
             {
                 // Fatigue sleep chance
-                _fatigueSleepEvent.Check();
+                _fatigueSleepEvent.Check(deltaTime);
             }
         }
 
-        private void ProcessSedativeEffects()
+        private void ProcessSedativeEffects(float deltaTime)
         {
             if (_gc.Health.Medicine.IsSedativeActive && _gc.Health.Medicine.SedativeAgent.ActiveDosesCount >= SedativeForceSleepValue)
             {
                 // Sedative force-sleep chance
-                _sedativeSleepEvent.Check();
+                _sedativeSleepEvent.Check(deltaTime);
             }
         }
 
@@ -1001,7 +999,7 @@ namespace ZaraEngine.HealthEngine {
             }
         }
 
-        private void CheckDiseaseDeath(DiseaseStage superStage)
+        private void CheckDiseaseDeath(DiseaseStage superStage, float deltaTime)
         {
             if (superStage == null)
                 return;
@@ -1009,11 +1007,11 @@ namespace ZaraEngine.HealthEngine {
             if (superStage.ChanceOfDeath > 0)
             {
                 // Disease death chance
-                _diseaseDeathEvent.Check(superStage.ChanceOfDeath);
+                _diseaseDeathEvent.Check(superStage.ChanceOfDeath, deltaTime);
             }
         }
 
-        private void CheckOverdoseDeath()
+        private void CheckOverdoseDeath(float deltaTime)
         {
             MedicalConsumablesGroup groupFiredOverdose = null;
 
@@ -1066,17 +1064,17 @@ namespace ZaraEngine.HealthEngine {
             {
                 // Overdose death chance
                 _overdoseDeathEvent.Param = groupFiredOverdose.Name;
-                _overdoseDeathEvent.Check();
+                _overdoseDeathEvent.Check(deltaTime);
             }
         }
 
-        private void CheckHeartFailureDeath()
+        private void CheckHeartFailureDeath(float deltaTime)
         {
             if ((_gc.Health.Medicine.IsEpinephrineActive && _gc.Health.Medicine.IsMorphineActive) ||
                 (_gc.Health.Medicine.IsEpinephrineActive && _gc.Health.Medicine.IsSedativeActive && _gc.Health.Medicine.SedativeAgent.ActiveDosesCount >= 2))
             {
                 // Heart failure death chance
-                _heartFailureDeathEvent.Check();
+                _heartFailureDeathEvent.Check(deltaTime);
             }
         }
 

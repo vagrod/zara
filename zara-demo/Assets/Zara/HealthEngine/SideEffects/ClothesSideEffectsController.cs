@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
 using ZaraEngine.Player;
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine.SideEffects
 {
@@ -93,7 +92,7 @@ namespace ZaraEngine.HealthEngine.SideEffects
                 var secondsSinceClothesChange = (float) (_gc.WorldTime.Value - _lastClothesChangeTime.Value).TotalSeconds;
                 var secondsUntilPeakValue = ClothesEffectPeakDuration * 60f;
 
-                currentLerp = Mathf.Clamp01(secondsSinceClothesChange / secondsUntilPeakValue);
+                currentLerp = Helpers.Clamp01(secondsSinceClothesChange / secondsUntilPeakValue);
             }
 
             if ((_gc.WorldTime.Value - _lastAutoReLerpTime.Value).TotalSeconds > AutoReLerpInterval * 60f && Math.Abs(currentLerp - 1f) < 0.000001)
@@ -107,8 +106,8 @@ namespace ZaraEngine.HealthEngine.SideEffects
                 return;
             }
 
-            BodyTemperatureBonus = Mathf.Lerp(_currentTemperatureBonus, _targetBodyTemperatureDelta, currentLerp);
-            HeartRateBonus = Mathf.Lerp(_currentHeartRateBonus, _targetHeartRateDelta, currentLerp);
+            BodyTemperatureBonus = Helpers.Lerp(_currentTemperatureBonus, _targetBodyTemperatureDelta, currentLerp);
+            HeartRateBonus = Helpers.Lerp(_currentHeartRateBonus, _targetHeartRateDelta, currentLerp);
         }
 
         private void OnClothesAdd(ClothesItemBase clothes)
@@ -140,8 +139,8 @@ namespace ZaraEngine.HealthEngine.SideEffects
             {
                 var impactDelta = (warmthLevel - ExtraHeatValue) / 20f;
 
-                _targetBodyTemperatureDelta = Mathf.Clamp(MaxBodyTemperatureIncrease * impactDelta, 0f, MaxBodyTemperatureIncrease);
-                _targetHeartRateDelta = Mathf.Clamp(MaxHeartRateIncrease * impactDelta, 0f, MaxHeartRateIncrease);
+                _targetBodyTemperatureDelta = Helpers.Clamp(MaxBodyTemperatureIncrease * impactDelta, 0f, MaxBodyTemperatureIncrease);
+                _targetHeartRateDelta = Helpers.Clamp(MaxHeartRateIncrease * impactDelta, 0f, MaxHeartRateIncrease);
 
                 return;
             }

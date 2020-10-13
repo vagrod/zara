@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Inventory;
-using UnityEngine;
 
 namespace ZaraEngine.Diseases.Treatment
 {
@@ -102,13 +101,13 @@ namespace ZaraEngine.Diseases.Treatment
                         if (OnTreatmentStarted != null)
                             OnTreatmentStarted.Invoke();
 
-                        Debug.Log("Disease consumables treatment started.");
+                        //("Disease consumables treatment started.");
 
                         IsStarted = true;
 
                         if (!IsNodePart && !IsFinished)
                         {
-                            Debug.Log("Overall disease treatment started.");
+                            //("Overall disease treatment started.");
 
                             Events.NotifyAll(l => l.DiseaseTreatmentStarted(disease.Disease));
 
@@ -159,11 +158,11 @@ namespace ZaraEngine.Diseases.Treatment
                     Events.NotifyAll(l => l.DiseaseHealed(disease.Disease));
                 }
 
-                Debug.Log("Disease treatment finished.");
+                //("Disease treatment finished.");
             }
             else
             {
-                Debug.Log("Disease treatment continued. Healing.");
+                //("Disease treatment continued. Healing.");
 
                 if (!IsNodePart && IsStarted)
                 {
@@ -200,7 +199,7 @@ namespace ZaraEngine.Diseases.Treatment
 
             if (minutes > _timingInGameMinutes + TimingDeltaBetweenAllowedConsuming)
             {
-                Debug.Log("You missed your treatment. You sick again.");
+                //("You missed your treatment. You sick again.");
 
                 if (!IsNodePart)
                 {

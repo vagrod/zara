@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace ZaraEngine
 {
@@ -83,9 +82,9 @@ namespace ZaraEngine
             }
         }
 
-        public bool Check()
+        public bool Check(float deltaTime)
         {
-            return Invoke();
+            return Invoke(deltaTime);
         }
 
         public void Reset()
@@ -95,7 +94,7 @@ namespace ZaraEngine
 
             IsHappened = false;
 
-            Debug.Log(_name + " reset");
+            //(_name + " reset");
 
             if (ChainedEvent != null)
                 ChainedEvent.Reset();
@@ -104,17 +103,17 @@ namespace ZaraEngine
                 RootEvent.Reset();
         }
 
-        public bool Invoke()
+        public bool Invoke(float deltaTime)
         {
             if (IsHappened)
             {
                 if (ChainedEvent != null)
-                    return ChainedEvent.Check();
+                    return ChainedEvent.Check(deltaTime);
 
                 return false;
             }
 
-            Debug.Log(_name);
+            //(_name);
 
             if(_eventAction != null)
                 _eventAction.Invoke(this);
