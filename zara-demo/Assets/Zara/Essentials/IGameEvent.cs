@@ -30,7 +30,5 @@ namespace ZaraEngine
 
         void Reset();
 
-        void Debug_SetProbability(int value);
-
     }
 }
