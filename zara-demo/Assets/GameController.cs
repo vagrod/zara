@@ -42,6 +42,8 @@ public class GameController : MonoBehaviour, IGameController
     public Text CanSleepText;
     public Text CanRunText;
     public Text HasLegFractureText;
+    public Text WetnessLevelText;
+    public Text WarmthLevelText;
 
     public Text LastSleepTimeText;
     public Text LastHealthCheckTimeText;
@@ -82,6 +84,8 @@ public class GameController : MonoBehaviour, IGameController
             HeartRateText.text =  $"Heart Rate: {_health.Status.HeartRate.ToString("00")}bpm";
             FoodLevelText.text =  $"Foood Level: {_health.Status.FoodPercentage.ToString("00.0")}%";
             WaterLevelText.text =  $"Water Level: {_health.Status.WaterPercentage.ToString("00.0")}%";
+            WetnessLevelText.text =  $"Is Wet? {(_body.IsWet ? "yes" : "no")} (Wetness Level is {_body.WetnessLevel.ToString("00.0")}%)";
+            WarmthLevelText.text = $"Warmth Score is {_body.GetWarmthLevel().ToString("0.0")} [-5..+5 is a comfort warm feel]";
             BloodLevelText.text =  $"Blood Level: {_health.Status.BloodPercentage.ToString("00.0")}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
             StaminaText.text =  $"Stamina Level: {_health.Status.StaminaPercentage.ToString("00.0")}%";
 
