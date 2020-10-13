@@ -8,6 +8,7 @@ Zara is written in C# (3D-engine-agnostic code [at the moment it has Unity refer
   - Food Level
   - Water Level
   - Blood Level
+  - Wetness level (how wet is your cloths)
   - Warmth level (incl. cloths with different warmth levels)
   - Sleep cycles
   - Side effects from running, carrying weight, swimming, freezing
@@ -49,5 +50,8 @@ Zara is written in C# (3D-engine-agnostic code [at the moment it has Unity refer
  Starvation 
  ~~~
  
- Zara is talking to your outside game world via events (you can subscribe and listen to them from anywhere).
- Zara will not eat your game performance: it is re-evaluating health state and all needed internals only once a second (you can customize this to be any number)
+Zara is talking to your outside game world via events (you can subscribe and listen to them from anywhere).
+
+Zara will not eat your game performance: it is re-evaluating health state and all needed internals only once a second (you can customize this to be any number).
+
+Zara is aware of the game surroundings if provided (air temperature, wind speed, rain intensity, time of day), and will adjust its parameters dynamically (in a hot day water will drain faster; in rainy cold day it is more likely to get flu, and so on.)
