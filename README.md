@@ -29,6 +29,7 @@ Zara is written in C# (3D-engine-agnostic code [at the moment it has Unity refer
   - Treatment with pills or injections in any order and with any number of stages
   - Timed treatment (to cure X, you need to take the Y pill every four hours, or else disease will become active again)
   - Every disease progresses gradually, and treatment inverts the effects, so they go in opposite order -- to the "healthy" state. If the treatment is missed mid-way, disease will invert back and will start to get worse, and you will need to start all the treatment steps from scratch
+  - Any number of simultanious diseases, injuries and medicine effects: everything will be combined to a single resulted health state
   
  + Injury Engine
    - Cuts, Fractures, Open fratcures, or anything custom you like
@@ -49,3 +50,4 @@ Zara is written in C# (3D-engine-agnostic code [at the moment it has Unity refer
  ~~~
  
  Zara is talking to your outside game world via events (you can subscribe and listen to them from anywhere).
+ Zara will not eat your game performance: it is re-evaluating health state and all needed internals only once a second (you can customize this to be any number)
