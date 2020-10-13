@@ -58,3 +58,7 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+/Bin
+/obj
+/zara-demo/Library
+/zara-demo/Temp
