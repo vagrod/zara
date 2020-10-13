@@ -8,8 +8,24 @@ using ZaraEngine.HealthEngine;
 public class WeatherDescription : IWeatherDescription 
 {
 
-    public float RainIntensity => 0f;
-    public float Temperature => 25f;
-    public float WindSpeed => 0.1f;
+    private float _rainIntensity;
+    private float _temperature;
+    private float _windSpeed;
+
+    public float RainIntensity => _rainIntensity;
+    public float Temperature => _temperature;
+    public float WindSpeed => _windSpeed;
+
+    public void SetRainIntensity(float value){
+        _rainIntensity = value;
+    }
+
+    public void SetTemperature(float value){
+        _temperature = value;
+    }
+
+    public void SetWindSpeed(float value){
+        _windSpeed = value;
+    }
 
 }

@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour, IGameController
 
     private BodyStatusController _body;
 
-    private IWeatherDescription _weather;
+    private WeatherDescription _weather;
 
     private HealthController _health;
 
@@ -61,6 +61,10 @@ public class GameController : MonoBehaviour, IGameController
         _weather = new WeatherDescription();
         _player = new PlayerStatus();
         _inventory = new InventoryController(this);
+
+        _weather.SetTemperature(27f);
+        _weather.SetWindSpeed(0.1f);
+        _weather.SetRainIntensity(0f);
 
         ClothesGroups.Initialize(this);
 
@@ -122,5 +126,27 @@ public class GameController : MonoBehaviour, IGameController
     public TimesOfDay TimeOfDay => _timeOfDay;
 
     #endregion
+
+    #region Controls
+
+    public void OnTemperatureValueChanged(Slider e){
+        e.gameObject.transform.Find("Value").GetComponent<Text>().text = e.value.ToString("0") + " deg C";
+
+        _weather.SetTemperature(e.value);
+    }
+
+    public void OnWindSpeedValueChanged(Slider e){
+        e.gameObject.transform.Find("Value").GetComponent<Text>().text = e.value.ToString("0.0");
+
+        _weather.SetWindSpeed(e.value);
+    }
+
+    public void OnRainIntensityValueChanged(Slider e){
+        e.gameObject.transform.Find("Value").GetComponent<Text>().text = e.value.ToString("0.0");
+
+        _weather.SetRainIntensity(e.value);
+    }
+
+    #endregion 
 
 }
