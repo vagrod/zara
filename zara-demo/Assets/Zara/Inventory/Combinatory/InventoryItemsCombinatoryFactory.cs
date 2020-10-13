@@ -19,7 +19,8 @@ namespace ZaraEngine.Inventory
                 CombinatoryItemBuilder      <SyringeOfEpinephrine>     .Is<EmptySyringe>().And<EpinephrineSolution>(),
                 CombinatoryItemBuilder      <SyringeOfMorphine>        .Is<EmptySyringe>().And<MorphineSolution>(),
                 CombinatoryItemBuilder      <SyringeOfDoripenem>       .Is<EmptySyringe>().And<DoripenemSolution>(),
-                CombinatoryItemBuilder      <AntibioticEmbrocation>    .Is<DoripenemSolution>().And<Bandage>()
+                CombinatoryItemBuilder      <AntibioticEmbrocation>    .Is<DoripenemSolution>().And<Bandage>(),
+                CombinatoryItemBuilder      <Headscarf>                .Is<NeedleAndThread>().And<Cloth>(3),
             });
         }
 
