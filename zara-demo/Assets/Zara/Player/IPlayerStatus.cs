@@ -8,7 +8,7 @@ namespace ZaraEngine.Player {
         bool IsWalking { get; }
         bool IsStanding { get; }
         bool IsSwimming { get; }
-        bool IsLimping { get; set; }
+        bool IsLimping { get; }
 
         float RunSpeed { get; }
         float WalkSpeed { get; }

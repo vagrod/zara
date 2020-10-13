@@ -850,7 +850,7 @@ namespace ZaraEngine.HealthEngine {
                 Events.NotifyAll(l => l.ApplyMovementSpeedDelta(-superInjury.WalkSpeedDecrease,-superInjury.WalkSpeedDecrease,null));
             }
 
-            _gc.Player.IsLimping = newState.IsLegFracture;
+            Events.NotifyAll(l => l.ReportLimpingState(newState.IsLegFracture));
         }
 
         #endregion

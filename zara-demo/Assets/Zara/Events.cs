@@ -57,6 +57,7 @@ namespace ZaraEngine {
 
         void MovementSpeedChange(float? newRunSpeed,float? newWalkSpeed, float? newCrouchSpeed);
         void ApplyMovementSpeedDelta(float? newRunSpeedDelta,float? newWalkSpeedDelta, float? newCrouchSpeedDelta);
+        void ReportLimpingState(bool isLimping);
     }
 
     public static class Events {
