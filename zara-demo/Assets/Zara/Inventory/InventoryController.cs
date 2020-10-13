@@ -94,6 +94,14 @@ namespace ZaraEngine.Inventory
         {
             public const string Hand = "Hand";
             public const string Ash = "Ash";
+            public const string Cloth = "Cloth";
+            public const string DisinfectingPellets = "DisinfectingPellets";
+            public const string Knife = "Knife";
+            public const string NeedleAndThread = "NeedleAndThread";
+            public const string Pin = "Pin";
+            public const string Resin = "Resin";
+            public const string Rope = "Rope";
+            public const string StoneAxe = "StoneAxe";
         }
 
         public static class MedicalItems
