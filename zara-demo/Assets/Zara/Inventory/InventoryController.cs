@@ -88,35 +88,11 @@ namespace ZaraEngine.Inventory
             public const string WaterproofPants = "WaterproofPants";
             public const string RubberBoots = "RubberBoots";
             public const string LeafHat = "LeafHat";
-            public const string Shirt = "Shirt";
         }
 
         public static class CommonTools
         {
-            public const string Knife = "Knife";
             public const string Hand = "Hand";
-            public const string Rope = "Rope";
-            public const string Stone = "Stone";
-            public const string SharpenStone = "SharpenStone";
-            public const string ElectricLighter = "ElectricLighter";
-            public const string UnlitTorch = "UnlitTorch";
-            public const string LitTorch = "LitTorch";
-            public const string FishingRod = "FishingRod";
-            public const string FishingRodWithBait = "FishingRodWithBait";
-            public const string Cloth = "Cloth";
-            public const string SharpDebris = "SharpDebris";
-            public const string Flask = "Flask";
-            public const string SimpleSpear = "SimpleSpear";
-            public const string UpgradedSpear = "UpgradedSpear";
-            public const string Mace = "Mace";
-            public const string StoneAxe = "StoneAxe";
-            public const string Battery = "Battery";
-            public const string Moss = "Moss";
-            public const string NeedleAndThread = "Needle And Thread";
-            public const string DisinfectingPellets = "Disinfecting Pellets";
-            public const string Pin = "Pin";
-            public const string StandardLighter = "StandardLighter";
-            public const string GasMaskFilter = "GasMaskFilter";
             public const string Ash = "Ash";
         }
 
