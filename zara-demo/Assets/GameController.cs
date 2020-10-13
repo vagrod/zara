@@ -11,7 +11,9 @@ using ZaraEngine.HealthEngine;
 public class GameController : MonoBehaviour, IGameController
 {
 
-    private IPlayerStatus _player;
+    private DateTime _dateTime;
+
+    private PlayerStatus _player;
 
     private BodyStatusController _body;
 
@@ -24,6 +26,7 @@ public class GameController : MonoBehaviour, IGameController
     private TimesOfDay _timeOfDay;
 
     private float _infoUpdateCounter;
+    private float _dateTimeCounter;
 
     #region UI elements for data display
 
@@ -48,6 +51,9 @@ public class GameController : MonoBehaviour, IGameController
     public Text LastSleepTimeText;
     public Text LastHealthCheckTimeText;
 
+    public Button RunButton;
+    public Button WalkButton;
+
     #endregion 
 
     // Start is called before the first frame update
@@ -55,6 +61,7 @@ public class GameController : MonoBehaviour, IGameController
     {
         ZaraEngine.Helpers.InitializeRandomizer((a, b) => UnityEngine.Random.Range(a, b));
 
+        _dateTime = DateTime.Now;
         _timeOfDay = TimesOfDay.Evening;
         _health = new HealthController(this);
         _body = new BodyStatusController(this);
@@ -79,6 +86,12 @@ public class GameController : MonoBehaviour, IGameController
         _health.Check(Time.deltaTime);
 
         _infoUpdateCounter += Time.deltaTime;
+        _dateTimeCounter += Time.deltaTime;
+
+        if(_dateTimeCounter > 0.05f){
+            _dateTime = _dateTime.AddSeconds(0.5d);
+            _dateTimeCounter = 0f;
+        }
 
         if (_infoUpdateCounter >= 1f)
         {
@@ -111,7 +124,7 @@ public class GameController : MonoBehaviour, IGameController
 
     #region IGameController Implementation
 
-    public DateTime? WorldTime => DateTime.Now;
+    public DateTime? WorldTime => _dateTime;
 
     public IPlayerStatus Player => _player;
 
@@ -129,6 +142,9 @@ public class GameController : MonoBehaviour, IGameController
 
     #region Controls
 
+    private bool _isRunning;
+    private bool _isWalking;
+
     public void OnTemperatureValueChanged(Slider e){
         e.gameObject.transform.Find("Value").GetComponent<Text>().text = e.value.ToString("0") + " deg C";
 
@@ -145,6 +161,36 @@ public class GameController : MonoBehaviour, IGameController
         e.gameObject.transform.Find("Value").GetComponent<Text>().text = e.value.ToString("0.0");
 
         _weather.SetRainIntensity(e.value);
+    }
+
+    public void OnRunClick(Button e){
+        _isWalking = false;
+        _isRunning = !_isRunning;
+
+        if(_isRunning)
+        {
+            e.gameObject.transform.Find("Text").GetComponent<Text>().text = "Stop Running";
+            WalkButton.transform.Find("Text").GetComponent<Text>().text = "Start Walking";
+        } else {
+            e.gameObject.transform.Find("Text").GetComponent<Text>().text = "Start Running";
+        }
+
+        _player.SetRunning(_isRunning);
+    }
+
+    public void OnWalkClick(Button e){
+        _isRunning = false;
+        _isWalking = !_isWalking;
+
+        if(_isWalking)
+        {
+            e.gameObject.transform.Find("Text").GetComponent<Text>().text = "Stop Walking";
+            RunButton.transform.Find("Text").GetComponent<Text>().text = "Start Running";
+        } else {
+            e.gameObject.transform.Find("Text").GetComponent<Text>().text = "Start Walking";
+        }
+
+        _player.SetWalking(_isWalking);
     }
 
     #endregion 
