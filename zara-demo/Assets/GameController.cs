@@ -23,9 +23,28 @@ public class GameController : MonoBehaviour, IGameController
 
     private TimesOfDay _timeOfDay;
 
+    private float _infoUpdateCounter;
+
     #region UI elements for data display
 
     public Text BodyTempText;
+    public Text BloodPressureText;
+    public Text FatigueLevelText;
+    public Text HeartRateText;
+    public Text FoodLevelText;
+    public Text WaterLevelText;
+    public Text BloodLevelText;
+    public Text StaminaText;
+
+    public Text DiseasesInfoText;
+    public Text InjuriesInfoText;
+    public Text CanEatText;
+    public Text CanSleepText;
+    public Text CanRunText;
+    public Text HasLegFractureText;
+
+    public Text LastSleepTimeText;
+    public Text LastHealthCheckTimeText;
 
     #endregion 
 
@@ -53,7 +72,33 @@ public class GameController : MonoBehaviour, IGameController
         _body.Check(Time.deltaTime);
         _health.Check(Time.deltaTime);
 
-        BodyTempText.text = _health.Status.BodyTemperature.ToString("00.0");
+        _infoUpdateCounter += Time.deltaTime;
+
+        if (_infoUpdateCounter >= 1f)
+        {
+            BodyTempText.text =  $"Body Temp.: {_health.Status.BodyTemperature.ToString("00.0")} deg C";
+            BloodPressureText.text =  $"Blood Pressure: {_health.Status.BloodPressureTop.ToString("000")}/{_health.Status.BloodPressureBottom.ToString("#00")}";
+            FatigueLevelText.text =  $"Fatigue: {_health.Status.FatiguePercentage.ToString("00.0")}%";
+            HeartRateText.text =  $"Heart Rate: {_health.Status.HeartRate.ToString("00")}bpm";
+            FoodLevelText.text =  $"Foood Level: {_health.Status.FoodPercentage.ToString("00.0")}%";
+            WaterLevelText.text =  $"Water Level: {_health.Status.WaterPercentage.ToString("00.0")}%";
+            BloodLevelText.text =  $"Blood Level: {_health.Status.BloodPercentage.ToString("00.0")}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
+            StaminaText.text =  $"Stamina Level: {_health.Status.StaminaPercentage.ToString("00.0")}%";
+
+            LastSleepTimeText.text =  $"Last Time Slept: {_health.Status.LastSleepTime.ToString("MMMM dd, HH:mm")}";
+            LastHealthCheckTimeText.text =  $"Last Health Update: {_health.Status.CheckTime.ToString("MMMM dd, HH:mm:ss")}";
+
+            CanEatText.text =  $"Can Eat? {(_health.Status.IsFoodDisgust ? "no" : "yes")}";
+            CanSleepText.text =  $"Has Sleep Disorder? {(_health.Status.IsSleepDisorder ? "yes" : "no")}";
+            CanRunText.text =  $"Can Run? {(_health.Status.CannotRun ? "no" : "yes")}";
+            HasLegFractureText.text =  $"Has Leg Fracture? {(_health.Status.IsLegFracture ? "yes" : "no")}";
+
+            DiseasesInfoText.text = $"Has Active Disease: {(_health.Status.IsActiveDisease ? "yes" : "no")}";
+
+            InjuriesInfoText.text = $"Has Active Injury: {(_health.Status.IsActiveInjury ? "yes" : "no")}";
+
+            _infoUpdateCounter = 0f;
+        }
     }
 
     #region IGameController Implementation
