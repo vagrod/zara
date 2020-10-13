@@ -103,11 +103,6 @@ namespace ZaraEngine
                 RootEvent.Reset();
         }
 
-        public void Debug_SetProbability(int value)
-        {
-            _chanceOfHappening = value;
-        }
-
         public bool Check(int chanceOfHappening, float deltaTime)
         {
             _chanceOfHappening = chanceOfHappening;
