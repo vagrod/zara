@@ -66,7 +66,7 @@ namespace ZaraEngine.Player
         public void UpdateWarmthLevelCacheImmediately()
         {
             _warmthLerpCounter = null;
-            
+
             WarmthLevelCached = GetWarmthLevel();
 
             _warmthLerpBase = WarmthLevelCached;
