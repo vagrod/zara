@@ -507,7 +507,7 @@ namespace ZaraEngine.HealthEngine {
                 ProcessDiseaseVitals(superStage, newState, gameSecondsSinceLastCheck);
                 AddSideEffectsVitalsBonuses(newState);
                 ProcessDiseaseLevelEffects(superStage);
-                ProcessAdditionalDiseaseEffects(superStage);
+                ProcessAdditionalDiseaseEffects(superStage, deltaTime);
             }
 
             #endregion
@@ -968,20 +968,20 @@ namespace ZaraEngine.HealthEngine {
             }
         }
 
-        private void ProcessAdditionalDiseaseEffects(DiseaseStage superStage) {
+        private void ProcessAdditionalDiseaseEffects(DiseaseStage superStage, float deltaTime) {
             if (superStage.BlackoutChance > 0) {
                 // Disease blackouts chance
-                _diseaseBlackoutsEvent.Check(superStage.BlackoutChance);
+                _diseaseBlackoutsEvent.Check(superStage.BlackoutChance, deltaTime);
             }
 
             if (superStage.DizzinessChance > 0) {
                 // Disease dizziness chance
-                _diseaseDizzinessEvent.Check(superStage.DizzinessChance);
+                _diseaseDizzinessEvent.Check(superStage.DizzinessChance, deltaTime);
             }
 
             if (superStage.SneezeChance > 0) {
                 // Sneeze chance
-                _sneezeEvent.Check(superStage.SneezeChance);
+                _sneezeEvent.Check(superStage.SneezeChance, deltaTime);
             }
 
             if (superStage.CoughChance > 0) {
@@ -995,7 +995,7 @@ namespace ZaraEngine.HealthEngine {
                 if (superStage.CoughChance > CoughChanceMedium)
                     _coughEvent.Param = (int)CoughLevels.CoughBad;
 
-                _coughEvent.Check(superStage.CoughChance);
+                _coughEvent.Check(superStage.CoughChance, deltaTime);
             }
         }
 
