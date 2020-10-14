@@ -7,6 +7,8 @@ using ZaraEngine;
 using ZaraEngine.Player;
 using ZaraEngine.Inventory;
 using ZaraEngine.HealthEngine;
+using System.Text;
+using System.Runtime.InteropServices;
 
 public class GameController : MonoBehaviour, IGameController
 {
@@ -114,7 +116,32 @@ public class GameController : MonoBehaviour, IGameController
             CanRunText.text =  $"Can Run? {(_health.Status.CannotRun ? "no" : "yes")}";
             HasLegFractureText.text =  $"Has Leg Fracture? {(_health.Status.IsLegFracture ? "yes" : "no")}";
 
-            DiseasesInfoText.text = $"Has Active Disease: {(_health.Status.IsActiveDisease ? "yes" : "no")}";
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"Has Active Disease (with an Active Stage): {(_health.Status.IsActiveDisease ? "yes" : "no")}");
+            sb.AppendLine($"Diseases count (including scheduled): {_health.Status.ActiveDiseases.Count}");
+
+            foreach(var d in _health.Status.ActiveDiseases)
+            {
+                sb.AppendLine($"\t• {d.Disease.Name} ({d.Disease.Stages.Count} stages total)");
+
+                var st = d.GetActiveStage(WorldTime.Value);
+
+                if (st == null)
+                {
+                    // Scheduled disease
+                    sb.AppendLine($"\t  Scheduled for {(d.DiseaseStartTime.ToString("HH:mm"))}");
+                } else
+                {
+                    // Active disease
+                    sb.AppendLine($"\t  Active. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
+                }
+                
+                sb.AppendLine($"\t  Is treatment needed? {(d.IsSelfHealing ? "no" : "yes")}");
+                sb.AppendLine();
+            }
+
+            DiseasesInfoText.text = sb.ToString();
 
             InjuriesInfoText.text = $"Has Active Injury: {(_health.Status.IsActiveInjury ? "yes" : "no")}";
 

@@ -11,16 +11,19 @@ namespace ZaraEngine.Diseases
 
         private const float WamthLevelToCatchFluWithLowChance    = -6f;
         private const float WamthLevelToCatchFluWithMediumChance = -14f;
-        private const float WamthLevelToCatchFluWithHighChance   = -23f;  
+        private const float WamthLevelToCatchFluWithHighChance   = -23f;
 
-        private const int MonitorCheckInterval      = 25;     // Game minutes
+        private const int MonitorCheckInterval      = 10;    // Game minutes
 
         public const int FluDelayMinutesMin         = 35;     // Game minutes
         public const int FluDelayMinutesMax         = 2 * 60; // Game minutes
 
+        private const float WarmthLevelCanCauseFlu  = -15f;   // Warmth score points
+
         private const int FluHighChance             = 50;     // Percents
         private const int FluMediumChance           = 25;     // Percents
         private const int FluLowChance              = 5;      // Percents
+        private const int FluLowWarmthChanceBase    = 26;     // Percents
         private const int FluChanceNightBonus       = 5;      // Percents
         private const int WetnessLevelToConsiderFlu = 50;     // Percents
         private const int AnginaBonus               = 5;      // Percents
@@ -56,6 +59,43 @@ namespace ZaraEngine.Diseases
             if ((activeFlu != null && !activeFlu.IsHealing) || (activeFlu != null && activeFlu.IsSelfHealing))
                 return;
 
+            void activateFlu()
+            {
+                if (activeFlu != null)
+                {
+                    // Resume flu that currently is being healed
+
+                    activeFlu.InvertBack();
+                    return;
+                }
+
+                _nextCheckTime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(FluDelayMinutesMin, FluDelayMinutesMax));
+                _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Flu), _nextCheckTime.Value));
+            }
+
+            if(_gc.Body.WarmthLevelCached < WarmthLevelCanCauseFlu)
+            {
+                var coldBonus = 0;
+
+                if (_gc.Body.WarmthLevelCached < WarmthLevelCanCauseFlu - 5)
+                    coldBonus = 7;
+
+                if (_gc.Body.WarmthLevelCached < WarmthLevelCanCauseFlu - 10)
+                    coldBonus = 25;
+
+                if (_gc.Body.WarmthLevelCached < WarmthLevelCanCauseFlu - 20)
+                    coldBonus = 45;
+
+                if ((FluLowWarmthChanceBase + coldBonus).WillHappen())
+                {
+                    //("You're too cold, Flu will activate");
+
+                    activateFlu();
+
+                    return;
+                }
+            }
+
             if (_gc.Body.IsWet && _gc.Body.WetnessLevel > WetnessLevelToConsiderFlu)
             {
                 if (_gc.Body.WarmthLevelCached <= WamthLevelToCatchFluWithHighChance)
@@ -70,19 +110,11 @@ namespace ZaraEngine.Diseases
 
                     if (chance.WillHappen())
                     {
-                        if (activeFlu != null)
-                        {
-                            // Resume flu that currently is being healed
-                            Events.NotifyAll(l => l.FluReTriggered());
-
-                            activeFlu.InvertBack();
-                            return;
-                        }
-
                         //("You were wet in a cold weather. Flu will become active at " + _nextCheckTime.Value);
 
-                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(FluDelayMinutesMin, FluDelayMinutesMax));
-                        _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Flu), _nextCheckTime.Value));
+                        activateFlu();
+
+                        return;
                     }
                 }
 
@@ -100,17 +132,9 @@ namespace ZaraEngine.Diseases
                     {
                         //("You were wet in a cold weather. Flu is active now.");
 
-                        if (activeFlu != null)
-                        {
-                            // Resume flu that currently is being healed
-                            Events.NotifyAll(l => l.FluReTriggered());
+                        activateFlu();
 
-                            activeFlu.InvertBack();
-                            return;
-                        }
-
-                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(FluDelayMinutesMin, FluDelayMinutesMax));
-                        _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Flu), _nextCheckTime.Value));
+                        return;
                     }
                 }
 
@@ -128,17 +152,9 @@ namespace ZaraEngine.Diseases
                     {
                         //("You were wet in a cold weather. Flu is active now.");
 
-                        if (activeFlu != null)
-                        {
-                            // Resume flu that currently is being healed
-                            Events.NotifyAll(l => l.FluReTriggered());
+                        activateFlu();
 
-                            activeFlu.InvertBack();
-                            return;
-                        }
-
-                        _nextCheckTime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(FluDelayMinutesMin, FluDelayMinutesMax));
-                        _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Flu), _nextCheckTime.Value));
+                        return;
                     }
                 }
             }

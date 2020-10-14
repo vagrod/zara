@@ -48,7 +48,6 @@ namespace ZaraEngine.Diseases
 
                 if (activeFoodPoisoning != null && activeFoodPoisoning.IsHealing && !activeFoodPoisoning.IsSelfHealing)
                 {
-                    Events.NotifyAll(l => l.FoodPoisoningReTriggered());
                     activeFoodPoisoning.InvertBack();
                     return;
                 }

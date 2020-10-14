@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using ZaraEngine;
 using ZaraEngine.Diseases;
@@ -47,8 +48,8 @@ public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
     public void HighBloodPressureTriggeredOn() { }
     public void HighBloodPressureTriggeredOff() { }
 
-    public void FluReTriggered() { }
-    public void FoodPoisoningReTriggered() { }
+    public void DiseaseTriggered(DiseaseDefinitionBase disease, ActiveInjury linkedInjury, DateTime diseaseStartTime) { }
+    public void DiseaseReActivated(DiseaseDefinitionBase disease) { }
 
     public void DiseaseTreatmentStarted(DiseaseDefinitionBase disease) { }
     public void DiseaseHealingContinued(DiseaseDefinitionBase disease) { }

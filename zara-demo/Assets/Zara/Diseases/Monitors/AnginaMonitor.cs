@@ -18,6 +18,9 @@ namespace ZaraEngine.Diseases
         public const int ColdTemperature     = 5;  // C and higher
         public const int VeryColdTemperature = -1; // C and higher
 
+        public const float WarmthLevelToGetAngina = -35f; // Warmth score points
+
+        private const int MonitorCheckInterval = 15;     // Game minutes
         public const int AnginaDelayMinutesMin = 25;     // Game minutes
         public const int AnginaDelayMinutesMax = 1 * 60; // Game minutes
         private const int AnginaHighChance     = 54;     // Percents
@@ -25,11 +28,60 @@ namespace ZaraEngine.Diseases
         private const int AnginaLowChance      = 5;      // Percents
         private const int FluBonus             = 5;      // Percents
 
+        // TODO: LOAD THESE FIELDS FROM SAVE
+
+        private DateTime? _nextCheckTime;
+
         public AnginaMonitor(IGameController gc) : base(gc) { }
 
         public override void Check()
         {
-            
+            if (!_gc.WorldTime.HasValue)
+                return;
+
+            if (_nextCheckTime.HasValue)
+            {
+                if (_gc.WorldTime.Value >= _nextCheckTime.Value)
+                {
+                    _nextCheckTime = null;
+                }
+                else return;
+            }
+            else
+            {
+                _nextCheckTime = _gc.WorldTime.Value.AddMinutes(MonitorCheckInterval);
+
+                return;
+            }
+
+            var activeAngina = _gc.Health.Status.GetActiveOrScheduled<Angina>(_gc.WorldTime.Value) as ActiveDisease;
+
+            if ((activeAngina != null && !activeAngina.IsHealing) || (activeAngina != null && activeAngina.IsSelfHealing))
+                return;
+
+            void activateAngina()
+            {
+                if (activeAngina != null)
+                {
+                    // Resume angina that currently is being healed
+
+                    activeAngina.InvertBack();
+                    return;
+                }
+
+                _nextCheckTime = _gc.WorldTime.Value.AddMinutes(Helpers.RollDice(AnginaDelayMinutesMin, AnginaDelayMinutesMax));
+                _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Angina), _nextCheckTime.Value));
+            }
+
+            if(_gc.Body.WarmthLevelCached < WarmthLevelToGetAngina)
+            {
+                if (AnginaHighChance.WillHappen())
+                {
+                    activateAngina();
+
+                    return;
+                }
+            }
         }
 
         public override void OnConsumeItem(InventoryConsumableItemBase item)

@@ -47,6 +47,8 @@ namespace ZaraEngine.Diseases
 
             ComputeDisease();
             Refresh(gc.WorldTime.Value);
+
+            Events.NotifyAll(l => l.DiseaseTriggered(disease, linkedInjury, diseaseStartTime));
         }
 
         private void ComputeDisease()
@@ -397,6 +399,8 @@ namespace ZaraEngine.Diseases
 
             _changedVitals = null;
             _changedCritialStage = null;
+
+            Events.NotifyAll(l => l.DiseaseReActivated(Disease));
         }
 
         #endregion

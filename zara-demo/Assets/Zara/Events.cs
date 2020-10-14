@@ -44,12 +44,11 @@ namespace ZaraEngine {
         void HighBloodPressureTriggeredOn();
         void HighBloodPressureTriggeredOff();
 
-        void FluReTriggered();
-        void FoodPoisoningReTriggered();
-
         void DiseaseTreatmentStarted(DiseaseDefinitionBase disease);
         void DiseaseHealingContinued(DiseaseDefinitionBase disease);
         void DiseaseStartProgressing(DiseaseDefinitionBase disease);
+        void DiseaseTriggered(DiseaseDefinitionBase disease, ActiveInjury linkedInjury, DateTime diseaseStartTime);
+        void DiseaseReActivated(DiseaseDefinitionBase disease);
         void DiseaseHealed(DiseaseDefinitionBase disease);
 
         void InjuryHealed(InjuryBase injury);

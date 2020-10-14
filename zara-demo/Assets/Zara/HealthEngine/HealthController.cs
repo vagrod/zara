@@ -9,6 +9,7 @@ using ZaraEngine.Injuries;
 using ZaraEngine.Injuries.Stages;
 using ZaraEngine.Inventory;
 using Foundation.Databinding;
+using UnityEditorInternal;
 
 namespace ZaraEngine.HealthEngine {
     [Serializable]
@@ -482,6 +483,11 @@ namespace ZaraEngine.HealthEngine {
 
             List<DiseaseStage> activeStages = null;
 
+            // New disease can appear here, after _diseaseMonitors.Check() call, already After the cloning 
+            var actualDiseases = Status.GetActualDiseases(_gc.WorldTime.Value);
+
+            newState.ActiveDiseases = actualDiseases;
+
             if (newState.ActiveDiseases.Count > 0) {
                 activeStages = new List<DiseaseStage>();
 
@@ -514,7 +520,11 @@ namespace ZaraEngine.HealthEngine {
 
             #region Injuries
 
+            // Re-asking active injuries -- just in case
             var activeInjuries = new List<Tuple<InjuryStage, ActiveInjury>>();
+            var actualInjuries = Status.GetActualInjuries(_gc.WorldTime.Value);
+
+            newState.ActiveInjuries = actualInjuries;
 
             if (newState.ActiveInjuries.Count > 0) {
                 foreach (var activeInjury in newState.ActiveInjuries)

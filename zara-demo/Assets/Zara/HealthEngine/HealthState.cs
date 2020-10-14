@@ -184,11 +184,21 @@ namespace ZaraEngine.HealthEngine
             return GetActiveOrScheduled<T>(currentTime) != null;
         }
 
+        public List<ActiveDisease> GetActualDiseases(DateTime? currentTime)
+        {
+            return currentTime == null ? this.ActiveDiseases.ToList() : this.ActiveDiseases.Where(x => x.IsActiveNow || x.DiseaseStartTime >= currentTime || Math.Abs((x.DiseaseStartTime - currentTime.Value).TotalMinutes) < 10).ToList();
+        }
+
+        public List<ActiveInjury> GetActualInjuries(DateTime? currentTime)
+        {
+            return currentTime == null ? this.ActiveInjuries.ToList() : this.ActiveInjuries.Where(x => x.IsActiveNow || x.InjuryTriggerTime >= currentTime || Math.Abs((x.InjuryTriggerTime - currentTime.Value).TotalMinutes) < 10).ToList();
+        }
+
         public HealthState Clone(DateTime? currentTime)
         {
             return new HealthState
             {
-                ActiveDiseases = currentTime == null ? this.ActiveDiseases.ToList() : this.ActiveDiseases.Where(x => x.IsActiveNow || x.DiseaseStartTime >= currentTime || Math.Abs((x.DiseaseStartTime - currentTime.Value).TotalMinutes) < 10).ToList(),
+                ActiveDiseases = GetActualDiseases(currentTime),
                 StaminaPercentage = this.StaminaPercentage,
                 WaterPercentage = this.WaterPercentage,
                 FoodPercentage = this.FoodPercentage,
@@ -197,7 +207,7 @@ namespace ZaraEngine.HealthEngine
                 BloodPercentage = this.BloodPercentage,
                 BloodPressureTop = this.BloodPressureTop,
                 BloodPressureBottom = this.BloodPressureBottom,
-                ActiveInjuries = currentTime == null ? this.ActiveInjuries.ToList() : this.ActiveInjuries.Where(x => x.IsActiveNow || x.InjuryTriggerTime >= currentTime || Math.Abs((x.InjuryTriggerTime - currentTime.Value).TotalMinutes) < 10).ToList(),
+                ActiveInjuries = GetActualInjuries(currentTime),
                 FatiguePercentage = this.FatiguePercentage,
                 LastSleepTime = this.LastSleepTime,
                 CheckTime = this.CheckTime
