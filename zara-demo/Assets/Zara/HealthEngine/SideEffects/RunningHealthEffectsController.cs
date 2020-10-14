@@ -18,6 +18,9 @@ namespace ZaraEngine.HealthEngine
         private const float MaxHeartRateBonus                = 24f;  // bpm
         private const float MaxBloodPressureBonus            = 11f;  // mmHg
         private const float MaxBodyTemperatureBonus          = 0.5f; // C
+        private const float MaxOxygenBonus                   = 16f;  // percent
+        private const float RunningOxygenDrainRate            = 0.05f; // percents per game second
+        private const float RunningOxygenThreshold            = 84f;   // percents
 
         private readonly IGameController _gc;
         private readonly HealthController _healthController;
@@ -29,6 +32,7 @@ namespace ZaraEngine.HealthEngine
         public float BloodPressureBottomBonus { get; private set; }
         public float HeartRateBonus { get; private set; }
         public float BodyTemperatureBonus { get; private set; }
+        public float OxygenLevelBonus { get; private set; }
 
         private float _gameSecondsInRunningState;
         private bool _isWheezeEventTriggered;
@@ -54,7 +58,9 @@ namespace ZaraEngine.HealthEngine
             if (_healthController.UnconsciousMode)
                 return;
 
-            if (!_gc.Player.IsWalking && !_gc.Player.IsStanding && !_gc.Health.Status.CannotRun && !_gc.Player.IsUnderWater && !_gc.Player.IsSwimming && !_healthController.Status.IsLegFracture && !_healthController.IsInventoryOverload)
+            var isRunning = !_gc.Player.IsWalking && !_gc.Player.IsStanding;
+
+            if (isRunning && !_gc.Health.Status.CannotRun && !_gc.Player.IsUnderWater && !_gc.Player.IsSwimming && !_healthController.Status.IsLegFracture && !_healthController.IsInventoryOverload)
                 _gameSecondsInRunningState += gameSecondsSinceLastCall;
             else
                 _gameSecondsInRunningState -= gameSecondsSinceLastCall;
@@ -78,6 +84,7 @@ namespace ZaraEngine.HealthEngine
             BloodPressureBottomBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, runningPerc);
             HeartRateBonus = Helpers.Lerp(0f, MaxHeartRateBonus, runningPerc);
             BodyTemperatureBonus = Helpers.Lerp(0f, MaxBodyTemperatureBonus, runningPerc);
+            OxygenLevelBonus = -Helpers.Lerp(0f, MaxOxygenBonus, runningPerc);
 
             if (_gameSecondsInRunningState > SecondsOfRunningBeforeWheeze)
             {

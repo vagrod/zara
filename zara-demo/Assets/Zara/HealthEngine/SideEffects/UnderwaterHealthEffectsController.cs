@@ -18,13 +18,12 @@ namespace ZaraEngine.HealthEngine
         private const float MaxHeartRateBonus                 = 24f;   // bpm
         private const float MaxBloodPressureBonus             = 11f;   // mmHg
         private const float MaxFatigueImpactOnOxygenConsuming = 0.04f; // percents
-        private const float OxygenLevelRestoreRate            = 4f;
+        private const float MaxOxygenBonus                    = 100f;  // percents
 
         public float BloodPressureTopBonus { get; private set; }
         public float BloodPressureBottomBonus { get; private set; }
         public float HeartRateBonus { get; private set; }
-
-        public float OxygenLevel = 100f;
+        public float OxygenLevelBonus { get; private set; }
 
         private bool _lastUnderWaterState;
 
@@ -56,33 +55,13 @@ namespace ZaraEngine.HealthEngine
 
         private void ProcessUnderwaterEffects(float gameSecondsSinceLastCall, float deltaTime)
         {
-            if (!_lastUnderWaterState && !_gc.Player.IsUnderWater)
-            {
-                if (Math.Abs(OxygenLevel - 100f) > 0.00001f)
-                {
-                    // Restore oxygen level
-                    OxygenLevel += UnderwaterOxygenDrainRate * gameSecondsSinceLastCall * OxygenLevelRestoreRate;
-
-                    if (OxygenLevel > 100f)
-                        OxygenLevel = 100f;
-
-                    CalculateVitalsBonus(deltaTime);
-                }
-            }
-            else
-            {
-                // Drain oxygen level
-                OxygenLevel -= UnderwaterOxygenDrainRate * gameSecondsSinceLastCall + MaxFatigueImpactOnOxygenConsuming * (_healthController.Status.FatiguePercentage / 100f);
-                CalculateVitalsBonus(deltaTime);
-            }
-
             if (_lastUnderWaterState && !_gc.Player.IsUnderWater)
             {
-                if (OxygenLevel < 20f)
+                if (_gc.Health.Status.OxygenPercentage < 20f)
                     _playHardBreath.Invoke(deltaTime);
-                else if (OxygenLevel < 40f)
+                else if (_gc.Health.Status.OxygenPercentage < 40f)
                     _playMediumBreath.Invoke(deltaTime);
-                else if (OxygenLevel < 70f)
+                else if (_gc.Health.Status.OxygenPercentage < 70f)
                     _playLightBreath.Invoke(deltaTime);
 
                 _lastUnderWaterState = _gc.Player.IsUnderWater;
@@ -96,18 +75,19 @@ namespace ZaraEngine.HealthEngine
 
         private void CalculateVitalsBonus(float deltaTime)
         {
-            if (OxygenLevel <= 0f)
+            if (_gc.Health.Status.OxygenPercentage <= 0f)
             {
                 _drowningDeathEvent.Invoke(deltaTime);
 
                 return;
             }
 
-            var oxyPercent = 1 - OxygenLevel / 100f;
+            var oxyPercent = 1f - _gc.Health.Status.OxygenPercentage / 100f;
 
             BloodPressureTopBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
             BloodPressureBottomBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
             HeartRateBonus = Helpers.Lerp(0f, MaxHeartRateBonus, oxyPercent);
+            OxygenLevelBonus = -Helpers.Lerp(0f, MaxOxygenBonus, oxyPercent);
         }
 
     }

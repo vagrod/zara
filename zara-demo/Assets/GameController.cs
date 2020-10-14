@@ -40,6 +40,7 @@ public class GameController : MonoBehaviour, IGameController
     public Text WaterLevelText;
     public Text BloodLevelText;
     public Text StaminaText;
+    public Text OxygenLevelText;
 
     public Text DiseasesInfoText;
     public Text InjuriesInfoText;
@@ -107,6 +108,7 @@ public class GameController : MonoBehaviour, IGameController
             WarmthLevelText.text = $"Warmth Score is {_body.GetWarmthLevel().ToString("0.0")} [-5..+5 is a comfort warm feel]";
             BloodLevelText.text =  $"Blood Level: {_health.Status.BloodPercentage.ToString("00.0")}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
             StaminaText.text =  $"Stamina Level: {_health.Status.StaminaPercentage.ToString("00.0")}%";
+            OxygenLevelText.text =  $"Oxygen Level: {_health.Status.OxygenPercentage.ToString("00.0")}%";
 
             LastSleepTimeText.text =  $"Last Time Slept: {_health.Status.LastSleepTime.ToString("MMMM dd, HH:mm")}";
             LastHealthCheckTimeText.text =  $"Last Health Update: {_health.Status.CheckTime.ToString("MMMM dd, HH:mm:ss")}";

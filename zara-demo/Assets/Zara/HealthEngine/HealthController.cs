@@ -214,10 +214,6 @@ namespace ZaraEngine.HealthEngine {
         private bool _isHighPressureEventTriggered;
         private float _actualFatigueValue;
 
-        public float OxygenLevel {
-            get { return _underwaterEffects.OxygenLevel; }
-        }
-
         public ActiveMedicalAgentsMonitorsNode Medicine
         {
             get { return _medicalAgentsMonitors; }
@@ -309,7 +305,8 @@ namespace ZaraEngine.HealthEngine {
                 BodyTemperature = 36.7f,
                 FoodPercentage = 68,
                 HeartRate = 69f,
-                FatiguePercentage = 0
+                FatiguePercentage = 0,
+                OxygenPercentage = 100
             };
 
             // Default health state
@@ -428,6 +425,7 @@ namespace ZaraEngine.HealthEngine {
             newState.BodyTemperature = _healthyStatus.BodyTemperature;
             newState.BloodPressureTop = _healthyStatus.BloodPressureTop;
             newState.BloodPressureBottom = _healthyStatus.BloodPressureBottom;
+            newState.OxygenPercentage = _healthyStatus.OxygenPercentage;
 
             AddSideEffectsVitalsBonuses(newState);
             ProcessStaminaEffects(newState, gameSecondsSinceLastCall, deltaTime);
@@ -583,11 +581,13 @@ namespace ZaraEngine.HealthEngine {
             state.BloodPressureTop += _underwaterEffects.BloodPressureTopBonus;
             state.BloodPressureBottom += _underwaterEffects.BloodPressureBottomBonus;
             state.HeartRate += _underwaterEffects.HeartRateBonus;
+            state.OxygenPercentage += _underwaterEffects.OxygenLevelBonus;
 
             state.BodyTemperature += _runningEffects.BodyTemperatureBonus;
             state.BloodPressureTop += _runningEffects.BloodPressureTopBonus;
             state.BloodPressureBottom += _runningEffects.BloodPressureBottomBonus;
             state.HeartRate += _runningEffects.HeartRateBonus;
+            state.OxygenPercentage += _runningEffects.OxygenLevelBonus;
 
             state.BloodPressureTop += _fatigueEffects.BloodPressureTopBonus;
             state.BloodPressureBottom += _fatigueEffects.BloodPressureBottomBonus;
@@ -610,11 +610,13 @@ namespace ZaraEngine.HealthEngine {
             state.BloodPressureTop -= _underwaterEffects.BloodPressureTopBonus;
             state.BloodPressureBottom -= _underwaterEffects.BloodPressureBottomBonus;
             state.HeartRate -= _underwaterEffects.HeartRateBonus;
+            state.OxygenPercentage -= _underwaterEffects.OxygenLevelBonus;
 
             state.BodyTemperature -= _runningEffects.BodyTemperatureBonus;
             state.BloodPressureTop -= _runningEffects.BloodPressureTopBonus;
             state.BloodPressureBottom -= _runningEffects.BloodPressureBottomBonus;
             state.HeartRate -= _runningEffects.HeartRateBonus;
+            state.OxygenPercentage += _runningEffects.OxygenLevelBonus;
 
             state.BloodPressureTop -= _fatigueEffects.BloodPressureTopBonus;
             state.BloodPressureBottom -= _fatigueEffects.BloodPressureBottomBonus;
@@ -867,7 +869,7 @@ namespace ZaraEngine.HealthEngine {
 
         private void CheckVitalsDeath(HealthState newState, float deltaTime) {
             if (newState.BloodPressureTop <= DangerousBloodPressureTop || newState.BloodPressureBottom <= DangerousBloodPressureBottom ||
-                newState.BloodPressureTop > CriticalBloodPressureTop ||
+                newState.BloodPressureTop > CriticalBloodPressureTop || newState.OxygenPercentage <= 0f ||
                 newState.HeartRate > CriticalMaximumHeartRate || newState.HeartRate <= CriticalMinimumHeartRate || 
                 newState.BloodPressureBottom > CriticalBloodPressureBottom || newState.BodyTemperature > CriticalMaximumBodyTemperature || newState.BodyTemperature <= CriticalMinimumBodyTemperature) {
                 _vitalsDeathEvent.Check(deltaTime);

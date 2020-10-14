@@ -28,6 +28,8 @@ namespace ZaraEngine.HealthEngine
 
         public float WaterPercentage { get; set; }
 
+        public float OxygenPercentage { get; set; }
+
         public float StaminaPercentage { get; set; }
 
         public float FatiguePercentage { get; set; }
@@ -68,7 +70,7 @@ namespace ZaraEngine.HealthEngine
             {
                 return Math.Abs(BloodPressureTop) < Tolerance && Math.Abs(BloodPressureBottom) < Tolerance && Math.Abs(HeartRate) < Tolerance &&
                        Math.Abs(BloodPercentage) < Tolerance && Math.Abs(FoodPercentage) < Tolerance && Math.Abs(WaterPercentage) < Tolerance &&
-                       Math.Abs(StaminaPercentage) < Tolerance;
+                       Math.Abs(StaminaPercentage) < Tolerance && Math.Abs(OxygenPercentage) < Tolerance;
             }
         }
 
@@ -87,6 +89,23 @@ namespace ZaraEngine.HealthEngine
             }
 
             StaminaPercentage = value;
+        }
+
+        public void SetOxygenLevel(float value)
+        {
+            if (value > 100f)
+            {
+                OxygenPercentage = 100f;
+                return;
+            }
+
+            if (Math.Abs(value) < Tolerance)
+            {
+                OxygenPercentage = 0f;
+                return;
+            }
+
+            OxygenPercentage = value;
         }
 
         public void SetFoodLevel(float value)
@@ -210,7 +229,8 @@ namespace ZaraEngine.HealthEngine
                 ActiveInjuries = GetActualInjuries(currentTime),
                 FatiguePercentage = this.FatiguePercentage,
                 LastSleepTime = this.LastSleepTime,
-                CheckTime = this.CheckTime
+                CheckTime = this.CheckTime,
+                OxygenPercentage = this.OxygenPercentage
             };
         }
 
