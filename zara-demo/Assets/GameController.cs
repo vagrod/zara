@@ -138,6 +138,10 @@ public class GameController : MonoBehaviour, IGameController
                     // Active disease
                     sb.AppendLine($"\t  Active. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
                 }
+
+                if(d.LinkedInjury != null){
+                    sb.AppendLine($"\t  This disease was caused by {d.LinkedInjury.Injury.Name} injury");    
+                }
                 
                 sb.AppendLine($"\t  Is treatment needed? {(d.IsSelfHealing ? "no" : "yes")}");
                 sb.AppendLine();
@@ -145,7 +149,35 @@ public class GameController : MonoBehaviour, IGameController
 
             DiseasesInfoText.text = sb.ToString();
 
-            InjuriesInfoText.text = $"Has Active Injury: {(_health.Status.IsActiveInjury ? "yes" : "no")}";
+            sb.Clear();
+
+            sb.AppendLine($"Has Active Injury: {(_health.Status.IsActiveInjury ? "yes" : "no")}");
+
+            foreach(var inj in _health.Status.ActiveInjuries){
+                sb.AppendLine($"\t• {inj.Injury.Name} ({inj.BodyPart}) -- {inj.Injury.Stages.Count} stages total");
+
+                var st = inj.GetActiveStage(WorldTime.Value);
+
+                if(st == null){
+                    // Scheduled injury
+                    sb.AppendLine($"\t  Scheduled for {(inj.InjuryTriggerTime.ToString("HH:mm"))}");
+                } else {
+                    // Active Injury
+                    if(st.SelfHealAt.HasValue){
+                        sb.AppendLine($"\t  Active. Current stage is {st.Level}, will self-heal at {st.SelfHealAt.Value.ToString("HH:mm")}");
+                    } else
+                    {
+                        sb.AppendLine($"\t  Active. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
+                    }
+                }
+
+                if(st != null)
+                    sb.AppendLine($"\t  Is treatment needed? {(st.SelfHealAt.HasValue ? "no" : "yes")}");
+
+                sb.AppendLine();
+            }
+
+            InjuriesInfoText.text = sb.ToString();
 
             _infoUpdateCounter = 0f;
         }
@@ -220,6 +252,49 @@ public class GameController : MonoBehaviour, IGameController
         }
 
         _player.SetWalking(_isWalking);
+    }
+
+    #endregion 
+
+    #region Disease Spawner
+
+    public void OnSpawnDiseaseClick(Dropdown e){
+        var diseaseName = e.options[e.value].text?.Replace(" ", "");
+
+        if(string.IsNullOrEmpty(diseaseName))
+            return;
+
+        var disease = Activator.CreateInstance(Type.GetType($"ZaraEngine.Diseases.{diseaseName}")) as ZaraEngine.Diseases.DiseaseDefinitionBase;
+
+        if(disease == null)
+            return;
+
+        // Blood Poisoning requires a body part (from where blood poisoning has started) to be present. We'll to some body part, does not matter
+        if(diseaseName == "BloodPoisoning"){
+            var injuryThatCausedBloodPoisoning = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType("ZaraEngine.Injuries.DeepCut"), ZaraEngine.Injuries.BodyParts.RightForearm, WorldTime.Value);
+
+            _health.Status.ActiveInjuries.Add(injuryThatCausedBloodPoisoning);
+            _health.Status.ActiveDiseases.Add(new ZaraEngine.Diseases.ActiveDisease(this, disease, injuryThatCausedBloodPoisoning, WorldTime.Value));
+        } else {
+             // Venom Poisoning requires a body part (from where venom poisoning has started) to be present. We'll to some body part, does not matter
+            if(diseaseName == "VenomPoisoning"){
+                var injuryThatCausedVenomPoisoning = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType("ZaraEngine.Injuries.LightCut"), ZaraEngine.Injuries.BodyParts.LeftFoot, WorldTime.Value);
+
+                _health.Status.ActiveInjuries.Add(injuryThatCausedVenomPoisoning);
+                _health.Status.ActiveDiseases.Add(new ZaraEngine.Diseases.ActiveDisease(this, disease, injuryThatCausedVenomPoisoning, WorldTime.Value));
+            } else {
+                _health.Status.ActiveDiseases.Add(new ZaraEngine.Diseases.ActiveDisease(this, disease, WorldTime.Value));
+            }
+        }
+    }
+
+    public void OnSpawnInjuryClick(Dropdown e)
+    {
+        var injuryName = e.options[e.value].text?.Replace(" ", "");
+        var bodyPart = (ZaraEngine.Injuries.BodyParts)e.gameObject.transform.Find("BodyPart").GetComponent<Dropdown>().value;
+        var injury = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType($"ZaraEngine.Injuries.{injuryName}"), bodyPart, WorldTime.Value);
+
+        _health.Status.ActiveInjuries.Add(injury);
     }
 
     #endregion 

@@ -22,6 +22,8 @@ namespace ZaraEngine.Diseases
         private readonly ActiveInjury _linkedInjury;
         private readonly DateTime _diseaseStartTime;
 
+        public ActiveInjury LinkedInjury => _linkedInjury;
+
         public ActiveDisease(IGameController gc, Type diseaseType, DateTime diseaseStartTime) : this(gc, (DiseaseDefinitionBase)Activator.CreateInstance(diseaseType), null, diseaseStartTime)
         {
             
@@ -54,7 +56,12 @@ namespace ZaraEngine.Diseases
         private void ComputeDisease()
         {
             if (Disease.RequiresBodyPart)
+            {
+                if(_linkedInjury == null)
+                    throw new ArgumentException($"The {Disease.Name} disease requires injury to be linked when disease is activated. Provide the linkedInjury argument to ActiveDisease class.");
+
                 Disease.InitializeWithInjury(_linkedInjury.BodyPart);
+            }
 
             var timeOverall = _diseaseStartTime;
 
