@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,11 +58,15 @@ public class GameController : MonoBehaviour, IGameController
     public Button RunButton;
     public Button WalkButton;
 
+    public Dropdown ConsumablesList;
+
     #endregion 
 
     // Start is called before the first frame update
     void Start()
     {
+        /* Zara Initialization code start =======>> */
+
         ZaraEngine.Helpers.InitializeRandomizer((a, b) => UnityEngine.Random.Range(a, b));
 
         _dateTime = DateTime.Now;
@@ -72,43 +77,74 @@ public class GameController : MonoBehaviour, IGameController
         _player = new PlayerStatus();
         _inventory = new InventoryController(this);
 
-        _weather.SetTemperature(27f);
-        _weather.SetWindSpeed(0.1f);
-        _weather.SetRainIntensity(0f);
-
         ClothesGroups.Initialize(this);
 
         _body.Initialize();
         _health.Initialize();
+
+        /* <<======= Zara Initialization code end */
+
+        var flaskWithWater = new ZaraEngine.Inventory.Flask();
+
+        flaskWithWater.FillUp(WorldTime.Value);
+        //flaskWithWater.Disinfect(WorldTime.Value);
+
+        // Let's add some items to the inventory to play with in this demo
+        _inventory.AddItem(new ZaraEngine.Inventory.Cloth { Count = 20 });
+        _inventory.AddItem(flaskWithWater);
+        _inventory.AddItem(new ZaraEngine.Inventory.Meat { Count = 3 });
+        _inventory.AddItem(new ZaraEngine.Inventory.Acetaminophen { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.Antibiotic { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.Aspirin { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.EmptySyringe { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.Loperamide { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.Oseltamivir { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.Sedative { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.AtropineSolution { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.EpinephrineSolution { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.AntiVenomSolution { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.DoripenemSolution { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.MorphineSolution { Count = 10 });
+
+        RefreshConsumablesUICombo();
+
+        // Defaults
+        _weather.SetTemperature(27f);
+        _weather.SetWindSpeed(0.1f);
+        _weather.SetRainIntensity(0f);
     }
 
     // Update is called once per frame
     void Update()
     {
+        /* These two calls are required by Zara */
+        
         _body.Check(Time.deltaTime);
         _health.Check(Time.deltaTime);
+
+        /* Updating UI info */
 
         _infoUpdateCounter += Time.deltaTime;
         _dateTimeCounter += Time.deltaTime;
 
         if(_dateTimeCounter > 0.05f){
-            _dateTime = _dateTime.AddSeconds(0.5d);
+            _dateTime = _dateTime.AddSeconds(0.5d); // in-game time is 10x the real one
             _dateTimeCounter = 0f;
         }
 
         if (_infoUpdateCounter >= 1f)
         {
-            BodyTempText.text =  $"Body Temp.: {_health.Status.BodyTemperature.ToString("00.0")} deg C";
+            BodyTempText.text =  $"Body Temp.: {_health.Status.BodyTemperature.ToString("#0.0")} deg C";
             BloodPressureText.text =  $"Blood Pressure: {_health.Status.BloodPressureTop.ToString("000")}/{_health.Status.BloodPressureBottom.ToString("#00")}";
-            FatigueLevelText.text =  $"Fatigue: {_health.Status.FatiguePercentage.ToString("00.0")}%";
+            FatigueLevelText.text =  $"Fatigue: {_health.Status.FatiguePercentage.ToString("#0.0")}%";
             HeartRateText.text =  $"Heart Rate: {_health.Status.HeartRate.ToString("00")}bpm";
-            FoodLevelText.text =  $"Foood Level: {_health.Status.FoodPercentage.ToString("00.0")}%";
-            WaterLevelText.text =  $"Water Level: {_health.Status.WaterPercentage.ToString("00.0")}%";
-            WetnessLevelText.text =  $"Is Wet? {(_body.IsWet ? "yes" : "no")} (Wetness Level is {_body.WetnessLevel.ToString("00.0")}%)";
+            FoodLevelText.text =  $"Foood Level: {_health.Status.FoodPercentage.ToString("#0.0")}%";
+            WaterLevelText.text =  $"Water Level: {_health.Status.WaterPercentage.ToString("#0.0")}%";
+            WetnessLevelText.text =  $"Is Wet? {(_body.IsWet ? "yes" : "no")} (Wetness Level is {_body.WetnessLevel.ToString("#0.0")}%)";
             WarmthLevelText.text = $"Warmth Score is {_body.GetWarmthLevel().ToString("0.0")} [-5..+5 is a comfort warm feel]";
-            BloodLevelText.text =  $"Blood Level: {_health.Status.BloodPercentage.ToString("00.0")}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
-            StaminaText.text =  $"Stamina Level: {_health.Status.StaminaPercentage.ToString("00.0")}%";
-            OxygenLevelText.text =  $"Oxygen Level: {_health.Status.OxygenPercentage.ToString("00.0")}%";
+            BloodLevelText.text =  $"Blood Level: {_health.Status.BloodPercentage.ToString("#0.0")}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
+            StaminaText.text =  $"Stamina Level: {_health.Status.StaminaPercentage.ToString("#0.0")}%";
+            OxygenLevelText.text =  $"Oxygen Level: {_health.Status.OxygenPercentage.ToString("#0.0")}%";
 
             LastSleepTimeText.text =  $"Last Time Slept: {_health.Status.LastSleepTime.ToString("MMMM dd, HH:mm")}";
             LastHealthCheckTimeText.text =  $"Last Health Update: {_health.Status.CheckTime.ToString("MMMM dd, HH:mm:ss")}";
@@ -183,7 +219,7 @@ public class GameController : MonoBehaviour, IGameController
         }
     }
 
-    #region IGameController Implementation
+    #region IGameController Implementation -- Required by Zara
 
     public DateTime? WorldTime => _dateTime;
 
@@ -256,7 +292,7 @@ public class GameController : MonoBehaviour, IGameController
 
     #endregion 
 
-    #region Disease Spawner
+    #region Disease/Injury Spawner
 
     public void OnSpawnDiseaseClick(Dropdown e){
         var diseaseName = e.options[e.value].text?.Replace(" ", "");
@@ -269,14 +305,14 @@ public class GameController : MonoBehaviour, IGameController
         if(disease == null)
             return;
 
-        // Blood Poisoning requires a body part (from where blood poisoning has started) to be present. We'll to some body part, does not matter
+        // Blood Poisoning requires a body part (from where blood poisoning has started) to be present. We'll do any body part, does not matter whitch one
         if(diseaseName == "BloodPoisoning"){
             var injuryThatCausedBloodPoisoning = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType("ZaraEngine.Injuries.DeepCut"), ZaraEngine.Injuries.BodyParts.RightForearm, WorldTime.Value);
 
             _health.Status.ActiveInjuries.Add(injuryThatCausedBloodPoisoning);
             _health.Status.ActiveDiseases.Add(new ZaraEngine.Diseases.ActiveDisease(this, disease, injuryThatCausedBloodPoisoning, WorldTime.Value));
         } else {
-             // Venom Poisoning requires a body part (from where venom poisoning has started) to be present. We'll to some body part, does not matter
+             // Venom Poisoning requires a body part (from where venom poisoning has started) to be present. We'll do any body part, does not matter whitch one
             if(diseaseName == "VenomPoisoning"){
                 var injuryThatCausedVenomPoisoning = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType("ZaraEngine.Injuries.LightCut"), ZaraEngine.Injuries.BodyParts.LeftFoot, WorldTime.Value);
 
@@ -295,6 +331,49 @@ public class GameController : MonoBehaviour, IGameController
         var injury = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType($"ZaraEngine.Injuries.{injuryName}"), bodyPart, WorldTime.Value);
 
         _health.Status.ActiveInjuries.Add(injury);
+    }
+
+    #endregion 
+
+    #region Consumables
+
+    private void RefreshConsumablesUICombo(){
+        ConsumablesList.ClearOptions();
+
+        foreach (var item in _inventory.Items)
+        {
+            if(item is ZaraEngine.Inventory.InventoryConsumableItemBase)
+                ConsumablesList.options.Add (new Dropdown.OptionData() {text=$"{item.Name}: {item.Count}"});
+
+        }
+    }
+
+    public void OnConsumeClick(Dropdown e){
+        var s = e.options[e.value].text;
+
+        if(string.IsNullOrEmpty(s))
+            return;
+
+        var a = s.Split(':');
+        var itemName = a[0];
+
+        if(string.IsNullOrEmpty(itemName))
+            return;
+
+        var item = _inventory.Items.FirstOrDefault(x => x.Name.ToLower() == itemName.ToLower());
+
+        if(item == null)
+            return;
+
+        var usageResult = _inventory.TryUse(item, false);
+
+        Debug.Log($"Using the item {itemName}: {usageResult.Result}");
+
+        var index = e.value;
+
+        RefreshConsumablesUICombo();
+
+        e.value = index;
     }
 
     #endregion 

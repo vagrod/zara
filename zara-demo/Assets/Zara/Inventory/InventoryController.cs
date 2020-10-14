@@ -101,6 +101,7 @@ namespace ZaraEngine.Inventory
             public const string Resin = "Resin";
             public const string Rope = "Rope";
             public const string StoneAxe = "StoneAxe";
+            public const string Flask = "Flask";
         }
 
         public static class MedicalItems
