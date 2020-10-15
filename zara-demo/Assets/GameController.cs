@@ -491,6 +491,7 @@ public class GameController : MonoBehaviour, IGameController
         // For this demo, we will take first available combination. IRL, give user a choise
         if(combinatoryResult.Any())
             combinationId = combinatoryResult.First().Id;
+        else return;
 
         // After choosing which combination to use, we need to check for resources availability for it
         var resourcesCheckResult = _inventory.CheckCombinationForResourcesAvailability(combinationId);
@@ -498,12 +499,13 @@ public class GameController : MonoBehaviour, IGameController
         Debug.Log($"{itemFirst.Name} + {itemSecond.Name} = {resourcesCheckResult.Result}");
 
         if(resourcesCheckResult.Result == InventoryCombinatoryResult.CombinatoryResult.Allowed){
+            // Actual crafting time
             var craftResult = _inventory.TryCombine(combinationId, checkOnly: false);
 
             Debug.Log($"Crafting result for {itemFirst.Name} + {itemSecond.Name} is {(craftResult.ResultedItem?.Name ?? "(nothing)")}");
 
             if(craftResult.Result == InventoryCombinatoryResult.CombinatoryResult.Allowed){
-                var newItem = craftResult.ResultedItem;
+                var newItem = craftResult.ResultedItem; // item already added to our inventory at this point
 
                 RefreshConsumablesUICombo();
                 RefreshToolsUICombo();
