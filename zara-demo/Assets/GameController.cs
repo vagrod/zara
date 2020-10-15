@@ -61,6 +61,7 @@ public class GameController : MonoBehaviour, IGameController
     public Dropdown FirstInventoryItemsList;
     public Dropdown SecondInventoryItemsList;
     public Text WeightText;
+    public Text AgentsSummaryText;
 
     // our clothes references
     private ZaraEngine.Inventory.WaterproofJacket _jacket;
@@ -156,7 +157,7 @@ public class GameController : MonoBehaviour, IGameController
 
         if (_infoUpdateCounter >= 1f)
         {
-            WeightText.text = $"({_inventory.CurrentWeight} grams)";
+            WeightText.text = $"({_inventory.CurrentWeight.ToString("# ### ##0").Trim()} grams)";
 
             BodyTempText.text =  $"Body Temp.: {_health.Status.BodyTemperature.ToString("#0.0")} deg C";
             BloodPressureText.text =  $"Blood Pressure: {_health.Status.BloodPressureTop.ToString("000")}/{_health.Status.BloodPressureBottom.ToString("#00")}";
@@ -238,6 +239,25 @@ public class GameController : MonoBehaviour, IGameController
             }
 
             InjuriesInfoText.text = sb.ToString();
+
+            sb.Clear();
+
+            if(_health.Medicine.ActiveAgents.Any()){
+                foreach(var medicine in _health.Medicine.ActiveAgents){
+                    sb.AppendLine($"\t• {medicine.MedicalGroup.Name} is active");    
+                    sb.AppendLine($"\t  Percent of presence in blood: {medicine.PercentOfPresence.ToString("0")}%");
+                    sb.AppendLine($"\t  Percent of activity in blood: {medicine.PercentOfActivity.ToString("0")}%");
+                    sb.AppendLine($"\t  Active doses count: {medicine.ActiveDosesCount}");
+
+                    if(medicine.LastTaken.HasValue){
+                        sb.AppendLine($"\t  Last Taken: {medicine.LastTaken.Value.ToString("HH.mm")}");
+                    }
+                }
+            } else {
+                sb.AppendLine("No medical agents currently active");
+            }
+
+            AgentsSummaryText.text = sb.ToString();
 
             _infoUpdateCounter = 0f;
         }
