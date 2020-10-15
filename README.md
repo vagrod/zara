@@ -6,7 +6,7 @@ On a surface, it is really easy to use. Basic setup is about 10 lines of code â€
 
 What is missing at the moment -- is save/load mechanic, but I'm already working on it. So you'll be able to serialize Zara state and completely restore it from the save with single line of code.
 
-![Zara Demo app screen](http://imw.su/ZaraDemoScreen_02.png)
+![Zara Demo app screen](http://imw.su/ZaraDemoScreen_03.png)
 
 It includes:
 + Health Engine that controls
