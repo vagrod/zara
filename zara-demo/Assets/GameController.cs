@@ -58,7 +58,8 @@ public class GameController : MonoBehaviour, IGameController
     public Button RunButton;
     public Button WalkButton;
 
-    public Dropdown ConsumablesList;
+    public Dropdown FirstInventoryItemsList;
+    public Dropdown SecondInventoryItemsList;
 
     #endregion 
 
@@ -107,6 +108,7 @@ public class GameController : MonoBehaviour, IGameController
         _inventory.AddItem(new ZaraEngine.Inventory.MorphineSolution { Count = 10 });
 
         RefreshConsumablesUICombo();
+        RefreshToolsUICombo();
 
         // Defaults
         _weather.SetTemperature(27f);
@@ -335,39 +337,82 @@ public class GameController : MonoBehaviour, IGameController
 
     #endregion 
 
-    #region Consumables
+    #region Inventory
 
     private void RefreshConsumablesUICombo(){
-        ConsumablesList.ClearOptions();
+        FirstInventoryItemsList.ClearOptions();
 
         foreach (var item in _inventory.Items)
         {
-            if(item is ZaraEngine.Inventory.InventoryConsumableItemBase)
-                ConsumablesList.options.Add (new Dropdown.OptionData() {text=$"{item.Name}: {item.Count}"});
+            var medItem = item as InventoryMedicalItemBase;
 
+            if(medItem != null) // it is a medical item of some sort -- pill, solution, syringe
+            {
+                // This is for demo only: showing in a first list an empty syringe (so we can combine it with med solutions) -- UI limitations let's say ;)
+                if (!(medItem is ZaraEngine.Inventory.EmptySyringe))
+                {
+                    if (medItem.MedicineKind != ZaraEngine.Inventory.InventoryMedicalItemBase.MedicineKinds.Consumable)
+                        continue; // do not show in Consumables medical tools like solutions
+                }
+            } else {
+                if(!item.Type.Contains(ZaraEngine.Inventory.InventoryController.InventoryItemType.Organic))
+                    continue; // do not show in Consumables non-organic items (cloth, knife, rope and whatnow)
+            }
+
+            var s = $"{item.Count}";
+
+            if(item is ZaraEngine.Inventory.Flask)
+                s += $" ({(item as ZaraEngine.Inventory.Flask).DosesLeft} doses)";
+
+            FirstInventoryItemsList.options.Add (new Dropdown.OptionData() {text=$"{item.Name}: {s}"});
         }
     }
 
-    public void OnConsumeClick(Dropdown e){
-        var s = e.options[e.value].text;
+    private void RefreshToolsUICombo(){
+        SecondInventoryItemsList.ClearOptions();
 
+        foreach (var item in _inventory.Items)
+        {
+            var medItem = item as InventoryMedicalItemBase;
+
+            if(medItem != null) // it is a medical item of some sort -- pill, solution, syringe
+            {
+                if(medItem.MedicineKind == ZaraEngine.Inventory.InventoryMedicalItemBase.MedicineKinds.Consumable)
+                    continue; // do not show in Tools medical pills and stuff
+            } else {
+                if(item.Type.Contains(ZaraEngine.Inventory.InventoryController.InventoryItemType.Organic))
+                    continue; // do not show in Tools organic items
+            }
+            
+            SecondInventoryItemsList.options.Add (new Dropdown.OptionData() {text=$"{item.Name}: {item.Count}"});
+        }
+    }
+
+    private ZaraEngine.Inventory.IInventoryItem GetItemByComboText(string s){
         if(string.IsNullOrEmpty(s))
-            return;
+            return null;
 
         var a = s.Split(':');
         var itemName = a[0];
 
         if(string.IsNullOrEmpty(itemName))
-            return;
+            return null;
 
-        var item = _inventory.Items.FirstOrDefault(x => x.Name.ToLower() == itemName.ToLower());
+        return _inventory.Items.FirstOrDefault(x => x.Name.ToLower() == itemName.ToLower()) as ZaraEngine.Inventory.IInventoryItem;
+    }
+
+    /* Food/Water/Pills consuming example code */
+    public void OnInventoryConsumeClick(Dropdown e){
+        var s = e.options[e.value].text;
+
+        var item = GetItemByComboText(s);
 
         if(item == null)
             return;
 
-        var usageResult = _inventory.TryUse(item, false);
+        var usageResult = _inventory.TryUse(item, checkOnly: false);
 
-        Debug.Log($"Using the item {itemName}: {usageResult.Result}");
+        Debug.Log($"Using the item {item.Name}: {usageResult.Result}");
 
         var index = e.value;
 
@@ -375,6 +420,137 @@ public class GameController : MonoBehaviour, IGameController
 
         e.value = index;
     }
+
+    /* Crafting example code */
+    public void OnInventoryCombineClick(){
+        var s = FirstInventoryItemsList.options[FirstInventoryItemsList.value].text;
+        var itemFirst = GetItemByComboText(s);
+
+        s = SecondInventoryItemsList.options[SecondInventoryItemsList.value].text;
+        var itemSecond = GetItemByComboText(s);
+
+        if(itemFirst == null || itemSecond == null)
+            return;
+
+        // First, we need to know if there are any combinations available with those two items
+        var combinatoryResult = ZaraEngine.Inventory.InventoryItemsCombinatoryFactory.Instance.GetMatchedCombinations(itemFirst, itemSecond); // can be any number of items
+        var combinationId = Guid.Empty;
+
+        Debug.Log($"{itemFirst.Name} + {itemSecond.Name} = {combinatoryResult.Count} items available to craft. Grabbing the first one (if any).");
+
+        // For this demo, we will take first available combination. IRL, give user a choise
+        if(combinatoryResult.Any())
+            combinationId = combinatoryResult.First().Id;
+
+        // After choosing which combination to use, we need to check for resources availability for it
+        var resourcesCheckResult = _inventory.CheckCombinationForResourcesAvailability(combinationId);
+
+        Debug.Log($"{itemFirst.Name} + {itemSecond.Name} = {resourcesCheckResult.Result}");
+
+        if(resourcesCheckResult.Result == InventoryCombinatoryResult.CombinatoryResult.Allowed){
+            var craftResult = _inventory.TryCombine(combinationId, checkOnly: false);
+
+            Debug.Log($"Crafting result for {itemFirst.Name} + {itemSecond.Name} is {(craftResult.ResultedItem?.Name ?? "(nothing)")}");
+
+            if(craftResult.Result == InventoryCombinatoryResult.CombinatoryResult.Allowed){
+                var newItem = craftResult.ResultedItem;
+
+                RefreshConsumablesUICombo();
+                RefreshToolsUICombo();
+            }
+        }
+    }
+
+    /* Body appliances example code (injections, clothes) */
+    public void OnInvenrotyApplyClick(Dropdown e){
+        var bodyPart = (ZaraEngine.Injuries.BodyParts)e.value;
+        var s = SecondInventoryItemsList.options[SecondInventoryItemsList.value].text;
+        var item = GetItemByComboText(s);
+        var appliance = item as ZaraEngine.Inventory.InventoryMedicalItemBase;
+
+        if(item is null)
+            return;
+
+        if(appliance is null){
+            Debug.Log($"The item {item.Name} is not a medical item");
+            
+            return;
+        }
+
+        if(appliance.MedicineKind != ZaraEngine.Inventory.InventoryMedicalItemBase.MedicineKinds.Appliance){
+            Debug.Log($"The item {item.Name} is not an appliance");
+            
+            return;
+        }
+
+        if(!IsApplianceApplicableToBodyPart(appliance, bodyPart)){
+            Debug.Log($"The item {item.Name} cannot be applied to {bodyPart}");
+            
+            return;
+        }
+
+        // After all checks are done, and we know that we can use this appliance on a selected body part, we must use this item in the inventory
+        // and notify our health angine that we took some kind of medical thing -- for the health engine to do its job
+        var isUsed = false;
+        var usageResult = _inventory.TryUse(item, checkOnly: false);
+
+        isUsed = usageResult.Result == ZaraEngine.Inventory.ItemUseResult.UsageResult.UsedAll || usageResult.Result == ZaraEngine.Inventory.ItemUseResult.UsageResult.UsedSingle;
+
+        if (isUsed)
+        {
+            // Notify the health angine
+            _health.OnApplianceTaken(appliance, bodyPart);
+
+            RefreshConsumablesUICombo();
+            RefreshToolsUICombo();
+
+            Debug.Log($"Appliance {appliance.Name} was applied to the {bodyPart}");
+        }
+    }
+
+    private bool IsApplianceApplicableToBodyPart(ZaraEngine.Inventory.InventoryMedicalItemBase item, ZaraEngine.Injuries.BodyParts bodyPart)
+        {
+            if (item.Name == InventoryController.MedicalItems.Splint)
+            {
+                if (bodyPart != ZaraEngine.Injuries.BodyParts.LeftForearm &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftShin &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftSpokebone &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightForearm &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightShin &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightSpokebone)
+
+                    return false;
+            }
+
+            if (item.Name == InventoryController.MedicalItems.Bandage)
+            {
+                if (bodyPart != ZaraEngine.Injuries.BodyParts.Belly &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.Forehead &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftBrush &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftChest &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftFoot &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftForearm &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftHip &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftKnee &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftShin &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftShoulder &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftSpokebone &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightBrush &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightChest &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightFoot &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightForearm &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightHip &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightKnee &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightShin &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightShoulder &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.RightSpokebone &&
+                    bodyPart != ZaraEngine.Injuries.BodyParts.Throat)
+
+                    return false;
+            }
+
+            return true;
+        }
 
     #endregion 
 
