@@ -60,6 +60,13 @@ public class GameController : MonoBehaviour, IGameController
 
     public Dropdown FirstInventoryItemsList;
     public Dropdown SecondInventoryItemsList;
+    public Text WeightText;
+
+    // our clothes references
+    private ZaraEngine.Inventory.WaterproofJacket _jacket;
+    private ZaraEngine.Inventory.WaterproofPants _pants;
+    private ZaraEngine.Inventory.RubberBoots _boots;
+    private ZaraEngine.Inventory.LeafHat _hat;
 
     #endregion 
 
@@ -85,15 +92,28 @@ public class GameController : MonoBehaviour, IGameController
 
         /* <<======= Zara Initialization code end */
 
+        // Let's add some items to the inventory to play with in this demo
+
         var flaskWithWater = new ZaraEngine.Inventory.Flask();
 
         flaskWithWater.FillUp(WorldTime.Value);
         //flaskWithWater.Disinfect(WorldTime.Value);
 
-        // Let's add some items to the inventory to play with in this demo
-        _inventory.AddItem(new ZaraEngine.Inventory.Cloth { Count = 20 });
+        _jacket = new ZaraEngine.Inventory.WaterproofJacket();
+        _pants = new ZaraEngine.Inventory.WaterproofPants();
+        _boots = new ZaraEngine.Inventory.RubberBoots();
+        _hat = new ZaraEngine.Inventory.LeafHat();
+
         _inventory.AddItem(flaskWithWater);
+
+        _inventory.AddItem(_jacket);
+        _inventory.AddItem(_pants);
+        _inventory.AddItem(_boots);
+        _inventory.AddItem(_hat);
+
+        _inventory.AddItem(new ZaraEngine.Inventory.Cloth { Count = 20 });
         _inventory.AddItem(new ZaraEngine.Inventory.Meat { Count = 3 });
+        _inventory.AddItem(new ZaraEngine.Inventory.Bandage { Count = 5 });
         _inventory.AddItem(new ZaraEngine.Inventory.Acetaminophen { Count = 10 });
         _inventory.AddItem(new ZaraEngine.Inventory.Antibiotic { Count = 10 });
         _inventory.AddItem(new ZaraEngine.Inventory.Aspirin { Count = 10 });
@@ -136,6 +156,8 @@ public class GameController : MonoBehaviour, IGameController
 
         if (_infoUpdateCounter >= 1f)
         {
+            WeightText.text = $"({_inventory.CurrentWeight} grams)";
+
             BodyTempText.text =  $"Body Temp.: {_health.Status.BodyTemperature.ToString("#0.0")} deg C";
             BloodPressureText.text =  $"Blood Pressure: {_health.Status.BloodPressureTop.ToString("000")}/{_health.Status.BloodPressureBottom.ToString("#00")}";
             FatigueLevelText.text =  $"Fatigue: {_health.Status.FatiguePercentage.ToString("#0.0")}%";
@@ -239,7 +261,7 @@ public class GameController : MonoBehaviour, IGameController
 
     #endregion
 
-    #region Controls
+    #region Controls -- Walking/Running sim
 
     private bool _isRunning;
     private bool _isWalking;
@@ -337,9 +359,11 @@ public class GameController : MonoBehaviour, IGameController
 
     #endregion 
 
-    #region Inventory
+    #region Inventory Demo
 
     private void RefreshConsumablesUICombo(){
+        var index = FirstInventoryItemsList.value;
+
         FirstInventoryItemsList.ClearOptions();
 
         foreach (var item in _inventory.Items)
@@ -366,9 +390,13 @@ public class GameController : MonoBehaviour, IGameController
 
             FirstInventoryItemsList.options.Add (new Dropdown.OptionData() {text=$"{item.Name}: {s}"});
         }
+
+        FirstInventoryItemsList.value = index;
     }
 
     private void RefreshToolsUICombo(){
+        var index = SecondInventoryItemsList.value;
+
         SecondInventoryItemsList.ClearOptions();
 
         foreach (var item in _inventory.Items)
@@ -386,6 +414,8 @@ public class GameController : MonoBehaviour, IGameController
             
             SecondInventoryItemsList.options.Add (new Dropdown.OptionData() {text=$"{item.Name}: {item.Count}"});
         }
+
+        SecondInventoryItemsList.value = index;
     }
 
     private ZaraEngine.Inventory.IInventoryItem GetItemByComboText(string s){
@@ -466,27 +496,32 @@ public class GameController : MonoBehaviour, IGameController
         var bodyPart = (ZaraEngine.Injuries.BodyParts)e.value;
         var s = SecondInventoryItemsList.options[SecondInventoryItemsList.value].text;
         var item = GetItemByComboText(s);
+
+        TryProcessMedicalAppliance(item, bodyPart);
+    }
+
+    private bool TryProcessMedicalAppliance(ZaraEngine.Inventory.IInventoryItem item, ZaraEngine.Injuries.BodyParts bodyPart){
         var appliance = item as ZaraEngine.Inventory.InventoryMedicalItemBase;
 
         if(item is null)
-            return;
+            return false;
 
         if(appliance is null){
             Debug.Log($"The item {item.Name} is not a medical item");
             
-            return;
+            return false;
         }
 
         if(appliance.MedicineKind != ZaraEngine.Inventory.InventoryMedicalItemBase.MedicineKinds.Appliance){
             Debug.Log($"The item {item.Name} is not an appliance");
             
-            return;
+            return false;
         }
 
         if(!IsApplianceApplicableToBodyPart(appliance, bodyPart)){
             Debug.Log($"The item {item.Name} cannot be applied to {bodyPart}");
             
-            return;
+            return false;
         }
 
         // After all checks are done, and we know that we can use this appliance on a selected body part, we must use this item in the inventory
@@ -505,52 +540,82 @@ public class GameController : MonoBehaviour, IGameController
             RefreshToolsUICombo();
 
             Debug.Log($"Appliance {appliance.Name} was applied to the {bodyPart}");
-        }
-    }
-
-    private bool IsApplianceApplicableToBodyPart(ZaraEngine.Inventory.InventoryMedicalItemBase item, ZaraEngine.Injuries.BodyParts bodyPart)
-        {
-            if (item.Name == InventoryController.MedicalItems.Splint)
-            {
-                if (bodyPart != ZaraEngine.Injuries.BodyParts.LeftForearm &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftShin &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftSpokebone &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightForearm &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightShin &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightSpokebone)
-
-                    return false;
-            }
-
-            if (item.Name == InventoryController.MedicalItems.Bandage)
-            {
-                if (bodyPart != ZaraEngine.Injuries.BodyParts.Belly &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.Forehead &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftBrush &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftChest &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftFoot &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftForearm &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftHip &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftKnee &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftShin &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftShoulder &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.LeftSpokebone &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightBrush &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightChest &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightFoot &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightForearm &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightHip &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightKnee &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightShin &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightShoulder &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.RightSpokebone &&
-                    bodyPart != ZaraEngine.Injuries.BodyParts.Throat)
-
-                    return false;
-            }
 
             return true;
         }
+
+        return false;
+    }
+
+    private bool IsApplianceApplicableToBodyPart(ZaraEngine.Inventory.InventoryMedicalItemBase item, ZaraEngine.Injuries.BodyParts bodyPart)
+    {
+        if (item.Name == InventoryController.MedicalItems.Splint)
+        {
+            if (bodyPart != ZaraEngine.Injuries.BodyParts.LeftForearm &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftShin &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftSpokebone &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightForearm &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightShin &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightSpokebone)
+
+                return false;
+        }
+
+        if (item.Name == InventoryController.MedicalItems.Bandage)
+        {
+            if (bodyPart != ZaraEngine.Injuries.BodyParts.Belly &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.Forehead &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftBrush &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftChest &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftFoot &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftForearm &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftHip &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftKnee &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftShin &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftShoulder &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.LeftSpokebone &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightBrush &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightChest &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightFoot &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightForearm &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightHip &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightKnee &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightShin &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightShoulder &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.RightSpokebone &&
+                bodyPart != ZaraEngine.Injuries.BodyParts.Throat)
+
+                return false;
+        }
+
+        return true;
+    }
+
+    #endregion 
+
+    #region Clothes Demo
+
+    public void OnClothesClick(Button e){
+        if(_body.Clothes.Any()){
+            // Undress
+
+            _body.Clothes.Clear();
+
+            e.gameObject.transform.Find("Text").GetComponent<Text>().text = "Put On Clothes";
+        } else {
+            // Dress
+
+            _body.Clothes.Add(_jacket);
+            _body.Clothes.Add(_pants);
+            _body.Clothes.Add(_hat);
+            _body.Clothes.Add(_boots);
+
+            e.gameObject.transform.Find("Text").GetComponent<Text>().text = "Undress";
+        }
+
+        // When putting on and off clothes, we need to recalculate the weight of our inventory
+        _inventory.RefreshRoughWeight();
+    }
 
     #endregion 
 
