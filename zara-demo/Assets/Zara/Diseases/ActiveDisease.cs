@@ -439,13 +439,14 @@ namespace ZaraEngine.Diseases
 
             if (TreatedStage != null)
             {
-                TreatedStage.OnApplianceTaken(gc, new ApplianceInfo { Appliance = appliance, BodyPart = bodyPart }, this);
+                if(TreatedStage.OnApplianceTaken != null)
+                    TreatedStage.OnApplianceTaken(gc, new ApplianceInfo { Appliance = appliance, BodyPart = bodyPart }, this);
             }
             else
             {
                 var stage = GetActiveStage(gc.WorldTime.Value);
 
-                if (stage != null)
+                if (stage != null && stage.OnApplianceTaken != null)
                     stage.OnApplianceTaken(gc, new ApplianceInfo { Appliance = appliance, BodyPart = bodyPart }, this);
             }
         }
