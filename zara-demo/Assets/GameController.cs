@@ -244,13 +244,13 @@ public class GameController : MonoBehaviour, IGameController
 
             if(_health.Medicine.ActiveAgents.Any()){
                 foreach(var medicine in _health.Medicine.ActiveAgents){
-                    sb.AppendLine($"\t• {medicine.MedicalGroup.Name} is active");    
-                    sb.AppendLine($"\t  Percent of presence in blood: {medicine.PercentOfPresence.ToString("0")}%");
-                    sb.AppendLine($"\t  Percent of activity in blood: {medicine.PercentOfActivity.ToString("0")}%");
-                    sb.AppendLine($"\t  Active doses count: {medicine.ActiveDosesCount}");
+                    sb.AppendLine($"• {medicine.MedicalGroup.Name} is active");    
+                    sb.AppendLine($"  Percent of presence in blood: {medicine.PercentOfPresence.ToString("0")}%");
+                    sb.AppendLine($"  Percent of activity in blood: {medicine.PercentOfActivity.ToString("0")}%");
+                    sb.AppendLine($"  Active doses count: {medicine.ActiveDosesCount}");
 
                     if(medicine.LastTaken.HasValue){
-                        sb.AppendLine($"\t  Last Taken: {medicine.LastTaken.Value.ToString("HH.mm")}");
+                        sb.AppendLine($"  Last Taken: {medicine.LastTaken.Value.ToString("HH.mm")}");
                     }
                 }
             } else {

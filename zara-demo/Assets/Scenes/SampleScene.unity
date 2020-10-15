@@ -4231,7 +4231,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Medical Adents in Blood:'
+  m_Text: 'Medical Agents in Blood:'
 --- !u!222 &637114232
 CanvasRenderer:
   m_ObjectHideFlags: 0
