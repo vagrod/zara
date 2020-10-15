@@ -656,7 +656,9 @@ public class GameController : MonoBehaviour, IGameController
 
         var hours = int.Parse(text);
 
-        _body.Sleep(hours /* how many in-game hours should pass */, 6f /* sleeping will take 6 real seconds */, () => Debug.Log("Woke up!") /* wake up callback */, newTime => _dateTime = newTime /* function to advance game time in big chunks */);
+        if(!_body.Sleep(hours /* how many in-game hours should pass */, 6f /* sleeping will take 6 real seconds */, () => Debug.Log("Woke up!") /* wake up callback */, newTime => _dateTime = newTime /* function to advance game time in big chunks */)){
+            Debug.Log("Cannot sleep or not tired");
+        }
     }
 
     #endregion 

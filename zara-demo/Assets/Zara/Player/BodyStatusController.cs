@@ -76,8 +76,8 @@ namespace ZaraEngine.Player
             if(IsSleeping)
                 return true;
 
-            //if(!_gc.Health.IsSleepAllowed)
-            //    return false;
+            if(!_gc.Health.IsSleepAllowed)
+                return false;
 
             if(_gc.Health.UnconsciousMode)
                 return false;
