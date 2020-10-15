@@ -15,6 +15,7 @@ namespace ZaraEngine.Player
         private const float WetnessLevelUpdateInterval = 1f;  // Real reconds
 
         private const int SleepHealthChecksCount = 5; // times
+        private const float HoursToFullyRest = 8f; // game hours
 
         private readonly IGameController _gc;
         private readonly WetnessController _wetnessController;
@@ -86,6 +87,7 @@ namespace ZaraEngine.Player
             _gc.Health.Status.LastSleepTime = _gc.WorldTime.Value;
 
             var totalSleepSeconds = hours * 60f * 60f;
+            var fatigue = 1f - (hours / HoursToFullyRest);
 
             _sleepStartTime = _gc.WorldTime.Value;
             _wakeUpAction = onWakeUp;
@@ -93,7 +95,9 @@ namespace ZaraEngine.Player
             _sleepDurationGameHours = hours;
             _sleepHealthChecksLeft = SleepHealthChecksCount;
             _sleepHealthCheckPeriod = realDurationSeconds / SleepHealthChecksCount;
-            _fatigueValueAfterSleep = 0f;
+            _fatigueValueAfterSleep = _gc.Health.Status.FatiguePercentage < fatigue ? _gc.Health.Status.FatiguePercentage : fatigue;
+
+            UnityEngine.Debug.Log(_fatigueValueAfterSleep);
 
             // Check for diseases and prolong healthy states if any
             var activeDiseases = _gc.Health.Status.ActiveDiseases.ToList().Where(x => x.IsActiveNow);

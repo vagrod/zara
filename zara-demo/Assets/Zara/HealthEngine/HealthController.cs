@@ -477,9 +477,6 @@ namespace ZaraEngine.HealthEngine {
 
             _fatigueEffects.SlowUpdate();
 
-            if(_gc.Body.IsSleeping)
-                newState.FatiguePercentage = 0f;
-
             #region Diseases
 
             List<DiseaseStage> activeStages = null;
@@ -573,6 +570,9 @@ namespace ZaraEngine.HealthEngine {
             CheckDiseaseDeath(superStage, deltaTime);
             CheckOverdoseDeath(deltaTime);
             CheckHeartFailureDeath(deltaTime);
+
+            if(UnconsciousMode)
+                newState.FatiguePercentage = Status.FatiguePercentage;
 
             // We're done with all checks
             Status = newState;
