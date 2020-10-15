@@ -62,6 +62,9 @@ public class GameController : MonoBehaviour, IGameController
     public Dropdown SecondInventoryItemsList;
     public Text WeightText;
     public Text AgentsSummaryText;
+    public Text CurrentTimeText;
+
+    public Text SleepingText;
 
     // our clothes references
     private ZaraEngine.Inventory.WaterproofJacket _jacket;
@@ -158,26 +161,28 @@ public class GameController : MonoBehaviour, IGameController
         if (_infoUpdateCounter >= 1f)
         {
             WeightText.text = $"({_inventory.CurrentWeight.ToString("# ### ##0").Trim()} grams)";
+            CurrentTimeText.text = $"World time is {WorldTime.Value.ToString("MMMM dd, HH:mm:ss")}";
 
-            BodyTempText.text =  $"Body Temp.: {_health.Status.BodyTemperature.ToString("#0.0")} deg C";
-            BloodPressureText.text =  $"Blood Pressure: {_health.Status.BloodPressureTop.ToString("000")}/{_health.Status.BloodPressureBottom.ToString("#00")}";
-            FatigueLevelText.text =  $"Fatigue: {_health.Status.FatiguePercentage.ToString("#0.0")}%";
-            HeartRateText.text =  $"Heart Rate: {_health.Status.HeartRate.ToString("00")}bpm";
-            FoodLevelText.text =  $"Foood Level: {_health.Status.FoodPercentage.ToString("#0.0")}%";
-            WaterLevelText.text =  $"Water Level: {_health.Status.WaterPercentage.ToString("#0.0")}%";
-            WetnessLevelText.text =  $"Is Wet? {(_body.IsWet ? "yes" : "no")} (Wetness Level is {_body.WetnessLevel.ToString("#0.0")}%)";
+            BodyTempText.text = $"Body Temp.: {_health.Status.BodyTemperature.ToString("#0.0")} deg C";
+            BloodPressureText.text = $"Blood Pressure: {_health.Status.BloodPressureTop.ToString("000")}/{_health.Status.BloodPressureBottom.ToString("#00")}";
+            FatigueLevelText.text = $"Fatigue: {_health.Status.FatiguePercentage.ToString("#0.0")}%";
+            HeartRateText.text = $"Heart Rate: {_health.Status.HeartRate.ToString("00")}bpm";
+            FoodLevelText.text = $"Foood Level: {_health.Status.FoodPercentage.ToString("#0.0")}%";
+            WaterLevelText.text = $"Water Level: {_health.Status.WaterPercentage.ToString("#0.0")}%";
+            WetnessLevelText.text = $"Is Wet? {(_body.IsWet ? "yes" : "no")} (Wetness Level is {_body.WetnessLevel.ToString("#0.0")}%)";
             WarmthLevelText.text = $"Warmth Score is {_body.GetWarmthLevel().ToString("0.0")} [-5..+5 is a comfort warm feel]";
-            BloodLevelText.text =  $"Blood Level: {_health.Status.BloodPercentage.ToString("#0.0")}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
-            StaminaText.text =  $"Stamina Level: {_health.Status.StaminaPercentage.ToString("#0.0")}%";
-            OxygenLevelText.text =  $"Oxygen Level: {_health.Status.OxygenPercentage.ToString("#0.0")}%";
+            BloodLevelText.text = $"Blood Level: {_health.Status.BloodPercentage.ToString("#0.0")}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
+            StaminaText.text = $"Stamina Level: {_health.Status.StaminaPercentage.ToString("#0.0")}%";
+            OxygenLevelText.text = $"Oxygen Level: {_health.Status.OxygenPercentage.ToString("#0.0")}%";
 
-            LastSleepTimeText.text =  $"Last Time Slept: {_health.Status.LastSleepTime.ToString("MMMM dd, HH:mm")}";
-            LastHealthCheckTimeText.text =  $"Last Health Update: {_health.Status.CheckTime.ToString("MMMM dd, HH:mm:ss")}";
+            LastSleepTimeText.text = $"Last Time Slept: {_health.Status.LastSleepTime.ToString("MMMM dd, HH:mm")}";
+            LastHealthCheckTimeText.text = $"Last Health Update: {_health.Status.CheckTime.ToString("MMMM dd, HH:mm:ss")}";
 
-            CanEatText.text =  $"Can Eat? {(_health.Status.IsFoodDisgust ? "no" : "yes")}";
-            CanSleepText.text =  $"Has Sleep Disorder? {(_health.Status.IsSleepDisorder ? "yes" : "no")}";
-            CanRunText.text =  $"Can Run? {(_health.Status.CannotRun ? "no" : "yes")}";
-            HasLegFractureText.text =  $"Has Leg Fracture? {(_health.Status.IsLegFracture ? "yes" : "no")}";
+            CanEatText.text = $"Can Eat? {(_health.Status.IsFoodDisgust ? "no" : "yes")}";
+            CanSleepText.text = $"Has Sleep Disorder? {(_health.Status.IsSleepDisorder ? "yes" : "no")}";
+            CanRunText.text = $"Can Run? {(_health.Status.CannotRun ? "no" : "yes")}";
+            HasLegFractureText.text = $"Has Leg Fracture? {(_health.Status.IsLegFracture ? "yes" : "no")}";
+            SleepingText.text = $"Is Sleeping? {(_body.IsSleeping ? "yes" : "no")}";
 
             var sb = new StringBuilder();
 
@@ -637,6 +642,21 @@ public class GameController : MonoBehaviour, IGameController
 
         // When putting on and off clothes, we need to recalculate the weight of our inventory
         _inventory.RefreshRoughWeight();
+    }
+
+    #endregion 
+
+    #region Sleeping Demo
+
+    public void OnSleepClick(Button e){
+        var text = e.gameObject.transform.Find("Hours").GetComponent<InputField>().text;
+
+        if(string.IsNullOrEmpty(text))
+            return;
+
+        var hours = int.Parse(text);
+
+        _body.Sleep(hours /* how many in-game hours should pass */, 6f /* sleeping will take 6 real seconds */, () => Debug.Log("Woke up!") /* wake up callback */, newTime => _dateTime = newTime /* function to advance game time in big chunks */);
     }
 
     #endregion 

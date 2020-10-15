@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using ZaraEngine;
-using ZaraEngine.HealthEngine;
 
 public class WeatherDescription : IWeatherDescription 
 {

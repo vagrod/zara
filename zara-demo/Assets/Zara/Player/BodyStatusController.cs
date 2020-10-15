@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -12,6 +13,8 @@ namespace ZaraEngine.Player
 
         private const float WarmthLevelUpdateInterval = 1.6f; // Real reconds
         private const float WetnessLevelUpdateInterval = 1f;  // Real reconds
+
+        private const int SleepHealthChecksCount = 5; // times
 
         private readonly IGameController _gc;
         private readonly WetnessController _wetnessController;
@@ -53,6 +56,67 @@ namespace ZaraEngine.Player
         public ObservableCollection<ClothesItemBase> Clothes { get; private set; }
 
         public float WarmthLevelCached { get; private set; }
+
+        public bool IsSleeping { get; private set; }
+
+        private Action _wakeUpAction;
+        private float _sleepingCounter; // real seconds
+        private float _sleepDurationGameHours; // game hours
+        private Action<DateTime> _sleepTimeAdvanceFunc;
+        private float _sleepHealthCheckPeriod; // real seconds
+        private int _sleepHealthChecksLeft;
+        private DateTime _sleepStartTime;
+        private float _fatigueValueAfterSleep;
+
+        public bool Sleep(float hours, float realDurationSeconds, Action onWakeUp, Action<DateTime> timeAdvanceFunc){
+            if(!_gc.WorldTime.HasValue)
+                return false;
+
+            if(IsSleeping)
+                return true;
+
+            //if(!_gc.Health.IsSleepAllowed)
+            //    return false;
+
+            if(_gc.Health.UnconsciousMode)
+                return false;
+
+            IsSleeping = true;
+
+            _gc.Health.Status.LastSleepTime = _gc.WorldTime.Value;
+
+            var totalSleepSeconds = hours * 60f * 60f;
+
+            _sleepStartTime = _gc.WorldTime.Value;
+            _wakeUpAction = onWakeUp;
+            _sleepTimeAdvanceFunc = timeAdvanceFunc;
+            _sleepDurationGameHours = hours;
+            _sleepHealthChecksLeft = SleepHealthChecksCount;
+            _sleepHealthCheckPeriod = realDurationSeconds / SleepHealthChecksCount;
+            _fatigueValueAfterSleep = 0f;
+
+            // Check for diseases and prolong healthy states if any
+            var activeDiseases = _gc.Health.Status.ActiveDiseases.ToList().Where(x => x.IsActiveNow);
+
+            foreach (var disease in activeDiseases)
+            {
+                var stage = disease.GetActiveStage(_gc.WorldTime.Value);
+
+                if (stage != null)
+                {
+                    if (stage.Level == ZaraEngine.Diseases.DiseaseLevels.HealthyStage)
+                    {
+                        stage.StageDuration += TimeSpan.FromSeconds(totalSleepSeconds);
+                        stage.WillEndAt = stage.WillEndAt.Value.AddSeconds(totalSleepSeconds);
+                    }
+                }
+            }
+
+            _gc.Health.Status.OxygenPercentage = 100f;
+            _gc.Health.UnconsciousMode = true;
+
+            return true;
+        }
 
         public void UpdateWarmthLevelCache()
         {
@@ -107,6 +171,52 @@ namespace ZaraEngine.Player
         public void Check(float deltaTime)
         {
 
+            #region Sleeping
+
+            if(IsSleeping){
+                _sleepingCounter += deltaTime;
+
+                if(_sleepingCounter >= _sleepHealthCheckPeriod){
+                    // need to check health and advance time
+
+                    //($"Sleep iteration done. Checks was {_sleepHealthChecksLeft}, now it's {_sleepHealthChecksLeft-1}");
+
+                    _sleepingCounter = 0f;
+                    _sleepHealthChecksLeft--;
+
+                    if(_sleepHealthChecksLeft == 0){
+                        // Done sleeping
+
+                        var newWorldTime = _sleepStartTime.AddHours(_sleepDurationGameHours);
+
+                        //($"Done sleeping. Wake up exact time is {newWorldTime.ToShortTimeString()}, warmth deltaTime is {deltaTime}");
+
+                        _sleepTimeAdvanceFunc?.Invoke(newWorldTime);
+
+                        _gc.Health.UnconsciousMode = false;
+                        _gc.Health.SetFatiguePercentage(_fatigueValueAfterSleep);
+                        _gc.Health.Status.CheckTime = newWorldTime;
+
+                        IsSleeping = false;
+
+                        _wakeUpAction?.Invoke();
+                    } else {
+                        var iteration = SleepHealthChecksCount - _sleepHealthChecksLeft;
+                        var newWorldTime = _sleepStartTime.AddHours((_sleepDurationGameHours / SleepHealthChecksCount) * iteration);
+
+                        deltaTime = (float)(newWorldTime - _gc.WorldTime.Value).TotalSeconds;
+
+                        //($"Mid-sleep check. New mid-sleep time is {newWorldTime.ToShortTimeString()}, warmth deltaTime is {deltaTime}");
+
+                        _sleepTimeAdvanceFunc?.Invoke(newWorldTime);
+
+                        _gc.Health.Status.LastSleepTime = newWorldTime;
+                    }
+                }
+            }
+
+            #endregion 
+
             #region Lerping Warmth Level
 
             if (_warmthLerpCounter.HasValue)
@@ -114,6 +224,9 @@ namespace ZaraEngine.Player
 
                 if (_warmthLerpCounter < WarmthLevelUpdateInterval)
                     _warmthLerpCounter += deltaTime;
+
+                if(_warmthLerpCounter > WarmthLevelUpdateInterval)
+                    _warmthLerpCounter = WarmthLevelUpdateInterval;
 
                 WarmthLevelCached = Helpers.Lerp(_warmthLerpBase, _warmthLerpTarget, _warmthLerpCounter.Value / WarmthLevelUpdateInterval);
             }
@@ -124,7 +237,10 @@ namespace ZaraEngine.Player
 
             _warmthLevelTimeoutCounter += deltaTime;
 
-            if (_warmthLevelTimeoutCounter > WarmthLevelUpdateInterval)
+            if(_warmthLevelTimeoutCounter > WarmthLevelUpdateInterval)
+                _warmthLevelTimeoutCounter = WarmthLevelUpdateInterval;
+
+            if (_warmthLevelTimeoutCounter >= WarmthLevelUpdateInterval)
             {
                 _warmthLerpCounter = null;
 
@@ -140,8 +256,11 @@ namespace ZaraEngine.Player
             #region Wetness Level Refresh
 
             _wetnessLevelTimeoutCounter += deltaTime;
+            
+            if(_wetnessLevelTimeoutCounter > WetnessLevelUpdateInterval)
+                _wetnessLevelTimeoutCounter = WetnessLevelUpdateInterval;
 
-            if (_wetnessLevelTimeoutCounter > WetnessLevelUpdateInterval)
+            if (_wetnessLevelTimeoutCounter >= WetnessLevelUpdateInterval)
             {
                 _wetnessLevelTimeoutCounter = 0f;
 

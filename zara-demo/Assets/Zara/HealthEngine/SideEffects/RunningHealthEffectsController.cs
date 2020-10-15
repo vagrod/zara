@@ -84,7 +84,7 @@ namespace ZaraEngine.HealthEngine
             BloodPressureBottomBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, runningPerc);
             HeartRateBonus = Helpers.Lerp(0f, MaxHeartRateBonus, runningPerc);
             BodyTemperatureBonus = Helpers.Lerp(0f, MaxBodyTemperatureBonus, runningPerc);
-            OxygenLevelBonus = _gc.Player.IsUnderWater ? 0f : -Helpers.Lerp(0f, MaxOxygenBonus, runningPerc); // ignore if underwater
+            OxygenLevelBonus = _gc.Player.IsUnderWater || _gc.Body.IsSleeping ? 0f : -Helpers.Lerp(0f, MaxOxygenBonus, runningPerc); // ignore if underwater
 
             if (_gameSecondsInRunningState > SecondsOfRunningBeforeWheeze)
             {

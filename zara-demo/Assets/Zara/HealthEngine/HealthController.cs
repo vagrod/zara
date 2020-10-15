@@ -143,14 +143,14 @@ namespace ZaraEngine.HealthEngine {
 
         private const float BasicWaterDrainPerSecond                  = 0.005f;    // percents per game second
         private const float AdditionalWaterDrainWhileRunningPerSecond = 0.01f;     // percents per game second
-        private const float BasicFoodDrainPerSecond                   = 0.00052f;  // percents per game second
+        private const float BasicFoodDrainPerSecond                   = 0.00212f;  // percents per game second
         private const float AdditionalFoodDrainWhileRunningPerSecond  = 0.001f;    // percents per game second
         private const float StaminaRegainRatePerSecond                = 0.2f;      // percents per game second
         private const float StaminaRegainRateWhileWalkingPerSecond    = 0.09f;     // percents per game second
         private const float StaminaDecreaseRateWhileRunningPerSecond  = 0.3f;      // percents per game second
         private const float FatigueIncreaseWhenRunning                = 0.01f;     // percents per game second
         private const float UnconsciousWaterDrainPerSecond            = 0.00062f;  // percents per game second
-        private const float UnconsciousFoodDrainPerSecond             = 0.000121f; // percents per game second
+        private const float UnconsciousFoodDrainPerSecond             = 0.001081f; // percents per game second
         private const float HotWeatherWaterDrainBonus                 = 0.0001f;   // percents per game second
         private const float ExtremelyHotWeatherWaterDrainBonus        = 0.006f;    // percents per game second
         private const float HotWeatherStaminaDrainBonus               = 0.0001f;   // percents per game second
@@ -477,6 +477,9 @@ namespace ZaraEngine.HealthEngine {
 
             _fatigueEffects.SlowUpdate();
 
+            if(_gc.Body.IsSleeping)
+                newState.FatiguePercentage = 0f;
+
             #region Diseases
 
             List<DiseaseStage> activeStages = null;
@@ -604,6 +607,9 @@ namespace ZaraEngine.HealthEngine {
 
             state.BodyTemperature += _clothesSideEffects.BodyTemperatureBonus;
             state.HeartRate += _clothesSideEffects.HeartRateBonus;
+
+            if (state.OxygenPercentage > 100f)
+                state.OxygenPercentage = 100f;
         }
 
         private void TakeAwaySideEffectsVitalsBonuses(HealthState state) {
@@ -633,6 +639,9 @@ namespace ZaraEngine.HealthEngine {
 
             state.BodyTemperature -= _clothesSideEffects.BodyTemperatureBonus;
             state.HeartRate -= _clothesSideEffects.HeartRateBonus;
+
+            if (state.OxygenPercentage < 0f)
+                state.OxygenPercentage = 0f;
         }
 
         #endregion
