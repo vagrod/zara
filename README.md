@@ -1,7 +1,7 @@
 # Zara Survival Engine
-Zara is written in C# (3D-engine-agnostic code [at the moment it has Unity references, but will be unlinked soon])
+Zara is written in C# (3D-engine-agnostic code [at the moment it has one Unity reference, but will be unlinked soon])
 
-![Zara Demo app screen](http://imw.su/ZaraScreen.png)
+![Zara Demo app screen](http://imw.su/ZaraDemoScreen.png)
 
 It includes:
 + Health Engine that controls
