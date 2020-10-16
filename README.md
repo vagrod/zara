@@ -6,7 +6,14 @@ Zara will be useful for you if you want your game to have weather-aware health c
 Code is open, so you can customize everything for your particular game needs.
 
 
-What is missing at the moment -- is save/load mechanic, but I'm already working on it. So you'll be able to serialize Zara state and completely restore it from the save with single line of code.
+What is missing at the moment -- is save/load mechanic, but I'm already working on it. So you'll be able to serialize Zara state and completely restore it from the save like that:
+
+``` csharp
+var state = ZaraEngine.EngineState.GetState(gc);
+// ........
+ZaraEngine.EngineState.RestoreState(gc, state);
+// ... where gc is an engine instance (IGameController)
+```
 
 ![Zara Demo app screen](http://imw.su/ZaraDemoScreen_03.png)
 
