@@ -6,7 +6,7 @@ namespace ZaraEngine.StateManaging {
 
     public interface IStateSnippet {
 
-        List<IStateSnippet> ChildStates { get; }
+        Dictionary<string, IStateSnippet> ChildStates { get; }
 
         object ToContract();
 
