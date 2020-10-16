@@ -404,7 +404,7 @@ public class GameController : MonoBehaviour, IGameController
                 }
             } else {
                 if(!item.Type.Contains(ZaraEngine.Inventory.InventoryController.InventoryItemType.Organic))
-                    continue; // do not show in Consumables non-organic items (cloth, knife, rope and whatnow)
+                    continue; // do not show in Consumables non-organic items (cloth, knife, rope and whatnot)
             }
 
             var s = $"{item.Count}";

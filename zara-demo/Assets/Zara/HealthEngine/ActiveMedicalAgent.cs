@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZaraEngine;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
-
-using UnityEngine;
 
 namespace ZaraEngine.HealthEngine
 {
@@ -17,7 +16,7 @@ namespace ZaraEngine.HealthEngine
         private readonly MedicalConsumablesGroup _group;
         private readonly CurveTypes _activationType;
 
-        private AnimationCurve _activationCurve;
+        private MultiKeyedLerp _activationCurve;
 
         private readonly List<DateTime> _timesTaken = new List<DateTime>();
 
@@ -135,7 +134,7 @@ namespace ZaraEngine.HealthEngine
         {
             if (_activationType == CurveTypes.ActiveImmediately)
             {
-                _activationCurve = new AnimationCurve(
+                _activationCurve = new MultiKeyedLerp(
                     new Keyframe(0f, 0f),
                     new Keyframe(5f, 100f),
                     new Keyframe(56f, 97f),
@@ -145,7 +144,7 @@ namespace ZaraEngine.HealthEngine
 
             if (_activationType == CurveTypes.ActiveInSecondHalf)
             {
-                _activationCurve = new AnimationCurve(
+                _activationCurve = new MultiKeyedLerp(
                     new Keyframe(0f, 0f),
                     new Keyframe(50f, 5f),
                     new Keyframe(56f, 100f),
@@ -156,7 +155,7 @@ namespace ZaraEngine.HealthEngine
 
             if (_activationType == CurveTypes.SlowActivation)
             {
-                _activationCurve = new AnimationCurve(
+                _activationCurve = new MultiKeyedLerp(
                     new Keyframe(0f, 0f),
                     new Keyframe(32f, 100f),
                     new Keyframe(100f, 0f)
