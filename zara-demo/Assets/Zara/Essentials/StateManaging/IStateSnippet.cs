@@ -10,6 +10,8 @@ namespace ZaraEngine.StateManaging {
 
         object ToContract();
 
+        void FromContract(object o);
+
     }
 
 }

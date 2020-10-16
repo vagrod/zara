@@ -10,12 +10,18 @@ namespace ZaraEngine {
             var o = new StateManaging.ZaraEngineState();
 
             o.healthState = (HealthControllerStateContract)gc.Health.GetState().ToContract();
+            //o.bodyState = (HealthControllerStateContract)gc.Body.GetState().ToContract();
+            //o.inventoryState = (HealthControllerStateContract)gc.Inventory.GetState().ToContract();
 
             return o;
         }
 
-        public static void RestoreState(ZaraEngine.StateManaging.ZaraEngineState state){
+        public static void RestoreState(IGameController gc, ZaraEngine.StateManaging.ZaraEngineState state){
+            var hcSnippet = new HealthControllerSnippet();
 
+            hcSnippet.FromContract(state.healthState);
+
+            gc.Health.RestoreState(hcSnippet);
         }
 
     }

@@ -1324,20 +1324,6 @@ namespace ZaraEngine.HealthEngine {
 
         #region State Manage
 
-        public class HealthControllerSnippet : IStateSnippet {
-            
-            public List<IStateSnippet> ChildStates { get; }
-
-            public object ToContract(){
-                return new HealthControllerStateContract();
-            }
-
-            public IStateSnippet FromContract(object o){
-                return new HealthControllerSnippet();
-            }
-
-        }
-
         public IStateSnippet GetState(){
             return new HealthControllerSnippet
             {
