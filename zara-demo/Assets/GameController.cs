@@ -130,6 +130,7 @@ public class GameController : MonoBehaviour, IGameController
         _inventory.AddItem(new ZaraEngine.Inventory.AntiVenomSolution { Count = 10 });
         _inventory.AddItem(new ZaraEngine.Inventory.DoripenemSolution { Count = 10 });
         _inventory.AddItem(new ZaraEngine.Inventory.MorphineSolution { Count = 10 });
+        _inventory.AddItem(new ZaraEngine.Inventory.DisinfectingPellets { Count = 5 });
 
         RefreshConsumablesUICombo();
         RefreshToolsUICombo();

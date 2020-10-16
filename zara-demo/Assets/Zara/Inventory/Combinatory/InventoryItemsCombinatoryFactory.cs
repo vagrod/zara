@@ -21,6 +21,9 @@ namespace ZaraEngine.Inventory
                 CombinatoryItemBuilder      <SyringeOfDoripenem>       .Is<EmptySyringe>().And<DoripenemSolution>(),
                 CombinatoryItemBuilder      <AntibioticEmbrocation>    .Is<DoripenemSolution>().And<Bandage>(),
                 CombinatoryItemBuilder      <Headscarf>                .Is<NeedleAndThread>().And<Cloth>(3),
+
+                /* Special Actions */
+                CombinatoryItemBuilder      <Flask>                    .Is<Flask>().Plus<DisinfectingPellets>().WithSpecialAction(ItemsCombination.SpecialActions.DisinfectWater).AvailableWhen(items => !ItemByType<Flask>(items).IsSafe && ItemByType<Flask>(items).DosesLeft > 0),
             });
         }
 
@@ -96,9 +99,7 @@ namespace ZaraEngine.Inventory
         {
             None = 0,
             TorchOff,
-            DisinfectWater,
-            WetTheMask,
-            ChangeGasMaskFilter
+            DisinfectWater
         }
 
         public ItemsCombination()
