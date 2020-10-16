@@ -89,8 +89,6 @@ public class GameController : MonoBehaviour, IGameController
         _player = new PlayerStatus();
         _inventory = new InventoryController(this);
 
-        ClothesGroups.Initialize(this);
-
         _body.Initialize();
         _health.Initialize();
 

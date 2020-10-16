@@ -39,6 +39,8 @@ namespace ZaraEngine.Player
 
         public void Initialize()
         {
+            ClothesGroups.Initialize(_gc);
+
             _wetnessController.Initialize();
         }
 
