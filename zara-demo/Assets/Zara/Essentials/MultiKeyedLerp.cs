@@ -25,7 +25,11 @@ namespace ZaraEngine
 
         public float Evaluate(float time)
         {
+            var alreadyDidRescan = false;
+
             Tuple<Keyframe, Keyframe> reScanSegments(){
+                alreadyDidRescan = true;
+
                 return _segments.FirstOrDefault(x => time >= x.Item1.Time && time <= x.Item2.Time);
             }
 
@@ -36,7 +40,8 @@ namespace ZaraEngine
                     _lastSegment = reScanSegments();
                 }
             } else {
-                _lastSegment = reScanSegments();
+                if(!alreadyDidRescan)
+                    _lastSegment = reScanSegments();
             }
 
             if(_lastSegment == null)
