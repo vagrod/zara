@@ -8,12 +8,13 @@ using ZaraEngine.HealthEngine.SideEffects;
 using ZaraEngine.Injuries;
 using ZaraEngine.Injuries.Stages;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 using Foundation.Databinding;
 using UnityEditorInternal;
 
 namespace ZaraEngine.HealthEngine {
     [Serializable]
-    public class HealthController {
+    public class HealthController : IAcceptsStateChange {
 
         private readonly IGameController _gc;
 
@@ -1319,6 +1320,36 @@ namespace ZaraEngine.HealthEngine {
         }
 
         #endregion
+
+
+        #region State Manage
+
+        public class HealthControllerSnippet : IStateSnippet {
+            
+            public List<IStateSnippet> ChildStates { get; }
+
+            public object ToContract(){
+                return new HealthControllerStateContract();
+            }
+
+            public IStateSnippet FromContract(object o){
+                return new HealthControllerSnippet();
+            }
+
+        }
+
+        public IStateSnippet GetState(){
+            return new HealthControllerSnippet
+            {
+
+            };
+        }
+
+        public void RestoreState(IStateSnippet savedState){
+            var state = (HealthControllerSnippet)savedState;
+        }
+
+        #endregion 
 
     }
 }
