@@ -661,6 +661,10 @@ public class GameController : MonoBehaviour, IGameController
         }
     }
 
+    public void OnAdvanceTimeClick(){
+        _dateTime = _dateTime.AddHours(1);
+    }
+
     #endregion 
 
 }

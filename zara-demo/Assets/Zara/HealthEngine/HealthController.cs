@@ -121,7 +121,7 @@ namespace ZaraEngine.HealthEngine {
         private const float WaterLevelDeathLevel              = 5f;   // percents
         private const float FoodLevelDeathLevel               = 5f;   // percents
         private const float HighTopBloodPressureLevel         = 137f; // mmHg
-        private const float FatigueEffectToStaminaDivider     = 550f; // number (less number means greater fatigue impact on stamina)
+        private const float FatigueEffectToStaminaDivider     = 550f; // number (lesser number means greater fatigue impact on stamina)
         private const float CriticalMaximumHeartRate          = 200f; // bpm
         private const float CriticalMinimumHeartRate          = 35f;  // bpm
         private const float CriticalBloodPressureTop          = 235;  // mmHg
@@ -453,7 +453,7 @@ namespace ZaraEngine.HealthEngine {
 
             var gameSecondsSinceLastCheck = (float)(_gc.WorldTime.Value - newState.CheckTime).TotalSeconds;
 
-            _actualFatigueValue += (gameSecondsSinceLastCheck / (3600f * 24)) * 100;
+            _actualFatigueValue += (gameSecondsSinceLastCheck / (3600f * 18)) * 100;
 
             if (Medicine.IsEpinephrineActive)
             {

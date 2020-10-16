@@ -87,7 +87,7 @@ namespace ZaraEngine.Player
             _gc.Health.Status.LastSleepTime = _gc.WorldTime.Value;
 
             var totalSleepSeconds = hours * 60f * 60f;
-            var fatigue = 1f - (hours / HoursToFullyRest);
+            var fatigue = (1f - (hours / HoursToFullyRest)) * 100f;
 
             _sleepStartTime = _gc.WorldTime.Value;
             _wakeUpAction = onWakeUp;
@@ -96,8 +96,6 @@ namespace ZaraEngine.Player
             _sleepHealthChecksLeft = SleepHealthChecksCount;
             _sleepHealthCheckPeriod = realDurationSeconds / SleepHealthChecksCount;
             _fatigueValueAfterSleep = _gc.Health.Status.FatiguePercentage < fatigue ? _gc.Health.Status.FatiguePercentage : fatigue;
-
-            UnityEngine.Debug.Log(_fatigueValueAfterSleep);
 
             // Check for diseases and prolong healthy states if any
             var activeDiseases = _gc.Health.Status.ActiveDiseases.ToList().Where(x => x.IsActiveNow);
