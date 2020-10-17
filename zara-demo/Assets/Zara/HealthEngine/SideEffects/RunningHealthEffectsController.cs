@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
 using ZaraEngine.Player;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine
 {
-    public class RunningHealthEffectsController
+    public class RunningHealthEffectsController : IAcceptsStateChange
     {
 
         /* ------------------------------------------------------------------------------------------------------------------ *
@@ -106,6 +107,46 @@ namespace ZaraEngine.HealthEngine
                 }
             }
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new RunningHealthEffectsSnippet
+            {
+                BloodPressureBottomBonus = this.BloodPressureBottomBonus,
+                BloodPressureTopBonus = this.BloodPressureTopBonus,
+                HeartRateBonus = this.HeartRateBonus,
+                OxygenLevelBonus = this.OxygenLevelBonus,
+                BodyTemperatureBonus = this.BodyTemperatureBonus,
+                GameSecondsInRunningState = _gameSecondsInRunningState,
+                IsWheezeEventTriggered = _isWheezeEventTriggered
+            };
+
+            state.ChildStates.Add("IntenseRunningOnEvent", _intenseRunningOnEvent.GetState());
+            state.ChildStates.Add("IntenseRunningOffEvent", _intenseRunningOffEvent.GetState());
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (RunningHealthEffectsSnippet)savedState;
+
+            BloodPressureBottomBonus = state.BloodPressureBottomBonus;
+            BloodPressureTopBonus = state.BloodPressureTopBonus;
+            HeartRateBonus = state.HeartRateBonus;
+            OxygenLevelBonus = state.OxygenLevelBonus;
+            BodyTemperatureBonus = state.BodyTemperatureBonus;
+
+            _gameSecondsInRunningState = state.GameSecondsInRunningState;
+            _isWheezeEventTriggered = state.IsWheezeEventTriggered;
+
+            _intenseRunningOnEvent.RestoreState(state.ChildStates["IntenseRunningOnEvent"]);
+            _intenseRunningOffEvent.RestoreState(state.ChildStates["IntenseRunningOffEvent"]);
+        }
+
+        #endregion 
 
     }
 }

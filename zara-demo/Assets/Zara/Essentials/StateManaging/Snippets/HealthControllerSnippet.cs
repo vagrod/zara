@@ -67,6 +67,7 @@ namespace ZaraEngine.StateManaging {
             c.DrowningEvent = (FixedEventContract)ChildStates["DrowningEvent"].ToContract();
 
             c.UnderwaterHealthEffects = (UnderwaterHealthEffectsContract)ChildStates["UnderwaterHealthEffects"].ToContract();
+            c.RunningHealthEffects = (RunningHealthEffectsContract)ChildStates["RunningHealthEffects"].ToContract();
 
             return c;
         }
@@ -115,6 +116,7 @@ namespace ZaraEngine.StateManaging {
             ChildStates.Add("DrowningEvent", new FixedEventSnippet(c.DrowningEvent));
 
             ChildStates.Add("UnderwaterHealthEffects", new UnderwaterHealthEffectsSnippet(c.UnderwaterHealthEffects));
+            ChildStates.Add("RunningHealthEffects", new RunningHealthEffectsSnippet(c.RunningHealthEffects));
         }
 
     }
