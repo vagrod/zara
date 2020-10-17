@@ -184,10 +184,6 @@ namespace ZaraEngine.HealthEngine {
         private readonly FixedEvent _normalPressureEvent;
         private readonly FixedEvent _drowningEvent;
 
-        /* ------------------------------------------------------------------------------------------------------------------- *
-         * ------------------------------------------------------ Fields ----------------------------------------------------- *
-         * ------------------------------------------- !!! RESTORE ON SAVE LOAD !!! ------------------------------------------ */
-
         private DateTime _lastUpdateGameTime;
         private HealthState _healthSnapshot;
 
@@ -1365,6 +1361,7 @@ namespace ZaraEngine.HealthEngine {
             state.ChildStates.Add("RunningHealthEffects", _runningEffects.GetState());
             state.ChildStates.Add("FatigueHealthEffects", _fatigueEffects.GetState());
             state.ChildStates.Add("InventoryHealthEffects", _inventoryEffects.GetState());
+            state.ChildStates.Add("MedicalAgentsHealthEffects", _medicalAgentsEffects.GetState());
 
             return state;
         }
@@ -1415,6 +1412,7 @@ namespace ZaraEngine.HealthEngine {
             _runningEffects.RestoreState(state.ChildStates["RunningHealthEffects"]);
             _fatigueEffects.RestoreState(state.ChildStates["FatigueHealthEffects"]);
             _inventoryEffects.RestoreState(state.ChildStates["InventoryHealthEffects"]);
+            _medicalAgentsEffects.RestoreState(state.ChildStates["MedicalAgentsHealthEffects"]);
         }
 
         #endregion 

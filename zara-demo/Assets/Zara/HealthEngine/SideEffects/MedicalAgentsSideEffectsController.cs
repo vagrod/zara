@@ -5,9 +5,10 @@ using System.Text;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
 using ZaraEngine.Player;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine {
-    public class MedicalAgentsSideEffectsController {
+    public class MedicalAgentsSideEffectsController : IAcceptsStateChange {
 
         private readonly IGameController _gc;
 
@@ -84,6 +85,33 @@ namespace ZaraEngine.HealthEngine {
             HeartRateBonus = clearHeartRateBonus;
             BodyTemperatureBonus = clearBodyTemperatureBonus;
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new MedicalAgentsHealthEffectsSnippet
+            {
+                BloodPressureBottomBonus = this.BloodPressureBottomBonus,
+                BloodPressureTopBonus = this.BloodPressureTopBonus,
+                HeartRateBonus = this.HeartRateBonus,
+                BodyTemperatureBonus = this.BodyTemperatureBonus
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (MedicalAgentsHealthEffectsSnippet)savedState;
+
+            BloodPressureBottomBonus = state.BloodPressureBottomBonus;
+            BloodPressureTopBonus = state.BloodPressureTopBonus;
+            HeartRateBonus = state.HeartRateBonus;
+            BodyTemperatureBonus = state.BodyTemperatureBonus;
+        }
+
+        #endregion 
 
     }
 }
