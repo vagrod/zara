@@ -16,7 +16,7 @@ namespace ZaraEngine.StateManaging
         public float ActualFatigueValue;
         public bool UnconsciousMode;
 
-        public HealthStateStateContract HealthState;
+        public HealthStateStateContract Status;
 
         public UnderwaterHealthEffectsContract UnderwaterHealthEffects;
         public RunningHealthEffectsContract RunningHealthEffects;

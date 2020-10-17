@@ -14,7 +14,7 @@ namespace ZaraEngine.StateManaging
 
         #region Data Fields
 
-        
+        public ToolsOnlyInjuryTreatmentSnippet[] ToolsOnlyTreatments { get; set; } = new ToolsOnlyInjuryTreatmentSnippet[] { };
 
         #endregion 
 
@@ -22,7 +22,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = new InjuryTreatmentContract
             {
-        
+                ToolsOnlyTreatments = this.ToolsOnlyTreatments.ToList().ConvertAll(x => (ToolsOnlyInjuryTreatmentContract)x.ToContract()).ToArray()
             };
 
             return c;
@@ -32,7 +32,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (InjuryTreatmentContract)o;
 
-        
+            ToolsOnlyTreatments = c.ToolsOnlyTreatments.ToList().ConvertAll(x => new ToolsOnlyInjuryTreatmentSnippet(x)).ToArray();
 
             ChildStates.Clear();
         }

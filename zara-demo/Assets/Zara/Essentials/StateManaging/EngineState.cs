@@ -11,9 +11,9 @@ namespace ZaraEngine {
 
             o.WorldTime = gc.WorldTime.Value;
 
-            o.HealthState = (HealthControllerStateContract)gc.Health.GetState().ToContract();
-            //o.bodyState = (HealthControllerStateContract)gc.Body.GetState().ToContract();
-            //o.inventoryState = (HealthControllerStateContract)gc.Inventory.GetState().ToContract();
+            o.Health = (HealthControllerStateContract)gc.Health.GetState().ToContract();
+            //o.Body = (HealthControllerStateContract)gc.Body.GetState().ToContract();
+            //o.Inventory = (HealthControllerStateContract)gc.Inventory.GetState().ToContract();
 
             return o;
         }
@@ -23,7 +23,7 @@ namespace ZaraEngine {
 
             restoreWorldTime?.Invoke(state.WorldTime);
 
-            hcSnippet.FromContract(state.HealthState);
+            hcSnippet.FromContract(state.Health);
 
             gc.Health.RestoreState(hcSnippet);
         }

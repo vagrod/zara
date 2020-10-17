@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Injuries.Treatment
 {
-    public class ToolsOnlyInjuryTreatment
+    public class ToolsOnlyInjuryTreatment : IAcceptsStateChange
     {
         private const int MaximumTimeBetweenAppliancesInGameMinutes = 5;
 
@@ -120,6 +121,34 @@ namespace ZaraEngine.Injuries.Treatment
 
             return false;
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ToolsOnlyInjuryTreatmentSnippet
+            {
+                LastToolTime = _lastToolTime,
+                ToolsUsed = _toolsOriginal.Count - _toolsNeeded.Count
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ToolsOnlyInjuryTreatmentSnippet)savedState;
+
+            _lastToolTime = state.LastToolTime;
+            _toolsNeeded = _toolsOriginal.ToList();
+
+            for (int i = 0; i < state.ToolsUsed; i++)
+            {
+                _toolsNeeded.RemoveAt(0);
+            }
+        }
+
+        #endregion 
 
     }
 }

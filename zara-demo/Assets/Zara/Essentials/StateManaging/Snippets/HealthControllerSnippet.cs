@@ -39,7 +39,7 @@ namespace ZaraEngine.StateManaging {
                 UnconsciousMode = this.UnconsciousMode
             };
 
-            c.HealthState = (HealthStateStateContract)ChildStates["HealthState"].ToContract();
+            c.Status = (HealthStateStateContract)ChildStates["HealthState"].ToContract();
 
             c.DiseaseDizzinessEvent = (EventByChanceContract)ChildStates["DiseaseDizzinessEvent"].ToContract();
             c.DiseaseBlackoutsEvent = (EventByChanceContract)ChildStates["DiseaseBlackoutsEvent"].ToContract();
@@ -96,7 +96,7 @@ namespace ZaraEngine.StateManaging {
 
             ChildStates.Clear();
 
-            ChildStates.Add("HealthState", new HealthStateSnippet(c.HealthState));
+            ChildStates.Add("HealthState", new HealthStateSnippet(c.Status));
 
             ChildStates.Add("DiseaseDizzinessEvent", new EventByChanceSnippet(c.DiseaseDizzinessEvent));
             ChildStates.Add("DiseaseBlackoutsEvent", new EventByChanceSnippet(c.DiseaseBlackoutsEvent));
