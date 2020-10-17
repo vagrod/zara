@@ -1366,6 +1366,7 @@ namespace ZaraEngine.HealthEngine {
             state.ChildStates.Add("ClothesHealthEffects", _clothesSideEffects.GetState());
 
             state.ChildStates.Add("DiseaseMonitors", _diseaseMonitors.GetState());
+            state.ChildStates.Add("ActiveMedicalAgentsMonitors", _medicalAgentsMonitors.GetState());
 
             return state;
         }
@@ -1421,6 +1422,7 @@ namespace ZaraEngine.HealthEngine {
             _clothesSideEffects.RestoreState(state.ChildStates["ClothesHealthEffects"]);
 
             _diseaseMonitors.RestoreState(state.ChildStates["DiseaseMonitors"]);
+            _medicalAgentsMonitors.RestoreState(state.ChildStates["ActiveMedicalAgentsMonitors"]);
         }
 
         #endregion 

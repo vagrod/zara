@@ -5,20 +5,21 @@ using System.Text;
 using ZaraEngine;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine
 {
-    public class ActiveMedicalAgent : IActiveMedicalAgent
+    public class ActiveMedicalAgent : IActiveMedicalAgent, IAcceptsStateChange
     {
 
-        private readonly float _gameMinutesAgentIsActive;
         private readonly IGameController _gc;
         private readonly MedicalConsumablesGroup _group;
         private readonly CurveTypes _activationType;
 
         private MultiKeyedLerp _activationCurve;
 
-        private readonly List<DateTime> _timesTaken = new List<DateTime>();
+        private float _gameMinutesAgentIsActive;
+        private List<DateTime> _timesTaken = new List<DateTime>();
 
         public List<DateTime> DosesTaken
         {
@@ -163,6 +164,29 @@ namespace ZaraEngine.HealthEngine
             }
         }
 
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ActiveMedicalAgentSnippet
+            {
+                GameMinutesAgentIsActive = _gameMinutesAgentIsActive,
+                TimesTaken = _timesTaken
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ActiveMedicalAgentSnippet)savedState;
+
+            _gameMinutesAgentIsActive = state.GameMinutesAgentIsActive;
+            _timesTaken = state.TimesTaken;
+        }
+
+        #endregion 
+
     }
 
     public interface IActiveMedicalAgent
@@ -177,4 +201,5 @@ namespace ZaraEngine.HealthEngine
         float PercentOfActivity { get; }
         float PercentOfPresence { get; }
     }
+
 }

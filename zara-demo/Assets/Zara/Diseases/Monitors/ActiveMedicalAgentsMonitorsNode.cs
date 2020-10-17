@@ -5,10 +5,11 @@ using System.Text;
 using ZaraEngine.HealthEngine;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
-    public class ActiveMedicalAgentsMonitorsNode
+    public class ActiveMedicalAgentsMonitorsNode: IAcceptsStateChange
     {
         private const float EpinephrineActiveTime           = 64f;  // game minutes
         private const float AntiVenomActiveTime             = 123f; // game minutes
@@ -162,6 +163,46 @@ namespace ZaraEngine.Diseases
         {
             _monitors.ForEach(x => x.OnApplianceTaken(item, bodyPart));
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ActiveMedicalAgentsMonitorsSnippet();
+
+            state.ChildStates.Add("EpinephrineMedicalAgent", (_monitors[0] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("AntiVenomMedicalAgent", (_monitors[1] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("AtropineMedicalAgent", (_monitors[2] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("MorphineMedicalAgent", (_monitors[3] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("AntibioticMedicalAgent", (_monitors[4] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("AspirinMedicalAgent", (_monitors[5] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("AcetaminophenMedicalAgent", (_monitors[6] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("LoperamideMedicalAgent", (_monitors[7] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("OseltamivirMedicalAgent", (_monitors[8] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("SedativeMedicalAgent", (_monitors[9] as ActiveMedicalAgent).GetState());
+            state.ChildStates.Add("DoripenemMedicalAgent", (_monitors[10] as ActiveMedicalAgent).GetState());
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ActiveMedicalAgentsMonitorsSnippet)savedState;
+
+            (_monitors[0] as ActiveMedicalAgent).RestoreState(state.ChildStates["EpinephrineMedicalAgent"]);
+            (_monitors[1] as ActiveMedicalAgent).RestoreState(state.ChildStates["AntiVenomMedicalAgent"]);
+            (_monitors[2] as ActiveMedicalAgent).RestoreState(state.ChildStates["AtropineMedicalAgent"]);
+            (_monitors[3] as ActiveMedicalAgent).RestoreState(state.ChildStates["MorphineMedicalAgent"]);
+            (_monitors[4] as ActiveMedicalAgent).RestoreState(state.ChildStates["AntibioticMedicalAgent"]);
+            (_monitors[5] as ActiveMedicalAgent).RestoreState(state.ChildStates["AspirinMedicalAgent"]);
+            (_monitors[6] as ActiveMedicalAgent).RestoreState(state.ChildStates["AcetaminophenMedicalAgent"]);
+            (_monitors[7] as ActiveMedicalAgent).RestoreState(state.ChildStates["LoperamideMedicalAgent"]);
+            (_monitors[8] as ActiveMedicalAgent).RestoreState(state.ChildStates["OseltamivirMedicalAgent"]);
+            (_monitors[9] as ActiveMedicalAgent).RestoreState(state.ChildStates["SedativeMedicalAgent"]);
+            (_monitors[10] as ActiveMedicalAgent).RestoreState(state.ChildStates["DoripenemMedicalAgent"]);
+        }
+
+        #endregion 
 
     }
 }

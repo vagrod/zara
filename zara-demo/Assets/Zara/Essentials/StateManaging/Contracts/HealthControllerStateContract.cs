@@ -27,6 +27,7 @@ namespace ZaraEngine.StateManaging
         public ClothesHealthEffectsContract ClothesHealthEffects;
 
         public DiseaseMonitorsContract DiseaseMonitors;
+        public ActiveMedicalAgentsMonitorsContract ActiveMedicalAgentsMonitors;
 
         public EventByChanceContract DiseaseDizzinessEvent;
         public EventByChanceContract DiseaseBlackoutsEvent;
