@@ -88,6 +88,8 @@ namespace ZaraEngine.StateManaging
             CannotRun = c.CannotRun;
             IsLegFracture = c.IsLegFracture;
             ActiveDiseasesWorstLevel = (DiseaseLevels)c.ActiveDiseasesWorstLevel;
+
+            ChildStates.Clear();
         }
 
     }

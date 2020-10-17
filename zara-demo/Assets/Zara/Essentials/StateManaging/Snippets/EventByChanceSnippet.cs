@@ -38,6 +38,8 @@ namespace ZaraEngine.StateManaging
             CoundownTimer = c.CoundownTimer;
             IsHappened = c.IsHappened;
             AutoReset = c.AutoReset;
+
+            ChildStates.Clear();
         }
 
     }

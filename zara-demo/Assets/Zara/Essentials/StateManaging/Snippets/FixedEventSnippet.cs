@@ -32,6 +32,8 @@ namespace ZaraEngine.StateManaging
 
             IsHappened = c.IsHappened;
             AutoReset = c.AutoReset;
+
+            ChildStates.Clear();
         }
 
     }

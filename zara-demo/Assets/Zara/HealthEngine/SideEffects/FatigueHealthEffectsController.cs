@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Player;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine
 {
-    public class FatigueHealthEffectsController
+    public class FatigueHealthEffectsController : IAcceptsStateChange
     {
 
         private const float MaxHeartRateBonus     = 10f; // bpm
@@ -41,6 +42,31 @@ namespace ZaraEngine.HealthEngine
             BloodPressureBottomBonus = -Helpers.Lerp(0f, MaxBloodPressureBonus, fatiguePerc);
             HeartRateBonus = -Helpers.Lerp(0f, MaxHeartRateBonus, fatiguePerc);
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new FatigueHealthEffectsSnippet
+            {
+                BloodPressureBottomBonus = this.BloodPressureBottomBonus,
+                BloodPressureTopBonus = this.BloodPressureTopBonus,
+                HeartRateBonus = this.HeartRateBonus
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (FatigueHealthEffectsSnippet)savedState;
+
+            BloodPressureBottomBonus = state.BloodPressureBottomBonus;
+            BloodPressureTopBonus = state.BloodPressureTopBonus;
+            HeartRateBonus = state.HeartRateBonus;
+        }
+
+        #endregion 
 
     }
 }
