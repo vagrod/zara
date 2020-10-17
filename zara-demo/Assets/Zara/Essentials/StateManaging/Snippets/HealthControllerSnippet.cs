@@ -72,6 +72,7 @@ namespace ZaraEngine.StateManaging {
             c.InventoryHealthEffects = (InventoryHealthEffectsContract)ChildStates["InventoryHealthEffects"].ToContract();
             c.MedicalAgentsHealthEffects = (MedicalAgentsHealthEffectsContract)ChildStates["MedicalAgentsHealthEffects"].ToContract();
             c.ConsumablesHealthEffects = (ConsumablesHealthEffectsContract)ChildStates["ConsumablesHealthEffects"].ToContract();
+            c.ClothesHealthEffects = (ClothesHealthEffectsContract)ChildStates["ClothesHealthEffects"].ToContract();
 
             return c;
         }
@@ -125,6 +126,7 @@ namespace ZaraEngine.StateManaging {
             ChildStates.Add("InventoryHealthEffects", new InventoryHealthEffectsSnippet(c.InventoryHealthEffects));
             ChildStates.Add("MedicalAgentsHealthEffects", new MedicalAgentsHealthEffectsSnippet(c.MedicalAgentsHealthEffects));
             ChildStates.Add("ConsumablesHealthEffects", new ConsumablesHealthEffectsSnippet(c.ConsumablesHealthEffects));
+            ChildStates.Add("ClothesHealthEffects", new ClothesHealthEffectsSnippet(c.ClothesHealthEffects));
         }
 
     }

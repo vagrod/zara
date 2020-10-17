@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
-using ZaraEngine.Player;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine.SideEffects
 {
-    public class ClothesSideEffectsController
+    public class ClothesSideEffectsController : IAcceptsStateChange
     {
 
         private const int LightClothesWeight  = 2000; // grams
@@ -149,6 +148,46 @@ namespace ZaraEngine.HealthEngine.SideEffects
             _targetBodyTemperatureDelta = 0f;
             _targetHeartRateDelta = 0f;
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ClothesHealthEffectsSnippet
+            {
+                BodyTemperatureBonus = this.BodyTemperatureBonus,
+                HeartRateBonus = this.HeartRateBonus,
+                PlayerRunSpeedBonus = this.PlayerRunSpeedBonus,
+                StaminaBonus = this.StaminaBonus,
+                CurrentHeartRateBonus = _currentHeartRateBonus,
+                CurrentTemperatureBonus = _currentTemperatureBonus,
+                LastAutoReLerpTime = _lastAutoReLerpTime,
+                LastClothesChangeTime = _lastClothesChangeTime,
+                TargetBodyTemperatureDelta = _targetBodyTemperatureDelta,
+                TargetHeartRateDelta = _targetHeartRateDelta
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ClothesHealthEffectsSnippet)savedState;
+
+            BodyTemperatureBonus = state.BodyTemperatureBonus;
+            HeartRateBonus = state.HeartRateBonus;
+            PlayerRunSpeedBonus = state.PlayerRunSpeedBonus;
+            StaminaBonus = state.StaminaBonus;
+
+            _currentHeartRateBonus = state.CurrentHeartRateBonus;
+            _currentTemperatureBonus = state.CurrentTemperatureBonus;
+            _lastAutoReLerpTime = state.LastAutoReLerpTime;
+            _lastClothesChangeTime = state.LastClothesChangeTime;
+            _targetBodyTemperatureDelta = state.TargetBodyTemperatureDelta;
+            _targetHeartRateDelta = state.TargetHeartRateDelta;
+        }
+
+        #endregion 
 
     }
 }
