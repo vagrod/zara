@@ -6,8 +6,11 @@ using ZaraEngine.Diseases;
 namespace ZaraEngine.StateManaging
 {
 
-    public class HealthStateSnippet : IStateSnippet
+    public class HealthStateSnippet : SnippetBase
     {
+
+        public HealthStateSnippet() : base() { }
+        public HealthStateSnippet(object contract) : base(contract) { }
 
         #region Data Fields
 
@@ -34,9 +37,7 @@ namespace ZaraEngine.StateManaging
 
         #endregion 
 
-        public Dictionary<string, IStateSnippet> ChildStates { get; }
-
-        public object ToContract()
+        public override object ToContract()
         {
             return new HealthStateStateContract
             {
@@ -63,7 +64,7 @@ namespace ZaraEngine.StateManaging
             };
         }
 
-        public void FromContract(object o)
+        public override void FromContract(object o)
         {
             var c = (HealthStateStateContract)o;
 

@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine
 {
-    public class EventByChance : IGameEventByChance
+    public class EventByChance : IGameEventByChance, IAcceptsStateChange
     {
 
         private readonly Action<EventByChance> _eventHappenedAction;
@@ -173,6 +174,34 @@ namespace ZaraEngine
 
             return !IsHappened;
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new EventByChanceSnippet
+            {
+                ChanceOfHappening = _chanceOfHappening,
+                CoundownTimer = _coundownTimer,
+                IsHappened = this.IsHappened,
+                AutoReset = this.AutoReset
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (EventByChanceSnippet)savedState;
+
+            _chanceOfHappening = state.ChanceOfHappening;
+            _coundownTimer = state.CoundownTimer;
+
+            IsHappened = state.IsHappened;
+            AutoReset = state.AutoReset;
+        }
+
+        #endregion 
 
     }
 }

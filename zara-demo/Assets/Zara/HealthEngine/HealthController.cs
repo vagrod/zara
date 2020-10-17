@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using ZaraEngine.Diseases;
 using ZaraEngine.Diseases.Stages;
-using ZaraEngine.HealthEngine;
 using ZaraEngine.HealthEngine.SideEffects;
 using ZaraEngine.Injuries;
 using ZaraEngine.Injuries.Stages;
 using ZaraEngine.Inventory;
 using ZaraEngine.StateManaging;
-using Foundation.Databinding;
-using UnityEditorInternal;
-using UnityEditor.ShortcutManagement;
 
 namespace ZaraEngine.HealthEngine {
     [Serializable]
@@ -1339,6 +1335,31 @@ namespace ZaraEngine.HealthEngine {
             };
 
             state.ChildStates.Add("HealthState", Status.GetState());
+            
+            state.ChildStates.Add("DiseaseDizzinessEvent", _diseaseDizzinessEvent.GetState());
+            state.ChildStates.Add("DiseaseBlackoutsEvent", _diseaseBlackoutsEvent.GetState());
+            state.ChildStates.Add("DiseaseDeathEvent", _diseaseDeathEvent.GetState());
+            state.ChildStates.Add("SneezeEvent", _sneezeEvent.GetState());
+            state.ChildStates.Add("CoughEvent", _coughEvent.GetState());
+            state.ChildStates.Add("BloodLevelDizzinessEvent", _bloodLevelDizzinessEvent.GetState());
+            state.ChildStates.Add("BloodLevelBlackoutsEvent", _bloodLevelBlackoutsEvent.GetState());
+            state.ChildStates.Add("LowBodyTemperatureDizzinessEvent", _lowBodyTemperatureDizzinessEvent.GetState());
+            state.ChildStates.Add("LowBodyTemperatureBlackoutsEvent", _lowBodyTemperatureBlackoutsEvent.GetState());
+            state.ChildStates.Add("BloodLevelDeathEvent", _bloodLevelDeathEvent.GetState());
+            state.ChildStates.Add("DehydrationDeathEvent", _dehydrationDeathEvent.GetState());
+            state.ChildStates.Add("StarvationDeathEvent", _starvationDeathEvent.GetState());
+            state.ChildStates.Add("VitalsDeathEvent", _vitalsDeathEvent.GetState());
+            state.ChildStates.Add("OverdoseDeathEvent", _overdoseDeathEvent.GetState());
+            state.ChildStates.Add("HeartFailureDeathEvent", _heartFailureDeathEvent.GetState());
+            state.ChildStates.Add("LsdEffect", _lsdEffect.GetState());
+            state.ChildStates.Add("FatigueDizzinessEvent", _fatigueDizzinessEvent.GetState());
+            state.ChildStates.Add("FatigueBlackoutsEvent", _fatigueBlackoutsEvent.GetState());
+            state.ChildStates.Add("FatigueSleepEvent", _fatigueSleepEvent.GetState());
+            state.ChildStates.Add("SedativeSleepEvent", _sedativeSleepEvent.GetState());
+
+            state.ChildStates.Add("HighPressureEvent", _highPressureEvent.GetState());
+            state.ChildStates.Add("NormalPressureEvent", _normalPressureEvent.GetState());
+            state.ChildStates.Add("DrowningEvent", _drowningEvent.GetState());
 
             return state;
         }
@@ -1359,6 +1380,31 @@ namespace ZaraEngine.HealthEngine {
             UnconsciousMode = state.UnconsciousMode;
 
             Status.RestoreState(state.ChildStates["HealthState"]);
+
+            _diseaseDizzinessEvent.RestoreState(state.ChildStates["DiseaseDizzinessEvent"]);
+            _diseaseBlackoutsEvent.RestoreState(state.ChildStates["DiseaseBlackoutsEvent"]);
+            _diseaseDeathEvent.RestoreState(state.ChildStates["DiseaseDeathEvent"]);
+            _sneezeEvent.RestoreState(state.ChildStates["SneezeEvent"]);
+            _coughEvent.RestoreState(state.ChildStates["CoughEvent"]);
+            _bloodLevelDizzinessEvent.RestoreState(state.ChildStates["BloodLevelDizzinessEvent"]);
+            _bloodLevelBlackoutsEvent.RestoreState(state.ChildStates["BloodLevelBlackoutsEvent"]);
+            _lowBodyTemperatureDizzinessEvent.RestoreState(state.ChildStates["LowBodyTemperatureDizzinessEvent"]);
+            _lowBodyTemperatureBlackoutsEvent.RestoreState(state.ChildStates["LowBodyTemperatureBlackoutsEvent"]);
+            _bloodLevelDeathEvent.RestoreState(state.ChildStates["BloodLevelDeathEvent"]);
+            _dehydrationDeathEvent.RestoreState(state.ChildStates["DehydrationDeathEvent"]);
+            _starvationDeathEvent.RestoreState(state.ChildStates["StarvationDeathEvent"]);
+            _vitalsDeathEvent.RestoreState(state.ChildStates["VitalsDeathEvent"]);
+            _overdoseDeathEvent.RestoreState(state.ChildStates["OverdoseDeathEvent"]);
+            _heartFailureDeathEvent.RestoreState(state.ChildStates["HeartFailureDeathEvent"]);
+            _lsdEffect.RestoreState(state.ChildStates["LsdEffect"]);
+            _fatigueDizzinessEvent.RestoreState(state.ChildStates["FatigueDizzinessEvent"]);
+            _fatigueBlackoutsEvent.RestoreState(state.ChildStates["FatigueBlackoutsEvent"]);
+            _fatigueSleepEvent.RestoreState(state.ChildStates["FatigueSleepEvent"]);
+            _sedativeSleepEvent.RestoreState(state.ChildStates["SedativeSleepEvent"]);
+
+            _highPressureEvent.RestoreState(state.ChildStates["HighPressureEvent"]);
+            _normalPressureEvent.RestoreState(state.ChildStates["NormalPressureEvent"]);
+            _drowningEvent.RestoreState(state.ChildStates["DrowningEvent"]);
         }
 
         #endregion 

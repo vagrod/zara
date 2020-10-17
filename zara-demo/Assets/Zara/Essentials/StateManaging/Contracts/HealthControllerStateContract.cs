@@ -18,6 +18,31 @@ namespace ZaraEngine.StateManaging
 
         public HealthStateStateContract HealthState;
 
+        public EventByChanceContract DiseaseDizzinessEvent;
+        public EventByChanceContract DiseaseBlackoutsEvent;
+        public EventByChanceContract DiseaseDeathEvent;
+        public EventByChanceContract SneezeEvent;
+        public EventByChanceContract CoughEvent;
+        public EventByChanceContract BloodLevelDizzinessEvent;
+        public EventByChanceContract BloodLevelBlackoutsEvent;
+        public EventByChanceContract LowBodyTemperatureDizzinessEvent;
+        public EventByChanceContract LowBodyTemperatureBlackoutsEvent;
+        public EventByChanceContract BloodLevelDeathEvent;
+        public EventByChanceContract DehydrationDeathEvent;
+        public EventByChanceContract StarvationDeathEvent;
+        public EventByChanceContract VitalsDeathEvent;
+        public EventByChanceContract OverdoseDeathEvent;
+        public EventByChanceContract HeartFailureDeathEvent;
+        public EventByChanceContract LsdEffect;
+        public EventByChanceContract FatigueDizzinessEvent;
+        public EventByChanceContract FatigueBlackoutsEvent;
+        public EventByChanceContract FatigueSleepEvent;
+        public EventByChanceContract SedativeSleepEvent;
+
+        public FixedEventContract HighPressureEvent;
+        public FixedEventContract NormalPressureEvent;
+        public FixedEventContract DrowningEvent;
+
     }
 
 }

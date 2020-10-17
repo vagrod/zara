@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine
 {
@@ -124,10 +125,28 @@ namespace ZaraEngine
             return false;
         }
 
-        public void Debug_SetProbability(int value)
+        #region State Manage
+
+        public IStateSnippet GetState()
         {
-            
+            var state = new FixedEventSnippet
+            {
+                IsHappened = this.IsHappened,
+                AutoReset = this.AutoReset
+            };
+
+            return state;
         }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (FixedEventSnippet)savedState;
+
+            IsHappened = state.IsHappened;
+            AutoReset = state.AutoReset;
+        }
+
+        #endregion 
 
     }
 }
