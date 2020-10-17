@@ -1360,6 +1360,8 @@ namespace ZaraEngine.HealthEngine {
             state.ChildStates.Add("HighPressureEvent", _highPressureEvent.GetState());
             state.ChildStates.Add("NormalPressureEvent", _normalPressureEvent.GetState());
             state.ChildStates.Add("DrowningEvent", _drowningEvent.GetState());
+            
+            state.ChildStates.Add("UnderwaterHealthEffects", _underwaterEffects.GetState());
 
             return state;
         }
@@ -1405,6 +1407,8 @@ namespace ZaraEngine.HealthEngine {
             _highPressureEvent.RestoreState(state.ChildStates["HighPressureEvent"]);
             _normalPressureEvent.RestoreState(state.ChildStates["NormalPressureEvent"]);
             _drowningEvent.RestoreState(state.ChildStates["DrowningEvent"]);
+
+            _underwaterEffects.RestoreState(state.ChildStates["UnderwaterHealthEffects"]);
         }
 
         #endregion 

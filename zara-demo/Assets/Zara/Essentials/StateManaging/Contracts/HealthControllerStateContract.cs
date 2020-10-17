@@ -18,6 +18,8 @@ namespace ZaraEngine.StateManaging
 
         public HealthStateStateContract HealthState;
 
+        public UnderwaterHealthEffectsContract UnderwaterHealthEffects;
+
         public EventByChanceContract DiseaseDizzinessEvent;
         public EventByChanceContract DiseaseBlackoutsEvent;
         public EventByChanceContract DiseaseDeathEvent;

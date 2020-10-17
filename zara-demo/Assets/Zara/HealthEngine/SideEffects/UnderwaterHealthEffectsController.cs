@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Player;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine
 {
-    public class UnderwaterHealthEffectsController
+    public class UnderwaterHealthEffectsController : IAcceptsStateChange
     {
 
 
@@ -89,6 +90,46 @@ namespace ZaraEngine.HealthEngine
             HeartRateBonus = Helpers.Lerp(0f, MaxHeartRateBonus, oxyPercent);
             OxygenLevelBonus = -Helpers.Lerp(0f, MaxOxygenBonus, oxyPercent);
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new UnderwaterHealthEffectsSnippet
+            {
+                BloodPressureBottomBonus = this.BloodPressureBottomBonus,
+                BloodPressureTopBonus = this.BloodPressureTopBonus,
+                HeartRateBonus = this.HeartRateBonus,
+                OxygenLevelBonus = this.OxygenLevelBonus,
+                LastUnderWaterState = _lastUnderWaterState
+            };
+
+            state.ChildStates.Add("DrowningDeathEvent", _drowningDeathEvent.GetState());
+            state.ChildStates.Add("PlayLightBreath", _playLightBreath.GetState());
+            state.ChildStates.Add("PlayMediumBreath", _playMediumBreath.GetState());
+            state.ChildStates.Add("PlayHardBreath", _playHardBreath.GetState());
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (UnderwaterHealthEffectsSnippet)savedState;
+
+            BloodPressureBottomBonus = state.BloodPressureBottomBonus;
+            BloodPressureTopBonus = state.BloodPressureTopBonus;
+            HeartRateBonus = state.HeartRateBonus;
+            OxygenLevelBonus = state.OxygenLevelBonus;
+
+            _lastUnderWaterState = state.LastUnderWaterState;
+
+            _drowningDeathEvent.RestoreState(state.ChildStates["DrowningDeathEvent"]);
+            _playLightBreath.RestoreState(state.ChildStates["PlayLightBreath"]);
+            _playMediumBreath.RestoreState(state.ChildStates["PlayMediumBreath"]);
+            _playHardBreath.RestoreState(state.ChildStates["PlayHardBreath"]);
+        }
+
+        #endregion 
 
     }
 }
