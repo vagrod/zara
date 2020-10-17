@@ -3,6 +3,7 @@ using System.Linq;
 using ZaraEngine.Diseases;
 using ZaraEngine.Injuries.Stages;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Injuries
 {
@@ -39,13 +40,18 @@ namespace ZaraEngine.Injuries
     }
 
     [Serializable]
-    public class ActiveInjury
+    public class ActiveInjury : IAcceptsStateChange
     {
 
         private bool _isInjuryActivated;
         private bool _isChainInverted;
 
         private readonly IGameController _gc;
+
+        public ActiveInjury(IGameController gc)
+        {
+            _gc = gc;
+        }
 
         public ActiveInjury(IGameController gc, Type injuryType, BodyParts bodyPart, DateTime injuryTriggerTime)
         {
@@ -55,6 +61,11 @@ namespace ZaraEngine.Injuries
             BodyPart = bodyPart;
             InjuryTriggerTime = injuryTriggerTime;
 
+            SetUpActiveStage(injuryTriggerTime);
+        }
+
+        private void SetUpActiveStage(DateTime injuryTriggerTime)
+        {
             var timeOverall = injuryTriggerTime;
 
             foreach (var stage in Injury.Stages)
@@ -69,7 +80,7 @@ namespace ZaraEngine.Injuries
                 timeOverall = stage.WillEndAt.Value;
             }
 
-            GetActiveStage(gc.WorldTime.Value);
+            GetActiveStage(_gc.WorldTime.Value);
         }
 
         public bool IsActiveNow
@@ -242,6 +253,51 @@ namespace ZaraEngine.Injuries
         }
 
         #endregion
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ActiveInjurySnippet
+            {
+                BodyPart = this.BodyPart,
+                InjuryId = Injury.Id,
+                InjuryTriggerTime = this.InjuryTriggerTime,
+                InjuryType = Injury.GetType().FullName,
+                IsChainInverted = _isChainInverted,
+                IsDiseaseProbabilityChecked = this.IsDiseaseProbabilityChecked,
+                IsInjuryActivated = _isInjuryActivated,
+                IsTreated = this.IsTreated,
+                TreatedStageLevel = TreatedStage?.Level
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ActiveInjurySnippet)savedState;
+
+            Injury = (InjuryBase)Activator.CreateInstance(Type.GetType(state.InjuryType));
+
+            SetUpActiveStage(state.InjuryTriggerTime);
+
+            if (state.TreatedStageLevel.HasValue)
+                TreatedStage = Injury.Stages.FirstOrDefault(x => x.Level == state.TreatedStageLevel.Value);
+            else
+                TreatedStage = null;
+
+            _isChainInverted = state.IsChainInverted;
+            _isInjuryActivated = state.IsInjuryActivated;
+
+            InjuryTriggerTime = state.InjuryTriggerTime;
+            IsDiseaseProbabilityChecked = state.IsDiseaseProbabilityChecked;
+            BodyPart = state.BodyPart;
+            IsTreated = state.IsTreated;
+            
+        }
+
+        #endregion 
 
     }
 }

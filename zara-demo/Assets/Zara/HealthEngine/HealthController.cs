@@ -290,7 +290,7 @@ namespace ZaraEngine.HealthEngine {
             _diseaseMonitors = new DiseaseMonitorsNode(gc);
             _medicalAgentsMonitors = new ActiveMedicalAgentsMonitorsNode(gc);
 
-            _healthyStatus = new HealthState {
+            _healthyStatus = new HealthState(_gc) {
                 StaminaPercentage = 100,
                 WaterPercentage = 80,
                 BloodPercentage = 73,

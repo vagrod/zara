@@ -21,9 +21,9 @@ namespace ZaraEngine {
         public static void RestoreState(IGameController gc, ZaraEngine.StateManaging.ZaraEngineState state, Action<DateTime> restoreWorldTime){
             var hcSnippet = new HealthControllerSnippet();
 
-            hcSnippet.FromContract(state.HealthState);
-
             restoreWorldTime?.Invoke(state.WorldTime);
+
+            hcSnippet.FromContract(state.HealthState);
 
             gc.Health.RestoreState(hcSnippet);
         }

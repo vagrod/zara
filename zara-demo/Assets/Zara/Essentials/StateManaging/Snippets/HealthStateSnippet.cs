@@ -39,7 +39,7 @@ namespace ZaraEngine.StateManaging
 
         public override object ToContract()
         {
-            return new HealthStateStateContract
+            var c = new HealthStateStateContract
             {
                 BloodPressureTop = this.BloodPressureTop,
                 BloodPressureBottom = this.BloodPressureBottom,
@@ -62,6 +62,10 @@ namespace ZaraEngine.StateManaging
                 IsLegFracture = this.IsLegFracture,
                 ActiveDiseasesWorstLevel = (int)this.ActiveDiseasesWorstLevel
             };
+
+            c.ActiveDiseasesAndInjuries = (ActiveDiseasesAndInjuriesContract)ChildStates["ActiveDiseasesAndInjuries"].ToContract();
+
+            return c;
         }
 
         public override void FromContract(object o)
@@ -90,6 +94,8 @@ namespace ZaraEngine.StateManaging
             ActiveDiseasesWorstLevel = (DiseaseLevels)c.ActiveDiseasesWorstLevel;
 
             ChildStates.Clear();
+
+            ChildStates.Add("ActiveDiseasesAndInjuries", new ActiveDiseasesAndInjuriesSnippet(c.ActiveDiseasesAndInjuries));
         }
 
     }

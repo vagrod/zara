@@ -6,11 +6,12 @@ using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Diseases.Stages.Fluent;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
     [Serializable]
-    public class ActiveDisease
+    public class ActiveDisease: IAcceptsStateChange
     {
 
         private readonly IGameController _gc;
@@ -20,9 +21,19 @@ namespace ZaraEngine.Diseases
         private bool _isChainInverted;
 
         private readonly ActiveInjury _linkedInjury;
-        private readonly DateTime _diseaseStartTime;
+        
+        private DateTime _diseaseStartTime;
+
+        private ChangedVitalsInfo _changedVitals;
+        private ChangedVitalsInfo _changedCritialStage;
 
         public ActiveInjury LinkedInjury => _linkedInjury;
+
+        public ActiveDisease(IGameController gc, ActiveInjury linkedInjury)
+        {
+            _gc = gc;
+            _linkedInjury = linkedInjury;
+        }
 
         public ActiveDisease(IGameController gc, Type diseaseType, DateTime diseaseStartTime) : this(gc, (DiseaseDefinitionBase)Activator.CreateInstance(diseaseType), null, diseaseStartTime)
         {
@@ -199,7 +210,7 @@ namespace ZaraEngine.Diseases
             TreatedStage = null;
         }
 
-        private class ChangedVitalsInfo
+        private class ChangedVitalsInfo : IAcceptsStateChange
         {
             public DiseaseLevels Level { get; set; }
             public float? InitialHeartRate { get; set; }
@@ -207,10 +218,39 @@ namespace ZaraEngine.Diseases
             public float? InitialBloodPressureBottom { get; set; }
             public float? InitialBodyTemperature { get; set; }
             public TimeSpan InitialStageDuration { get; set; }
-        }
 
-        private ChangedVitalsInfo _changedVitals;
-        private ChangedVitalsInfo _changedCritialStage;
+            #region State Manage
+
+            public IStateSnippet GetState()
+            {
+                var state = new ChangedVitalsInfoSnippet
+                {
+                    Level = this.Level,
+                    InitialHeartRate = this.InitialHeartRate,
+                    InitialBloodPressureTop = this.InitialBloodPressureTop,
+                    InitialBloodPressureBottom = this.InitialBloodPressureBottom,
+                    InitialBodyTemperature = this.InitialBodyTemperature,
+                    InitialStageDuration = this.InitialStageDuration
+                };
+
+                return state;
+            }
+
+            public void RestoreState(IStateSnippet savedState)
+            {
+                var state = (ChangedVitalsInfoSnippet)savedState;
+
+                Level = state.Level;
+                InitialHeartRate = state.InitialHeartRate;
+                InitialBloodPressureTop = state.InitialBloodPressureTop;
+                InitialBloodPressureBottom = state.InitialBloodPressureBottom;
+                InitialBodyTemperature = state.InitialBodyTemperature;
+                InitialStageDuration = state.InitialStageDuration;
+            }
+
+            #endregion
+
+        }
 
         public void Invert()
         {
@@ -467,6 +507,59 @@ namespace ZaraEngine.Diseases
         }
 
         #endregion
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ActiveDiseaseSnippet
+            {
+                DiseaseId = Disease.Id,
+                InjuryId = _linkedInjury?.Injury?.Id,
+                DiseaseType = Disease.GetType().FullName,
+                IsDiseaseActivated = _isDiseaseActivated,
+                IsSelfHealActive = _isSelfHealActive,
+                IsChainInverted = _isChainInverted,
+                DiseaseStartTime = _diseaseStartTime,
+                TreatedStageLevel = TreatedStage?.Level,
+                IsTreated = this.IsTreated
+            };
+
+            state.ChildStates.Add("ChangedVitals", _changedVitals?.GetState());
+            state.ChildStates.Add("ChangedCritialStage", _changedCritialStage?.GetState());
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ActiveDiseaseSnippet)savedState;
+
+            Disease = (DiseaseDefinitionBase)Activator.CreateInstance(Type.GetType(state.DiseaseType));
+            
+            if (state.TreatedStageLevel.HasValue)
+                TreatedStage = Disease.Stages.FirstOrDefault(x => x.Level == state.TreatedStageLevel.Value);
+            else
+                TreatedStage = null;
+
+            _isDiseaseActivated = state.IsDiseaseActivated;
+            _isSelfHealActive = state.IsSelfHealActive;
+            _isChainInverted = state.IsChainInverted;
+            _diseaseStartTime = state.DiseaseStartTime;
+
+            IsTreated = state.IsTreated;
+
+            if (state.ChildStates["ChangedVitals"] != null)
+                _changedVitals.RestoreState(state.ChildStates["ChangedVitals"]);
+
+            if(state.ChildStates["ChangedCritialStage"] != null)
+                _changedCritialStage.RestoreState(state.ChildStates["ChangedCritialStage"]);
+
+            ComputeDisease();
+            Refresh(_gc.WorldTime.Value);
+        }
+
+        #endregion 
 
     }
 }

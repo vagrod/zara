@@ -11,6 +11,8 @@ namespace ZaraEngine.Injuries
     public abstract class InjuryBase
     {
 
+        public Guid Id { get; } = Guid.NewGuid();
+
         protected InjuryBase()
         {
             Stages = new List<InjuryStage>();

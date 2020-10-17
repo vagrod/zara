@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ZaraEngine.Diseases.Stages;
@@ -17,6 +18,8 @@ namespace ZaraEngine.Diseases
 
     public abstract class DiseaseDefinitionBase
     {
+
+        public Guid Id { get; } = Guid.NewGuid();
 
         public string Name { get; protected set; }
 

@@ -11,8 +11,12 @@ namespace ZaraEngine.HealthEngine
     public class HealthState : IAcceptsStateChange
     {
 
-        public HealthState()
+        private readonly IGameController _gc;
+
+        public HealthState(IGameController gc)
         {
+            _gc = gc;
+
             ActiveDiseases = new List<ActiveDisease>();
             ActiveInjuries = new List<ActiveInjury>();
         }
@@ -216,7 +220,7 @@ namespace ZaraEngine.HealthEngine
 
         public HealthState Clone(DateTime? currentTime)
         {
-            return new HealthState
+            return new HealthState(_gc)
             {
                 ActiveDiseases = GetActualDiseases(currentTime),
                 StaminaPercentage = this.StaminaPercentage,
@@ -263,8 +267,13 @@ namespace ZaraEngine.HealthEngine
                 ActiveDiseasesWorstLevel = this.ActiveDiseasesWorstLevel
             };
 
-            //state.ChildStates.Add("ActiveDiseases", );
-            //state.ChildStates.Add("ActiveInjuries", );
+            var diseases = ActiveDiseases.ConvertAll(x => (ActiveDiseaseSnippet)x.GetState()).ToArray();
+            var injuries = ActiveInjuries.ConvertAll(x => (ActiveInjurySnippet)x.GetState()).ToArray();
+
+            state.ChildStates.Add("ActiveDiseasesAndInjuries", new ActiveDiseasesAndInjuriesSnippet { 
+                ActiveDiseases = diseases,
+                ActiveInjuries = injuries
+            });
 
             return state;
         }
@@ -294,11 +303,44 @@ namespace ZaraEngine.HealthEngine
             IsLegFracture = state.IsLegFracture;
             ActiveDiseasesWorstLevel = state.ActiveDiseasesWorstLevel;
 
-            //state.ChildStates["ActiveDiseases"]...
-            //state.ChildStates["ActiveInjuries"]...
+            var diseasesAndInjuriesData = (ActiveDiseasesAndInjuriesSnippet)state.ChildStates["ActiveDiseasesAndInjuries"];
+
+            CreateAndLinkActiveDiseasesAndInjuries(diseasesAndInjuriesData.ActiveDiseases, diseasesAndInjuriesData.ActiveInjuries);
         }
 
-        #endregion 
+        private void CreateAndLinkActiveDiseasesAndInjuries(ActiveDiseaseSnippet[] diseasesData, ActiveInjurySnippet[] injuriesData)
+        {
+            ActiveInjuries.Clear();
+            ActiveDiseases.Clear();
+
+            var injuriesMapping = new Dictionary<Guid, Guid>(); // old id, new id
+
+            foreach (var injData in injuriesData)
+            {
+                var inj = new ActiveInjury(_gc);
+
+                inj.RestoreState(injData);
+
+                injuriesMapping.Add(injData.InjuryId, inj.Injury.Id);
+
+                ActiveInjuries.Add(inj);
+            }
+
+            foreach (var diseaseData in diseasesData)
+            {
+                var injKey = diseaseData.InjuryId.HasValue ? (injuriesMapping.ContainsKey(diseaseData.InjuryId.Value) ? injuriesMapping[diseaseData.InjuryId.Value] : (Guid?)null) : (Guid?)null;
+                var linkedInj = injKey.HasValue ? ActiveInjuries.FirstOrDefault(x => x.Injury.Id == injKey.Value) : null;
+                var disease = new ActiveDisease(_gc, linkedInj);
+
+                disease.RestoreState(diseaseData);
+
+                ActiveDiseases.Add(disease);
+            }
+
+            injuriesMapping.Clear();
+        }
+
+        #endregion
 
     }
 }

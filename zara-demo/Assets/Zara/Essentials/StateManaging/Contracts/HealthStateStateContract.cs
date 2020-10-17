@@ -25,6 +25,8 @@ namespace ZaraEngine.StateManaging
         public bool CannotRun;
         public bool IsLegFracture;
         public int ActiveDiseasesWorstLevel;
+        
+        public ActiveDiseasesAndInjuriesContract ActiveDiseasesAndInjuries;
 
     }
 }
