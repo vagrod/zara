@@ -5,9 +5,11 @@ namespace ZaraEngine.StateManaging
 
     public class ZaraEngineState {
         
-        public HealthControllerStateContract healthState;
-        public PlayerControllerStateContract bodyState;
-        public InventoryControllerStateContract inventoryState;
+        public HealthControllerStateContract HealthState;
+        public PlayerControllerStateContract BodyState;
+        public InventoryControllerStateContract InventoryState;
+
+        public System.DateTime WorldTime;
 
     }
 

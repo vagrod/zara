@@ -9,17 +9,21 @@ namespace ZaraEngine {
         public static ZaraEngine.StateManaging.ZaraEngineState GetState(IGameController gc){
             var o = new StateManaging.ZaraEngineState();
 
-            o.healthState = (HealthControllerStateContract)gc.Health.GetState().ToContract();
+            o.WorldTime = gc.WorldTime.Value;
+
+            o.HealthState = (HealthControllerStateContract)gc.Health.GetState().ToContract();
             //o.bodyState = (HealthControllerStateContract)gc.Body.GetState().ToContract();
             //o.inventoryState = (HealthControllerStateContract)gc.Inventory.GetState().ToContract();
 
             return o;
         }
 
-        public static void RestoreState(IGameController gc, ZaraEngine.StateManaging.ZaraEngineState state){
+        public static void RestoreState(IGameController gc, ZaraEngine.StateManaging.ZaraEngineState state, Action<DateTime> restoreWorldTime){
             var hcSnippet = new HealthControllerSnippet();
 
-            hcSnippet.FromContract(state.healthState);
+            hcSnippet.FromContract(state.HealthState);
+
+            restoreWorldTime?.Invoke(state.WorldTime);
 
             gc.Health.RestoreState(hcSnippet);
         }

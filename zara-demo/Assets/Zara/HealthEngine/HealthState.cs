@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Diseases;
 using ZaraEngine.Injuries;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine
 {
-    public class HealthState
+    public class HealthState : IAcceptsStateChange
     {
 
         public HealthState()
@@ -233,6 +234,71 @@ namespace ZaraEngine.HealthEngine
                 OxygenPercentage = this.OxygenPercentage
             };
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new HealthStateSnippet
+            {
+                BloodPressureTop = this.BloodPressureTop,
+                BloodPressureBottom = this.BloodPressureBottom,
+                HeartRate = this.HeartRate,
+                BloodPercentage = this.BloodPercentage,
+                FoodPercentage = this.FoodPercentage,
+                WaterPercentage = this.WaterPercentage,
+                OxygenPercentage = this.OxygenPercentage,
+                StaminaPercentage = this.StaminaPercentage,
+                FatiguePercentage = this.FatiguePercentage,
+                BodyTemperature = this.BodyTemperature,
+                LastSleepTime = this.LastSleepTime,
+                CheckTime = this.CheckTime,
+                IsBloodLoss = this.IsBloodLoss,
+                IsActiveInjury = this.IsActiveInjury,
+                IsActiveDisease = this.IsActiveDisease,
+                IsFoodDisgust = this.IsFoodDisgust,
+                IsSleepDisorder = this.IsSleepDisorder,
+                CannotRun = this.CannotRun,
+                IsLegFracture = this.IsLegFracture,
+                ActiveDiseasesWorstLevel = this.ActiveDiseasesWorstLevel
+            };
+
+            //state.ChildStates.Add("ActiveDiseases", );
+            //state.ChildStates.Add("ActiveInjuries", );
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (HealthStateSnippet)savedState;
+
+            BloodPressureTop = state.BloodPressureTop;
+            BloodPressureBottom = state.BloodPressureBottom;
+            HeartRate = state.HeartRate;
+            BloodPercentage = state.BloodPercentage;
+            FoodPercentage = state.FoodPercentage;
+            WaterPercentage = state.WaterPercentage;
+            OxygenPercentage = state.OxygenPercentage;
+            StaminaPercentage = state.StaminaPercentage;
+            FatiguePercentage = state.FatiguePercentage;
+            BodyTemperature = state.BodyTemperature;
+            LastSleepTime = state.LastSleepTime;
+            CheckTime = state.CheckTime;
+            IsBloodLoss = state.IsBloodLoss;
+            IsActiveInjury = state.IsActiveInjury;
+            IsActiveDisease = state.IsActiveDisease;
+            IsFoodDisgust = state.IsFoodDisgust;
+            IsSleepDisorder = state.IsSleepDisorder;
+            CannotRun = state.CannotRun;
+            IsLegFracture = state.IsLegFracture;
+            ActiveDiseasesWorstLevel = state.ActiveDiseasesWorstLevel;
+
+            //state.ChildStates["ActiveDiseases"]...
+            //state.ChildStates["ActiveInjuries"]...
+        }
+
+        #endregion 
 
     }
 }

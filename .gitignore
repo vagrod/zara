@@ -60,5 +60,6 @@ crashlytics-build.properties
 
 /Bin
 /obj
+/zara-demo/obj
 /zara-demo/Library
 /zara-demo/Temp

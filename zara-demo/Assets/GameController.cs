@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ZaraEngine;
@@ -9,7 +7,7 @@ using ZaraEngine.Player;
 using ZaraEngine.Inventory;
 using ZaraEngine.HealthEngine;
 using System.Text;
-using System.Runtime.InteropServices;
+using ZaraEngine.StateManaging;
 
 public class GameController : MonoBehaviour, IGameController
 {
@@ -28,8 +26,18 @@ public class GameController : MonoBehaviour, IGameController
 
     private TimesOfDay _timeOfDay;
 
+    #region Demo app fields
+
     private float _infoUpdateCounter;
     private float _dateTimeCounter;
+
+    // our clothes references
+    private ZaraEngine.Inventory.WaterproofJacket _jacket;
+    private ZaraEngine.Inventory.WaterproofPants _pants;
+    private ZaraEngine.Inventory.RubberBoots _boots;
+    private ZaraEngine.Inventory.LeafHat _hat;
+
+    #endregion 
 
     #region UI elements for data display
 
@@ -66,12 +74,6 @@ public class GameController : MonoBehaviour, IGameController
 
     public Text SleepingText;
 
-    // our clothes references
-    private ZaraEngine.Inventory.WaterproofJacket _jacket;
-    private ZaraEngine.Inventory.WaterproofPants _pants;
-    private ZaraEngine.Inventory.RubberBoots _boots;
-    private ZaraEngine.Inventory.LeafHat _hat;
-
     #endregion 
 
     // Start is called before the first frame update
@@ -93,6 +95,8 @@ public class GameController : MonoBehaviour, IGameController
         _health.Initialize();
 
         /* <<======= Zara Initialization code end */
+
+        #region Demo app init
 
         // Let's add some items to the inventory to play with in this demo
 
@@ -137,6 +141,9 @@ public class GameController : MonoBehaviour, IGameController
         _weather.SetTemperature(27f);
         _weather.SetWindSpeed(0.1f);
         _weather.SetRainIntensity(0f);
+
+        #endregion
+
     }
 
     // Update is called once per frame
@@ -146,6 +153,8 @@ public class GameController : MonoBehaviour, IGameController
         
         _body.Check(Time.deltaTime);
         _health.Check(Time.deltaTime);
+
+        #region Demo UI update
 
         /* Updating UI info */
 
@@ -265,6 +274,9 @@ public class GameController : MonoBehaviour, IGameController
 
             _infoUpdateCounter = 0f;
         }
+
+        #endregion 
+
     }
 
     #region IGameController Implementation -- Required by Zara
@@ -662,6 +674,27 @@ public class GameController : MonoBehaviour, IGameController
 
     public void OnAdvanceTimeClick(){
         _dateTime = _dateTime.AddHours(1);
+    }
+
+    #endregion
+
+    #region State Save/Load Demo
+
+    private ZaraEngineState _savedState;
+
+    public void OnStateSaveClick()
+    {
+        _savedState = ZaraEngine.EngineState.GetState(this);
+    }
+
+    public void OnStateLoadClick()
+    {
+        if (_savedState == null)
+            return;
+
+        // Important: if you are restoring Zara state asyncronously, be sure not to call .Check() methods on _healts and _body during the RestoreState method execution
+
+        ZaraEngine.EngineState.RestoreState(this, _savedState, stateWorldTime => _dateTime = stateWorldTime /* method to restore the saved world time */);
     }
 
     #endregion 

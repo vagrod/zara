@@ -11,6 +11,7 @@ using ZaraEngine.Inventory;
 using ZaraEngine.StateManaging;
 using Foundation.Databinding;
 using UnityEditorInternal;
+using UnityEditor.ShortcutManagement;
 
 namespace ZaraEngine.HealthEngine {
     [Serializable]
@@ -1321,18 +1322,43 @@ namespace ZaraEngine.HealthEngine {
 
         #endregion
 
-
         #region State Manage
 
         public IStateSnippet GetState(){
-            return new HealthControllerSnippet
+            var state = new HealthControllerSnippet
             {
-
+                ActualFatigueValue = _actualFatigueValue,
+                HealthCheckCooldownTimer = _healthCheckCooldownTimer,
+                IsHighPressureEventTriggered = _isHighPressureEventTriggered,
+                LastUpdateGameTime =_lastUpdateGameTime,
+                PreviousDiseaseVitalsChangeRate = _previousDiseaseVitalsChangeRate,
+                PreviousInjuryVitalsChangeRate = _previousInjuryVitalsChangeRate,
+                UnconsciousMode = this.UnconsciousMode,
+                VilalsFluctuateCheckCounter = _vilalsFluctuateCheckCounter,
+                VitalsFluctuateEquilibrium = _vitalsFluctuateEquilibrium
             };
+
+            state.ChildStates.Add("HealthState", Status.GetState());
+
+            return state;
         }
 
-        public void RestoreState(IStateSnippet savedState){
+        public void RestoreState(IStateSnippet savedState)
+        {
             var state = (HealthControllerSnippet)savedState;
+
+            _actualFatigueValue = state.ActualFatigueValue;
+            _healthCheckCooldownTimer = state.HealthCheckCooldownTimer;
+            _isHighPressureEventTriggered = state.IsHighPressureEventTriggered;
+            _lastUpdateGameTime = state.LastUpdateGameTime;
+            _previousDiseaseVitalsChangeRate = state.PreviousDiseaseVitalsChangeRate;
+            _previousInjuryVitalsChangeRate = state.PreviousInjuryVitalsChangeRate;
+            _vilalsFluctuateCheckCounter = state.VilalsFluctuateCheckCounter;
+            _vitalsFluctuateEquilibrium = state.VitalsFluctuateEquilibrium;
+
+            UnconsciousMode = state.UnconsciousMode;
+
+            Status.RestoreState(state.ChildStates["HealthState"]);
         }
 
         #endregion 
