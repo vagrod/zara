@@ -11,7 +11,7 @@ What is missing at the moment -- is save/load mechanic, but I'm already working 
 ``` csharp
 var state = ZaraEngine.EngineState.GetState(gc);
 // ........
-ZaraEngine.EngineState.RestoreState(gc, state);
+ZaraEngine.EngineState.RestoreState(gc, state, savedWorldTime => _worldTime = savedWorldTime);
 // ... where gc is an engine instance (IGameController)
 ```
 
