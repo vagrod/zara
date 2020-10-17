@@ -522,11 +522,12 @@ namespace ZaraEngine.Diseases
                 IsChainInverted = _isChainInverted,
                 DiseaseStartTime = _diseaseStartTime,
                 TreatedStageLevel = TreatedStage?.Level,
-                IsTreated = this.IsTreated
+                IsTreated = this.IsTreated,
             };
 
             state.ChildStates.Add("ChangedVitals", _changedVitals?.GetState());
             state.ChildStates.Add("ChangedCritialStage", _changedCritialStage?.GetState());
+            state.ChildStates.Add("Treatments", Disease.GetState());
 
             return state;
         }
@@ -556,6 +557,9 @@ namespace ZaraEngine.Diseases
                 _changedCritialStage.RestoreState(state.ChildStates["ChangedCritialStage"]);
 
             ComputeDisease();
+
+            Disease.RestoreState(state.ChildStates["Treatments"]);
+
             Refresh(_gc.WorldTime.Value);
         }
 

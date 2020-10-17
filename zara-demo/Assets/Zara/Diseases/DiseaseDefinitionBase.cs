@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Injuries;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
@@ -16,7 +17,7 @@ namespace ZaraEngine.Diseases
         HealthyStage = 1
     }
 
-    public abstract class DiseaseDefinitionBase
+    public abstract class DiseaseDefinitionBase: IAcceptsStateChange
     {
 
         public Guid Id { get; } = Guid.NewGuid();
@@ -48,6 +49,20 @@ namespace ZaraEngine.Diseases
         {
 
         }
+
+        #region State Manage
+
+        public virtual IStateSnippet GetState()
+        {
+            return new DiseaseTreatmentsListSnippet();
+        }
+
+        public virtual void RestoreState(IStateSnippet state)
+        {
+
+        }
+
+        #endregion
 
     }
 
