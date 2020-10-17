@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine
 {
-    public class InventoryHealthEffectsController
+    public class InventoryHealthEffectsController : IAcceptsStateChange
     {
 
         private readonly IGameController _gc;
@@ -54,6 +55,37 @@ namespace ZaraEngine.HealthEngine
             PlayerWalkSpeedBonus = -Helpers.Lerp(0f, _gc.Player.WalkSpeed / 2f, invPerc);
             PlayerCrouchSpeedBonus = -Helpers.Lerp(0f, _gc.Player.CrouchSpeed / 3f, invPerc);
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new InventoryHealthEffectsSnippet
+            {
+                PlayerRunSpeedBonus = this.PlayerRunSpeedBonus,
+                PlayerWalkSpeedBonus = this.PlayerWalkSpeedBonus,
+                PlayerCrouchSpeedBonus = this.PlayerCrouchSpeedBonus,
+                IsFreezed = this.IsFreezed
+            };
+
+            state.ChildStates.Add("FreezedByInventoryOverloadEvent", _freezedByInventoryOverloadEvent.GetState());
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (InventoryHealthEffectsSnippet)savedState;
+
+            PlayerRunSpeedBonus = state.PlayerRunSpeedBonus;
+            PlayerWalkSpeedBonus = state.PlayerWalkSpeedBonus;
+            PlayerCrouchSpeedBonus = state.PlayerCrouchSpeedBonus;
+            IsFreezed = state.IsFreezed;
+
+            _freezedByInventoryOverloadEvent.RestoreState(state.ChildStates["FreezedByInventoryOverloadEvent"]);
+        }
+
+        #endregion 
 
     }
 }
