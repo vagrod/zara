@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine.SideEffects
 {
-    public class ConsumablesSideEffectsController
+    public class ConsumablesSideEffectsController : IAcceptsStateChange
     {
 
         private readonly IGameController _gc;
@@ -29,6 +30,31 @@ namespace ZaraEngine.HealthEngine.SideEffects
         {
 
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ConsumablesHealthEffectsSnippet
+            {
+                BloodPressureBottomBonus = this.BloodPressureBottomBonus,
+                BloodPressureTopBonus = this.BloodPressureTopBonus,
+                HeartRateBonus = this.HeartRateBonus
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ConsumablesHealthEffectsSnippet)savedState;
+
+            BloodPressureBottomBonus = state.BloodPressureBottomBonus;
+            BloodPressureTopBonus = state.BloodPressureTopBonus;
+            HeartRateBonus = state.HeartRateBonus;
+        }
+
+        #endregion 
 
     }
 }
