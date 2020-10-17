@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
-    public class FluMonitor : DiseaseMonitorBase
+    public class FluMonitor : DiseaseMonitorBase, IAcceptsStateChange
     {
 
         private const float WamthLevelToCatchFluWithLowChance    = -6f;
@@ -27,8 +28,6 @@ namespace ZaraEngine.Diseases
         private const int FluChanceNightBonus       = 5;      // Percents
         private const int WetnessLevelToConsiderFlu = 50;     // Percents
         private const int AnginaBonus               = 5;      // Percents
-
-        // TODO: LOAD THESE FIELDS FROM SAVE
 
         private DateTime? _nextCheckTime;
 
@@ -164,5 +163,27 @@ namespace ZaraEngine.Diseases
         {
             
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new FluMonitorSnippet
+            {
+                NextCheckTime = _nextCheckTime
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (FluMonitorSnippet)savedState;
+
+            _nextCheckTime = state.NextCheckTime;
+        }
+
+        #endregion 
+
     }
 }

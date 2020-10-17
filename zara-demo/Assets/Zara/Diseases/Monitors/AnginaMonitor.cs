@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
-    public class AnginaMonitor : DiseaseMonitorBase
+    public class AnginaMonitor : DiseaseMonitorBase, IAcceptsStateChange
     {
 
         private const int MinutesFromBoilMediumTemperatureToConsiderAngina   = 60 * 5; // Game minutes
@@ -27,8 +28,6 @@ namespace ZaraEngine.Diseases
         private const int AnginaMediumChance   = 25;     // Percents
         private const int AnginaLowChance      = 5;      // Percents
         private const int FluBonus             = 5;      // Percents
-
-        // TODO: LOAD THESE FIELDS FROM SAVE
 
         private DateTime? _nextCheckTime;
 
@@ -143,5 +142,27 @@ namespace ZaraEngine.Diseases
                 _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(Angina), diseaseStime));
             }
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new AnginaMonitorSnippet
+            {
+                NextCheckTime = _nextCheckTime
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (AnginaMonitorSnippet)savedState;
+
+            _nextCheckTime = state.NextCheckTime;
+        }
+
+        #endregion 
+
     }
 }

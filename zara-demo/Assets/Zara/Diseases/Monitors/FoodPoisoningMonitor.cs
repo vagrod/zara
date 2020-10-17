@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
-    public class FoodPoisoningMonitor : DiseaseMonitorBase
+    public class FoodPoisoningMonitor : DiseaseMonitorBase, IAcceptsStateChange
     {
 
         public const int UnsafeWaterFoodPoisoningChance = 60; // percents
@@ -57,5 +58,24 @@ namespace ZaraEngine.Diseases
                 _gc.Health.Status.ActiveDiseases.Add(new ActiveDisease(_gc, typeof(FoodPoisoning), _gc.WorldTime.Value));
             }
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new FoodPoisoningMonitorSnippet();
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (FoodPoisoningMonitorSnippet)savedState;
+
+            //...
+        }
+
+        #endregion 
+
     }
 }
