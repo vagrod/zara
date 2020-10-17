@@ -271,6 +271,8 @@ namespace ZaraEngine.Injuries
                 TreatedStageLevel = TreatedStage?.Level
             };
 
+            state.ChildStates.Add("Treatments", Injury.GetState());
+
             return state;
         }
 
@@ -281,6 +283,8 @@ namespace ZaraEngine.Injuries
             Injury = (InjuryBase)Activator.CreateInstance(Type.GetType(state.InjuryType));
 
             SetUpActiveStage(state.InjuryTriggerTime);
+
+            Injury.RestoreState(state.ChildStates["Treatments"]);
 
             if (state.TreatedStageLevel.HasValue)
                 TreatedStage = Injury.Stages.FirstOrDefault(x => x.Level == state.TreatedStageLevel.Value);
@@ -294,7 +298,6 @@ namespace ZaraEngine.Injuries
             IsDiseaseProbabilityChecked = state.IsDiseaseProbabilityChecked;
             BodyPart = state.BodyPart;
             IsTreated = state.IsTreated;
-            
         }
 
         #endregion 

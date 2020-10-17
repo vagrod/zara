@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ZaraEngine.StateManaging
 {
-    public class DiseaseTreatmentSnippet : SnippetBase
+    public class InjuryTreatmentSnippet : SnippetBase
     {
 
-        public DiseaseTreatmentSnippet() : base() { }
-        public DiseaseTreatmentSnippet(object contract) : base(contract) { }
+        public InjuryTreatmentSnippet() : base() { }
+        public InjuryTreatmentSnippet(object contract) : base(contract) { }
 
         #region Data Fields
 
@@ -20,7 +20,7 @@ namespace ZaraEngine.StateManaging
 
         public override object ToContract()
         {
-            var c = new DiseaseTreatmentContract
+            var c = new InjuryTreatmentContract
             {
         
             };
@@ -30,7 +30,7 @@ namespace ZaraEngine.StateManaging
 
         public override void FromContract(object o)
         {
-            var c = (DiseaseTreatmentContract)o;
+            var c = (InjuryTreatmentContract)o;
 
         
 

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Diseases;
 using ZaraEngine.Injuries.Stages;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Injuries
 {
 
-    public abstract class InjuryBase
+    public abstract class InjuryBase: IAcceptsStateChange
     {
 
         public Guid Id { get; } = Guid.NewGuid();
@@ -26,5 +27,20 @@ namespace ZaraEngine.Injuries
         {
             Stages = chainCopy;
         }
+
+        #region State Manage
+
+        public virtual IStateSnippet GetState()
+        {
+            return new InjuryTreatmentsListSnippet();
+        }
+
+        public virtual void RestoreState(IStateSnippet state)
+        {
+
+        }
+
+        #endregion
+
     }
 }
