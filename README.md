@@ -31,11 +31,11 @@ It includes:
   - Water Level
   - Blood Level
   - Oxygen Level
-  - Wetness level (how wet is your cloths)
+  - Wetness level (how wet is your character)
   - Warmth level (incl. cloths with different warmth levels)
   - Sleep cycles
   - Side effects from running, carrying weight, swimming, freezing
-  - Dizziness and blackouts as a result of an extreme exhaustion and/or medical effects
+  - Dizziness and blackouts as a result of an extreme exhaustion and/or diseases and/or medical effects
   - Sneezing
   - Caughing
   - Diseases and injuries and their treatment (see more below)
