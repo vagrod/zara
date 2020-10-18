@@ -1,7 +1,7 @@
 # Zara Survival Engine
 Zara is written in C# (3D-engine-agnostic code: no specific 3D-engine references).
 
-Zara will be useful for you if you want your game to have weather-aware health control with ton of intertwined parameters, sleeping, fatigue, diseases (flu, food poisoning, venom poisoning, angina and so on), injuries (cuts, fractures), food spoiling, water disinfecting, inventory, crafting, clothes with different water/sun/cold resistance levels and more. On a surface, it is really easy to use. Basic setup is about 10 lines of code – and you have everything at your disposal). 
+Zara will be useful for you if you want your game to have weather-aware health control with ton of intertwined parameters, sleeping, fatigue, diseases (flu, food poisoning, venom poisoning, angina and so on), injuries (cuts, fractures), food spoiling, water disinfecting, inventory, crafting, clothes with different water/cold resistance levels and more. On a surface, it is really easy to use. Basic setup is about 10 lines of code – and you have everything at your disposal). 
 
 Code is open, so you can customize everything for your particular game needs.
 
