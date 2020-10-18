@@ -51,6 +51,8 @@ public class GameController : MonoBehaviour, IGameController
     public Text StaminaText;
     public Text OxygenLevelText;
 
+    public Text AppliancesText;
+
     public Text DiseasesInfoText;
     public Text InjuriesInfoText;
     public Text CanEatText;
@@ -193,6 +195,33 @@ public class GameController : MonoBehaviour, IGameController
             SleepingText.text = $"Is Sleeping? {(_body.IsSleeping ? "yes" : "no")}";
 
             var sb = new StringBuilder();
+
+            sb.AppendLine("Clothes:");
+
+            var cg = ClothesGroups.Instance.GetCompleteClothesGroup();
+            
+            sb.AppendLine($"  Has Complete Set of Clothes? {(cg == null ? "no" : ("yes -- " + cg.Name + $"\n  Gives extra Water ({cg.WaterResistanceBonus}%) and Cold Resistance ({cg.ColdResistanceBonus}%) when complete set"))}");
+
+            foreach(var item in _body.Clothes){
+                sb.AppendLine($"\t• {item.Name} ({item.ClothesType})");
+                sb.AppendLine($"\t  Water Resistance: {item.WaterResistance}%");
+                sb.AppendLine($"\t  Cold Resistance: {item.ColdResistance}%");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("Appliances:");
+
+            if(_body.Appliances.Count == 0){
+                sb.AppendLine("\t None");
+            } else {
+                foreach(var item in _body.Appliances){
+                    sb.AppendLine($"\t• {item.Item.Name} on {item.BodyPart}");
+                }
+            }
+
+            AppliancesText.text = sb.ToString();
+
+            sb.Clear();
 
             sb.AppendLine($"Has Active Disease (with an Active Stage): {(_health.Status.IsActiveDisease ? "yes" : "no")}");
             sb.AppendLine($"Diseases count (including scheduled): {_health.Status.ActiveDiseases.Count}");
