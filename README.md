@@ -30,6 +30,7 @@ It includes:
   - Food Level
   - Water Level
   - Blood Level
+  - Oxygen Level
   - Wetness level (how wet is your cloths)
   - Warmth level (incl. cloths with different warmth levels)
   - Sleep cycles
