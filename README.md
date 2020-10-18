@@ -19,7 +19,7 @@ ZaraEngine.EngineState.RestoreState(gc, state, savedWorldTime => _worldTime = sa
 // ... where gc is an engine instance (IGameController)
 ```
 
-![Zara Demo app screen](http://imw.su/ZaraDemoScreen_03.png)
+![Zara Demo app screen](http://imw.su/ZaraDemoScreen_04.png)
 
 It includes:
 + Health Engine that controls
