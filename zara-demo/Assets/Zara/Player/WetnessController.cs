@@ -109,14 +109,12 @@ namespace ZaraEngine.Player
                 return;
 
             // Drying
-            var currentRate = 0f;
+            var currentRate = NormalDryRate;
 
             if (_gc.Weather.Temperature <= FreezeTemperature)
                 currentRate = FreezeDryRate;
             else if (_gc.Weather.Temperature <= ColdTemperature)
                 currentRate = ColdDryRate;
-            else if (_gc.Weather.Temperature <= NormalTemperature)
-                currentRate = NormalDryRate;
             else if (_gc.Weather.Temperature >= HotTemperature)
                 currentRate = HotDryRate;
 

@@ -1,4 +1,6 @@
-﻿namespace ZaraEngine.StateManaging
+﻿using System;
+
+namespace ZaraEngine.StateManaging
 {
     public class UnderwaterHealthEffectsSnippet : SnippetBase
     {
@@ -13,6 +15,7 @@
         public float HeartRateBonus { get; set; }
         public float OxygenLevelBonus { get; set; }
         public bool LastUnderWaterState { get; set; }
+        public DateTime? GameTimeGotUnderwater { get; set; }
 
         #endregion 
 
@@ -24,7 +27,8 @@
                 BloodPressureBottomBonus = this.BloodPressureBottomBonus,
                 HeartRateBonus = this.HeartRateBonus,
                 OxygenLevelBonus = this.OxygenLevelBonus,
-                LastUnderWaterState = this.LastUnderWaterState
+                LastUnderWaterState = this.LastUnderWaterState,
+                GameTimeGotUnderwater = this.GameTimeGotUnderwater.HasValue ? new DateTimeContract(this.GameTimeGotUnderwater.Value) : null
             };
 
             c.DrowningDeathEvent = (FixedEventContract)ChildStates["DrowningDeathEvent"].ToContract();
@@ -41,6 +45,7 @@
             HeartRateBonus = c.HeartRateBonus;
             OxygenLevelBonus = c.OxygenLevelBonus;
             LastUnderWaterState = c.LastUnderWaterState;
+            GameTimeGotUnderwater = c.GameTimeGotUnderwater == null || c.GameTimeGotUnderwater.IsEmpty ? (DateTime?)null : c.GameTimeGotUnderwater.ToDateTime();
 
             ChildStates.Clear();
 

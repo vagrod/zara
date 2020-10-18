@@ -15,11 +15,11 @@ namespace ZaraEngine.HealthEngine
          * ---------------------------------------------------- Underwater -------------------------------------------------- *
          * ------------------------------------------------------------------------------------------------------------------ */
 
-        public const float UnderwaterOxygenDrainRate         = 0.16f; // percents per game second
-        private const float MaxHeartRateBonus                 = 24f;   // bpm
-        private const float MaxBloodPressureBonus             = 11f;   // mmHg
-        private const float MaxFatigueImpactOnOxygenConsuming = 0.04f; // percents
+        public const float UnderwaterOxygenDrainRate          = 0.16f; // percents per game second
+        private const float MaxHeartRateBonus                 = 54f;   // bpm
+        private const float MaxBloodPressureBonus             = 32f;   // mmHg
         private const float MaxOxygenBonus                    = 100f;  // percents
+        private const float MaxGameMinutesUnderwater          = 6.5f;  // game minutes
 
         public float BloodPressureTopBonus { get; private set; }
         public float BloodPressureBottomBonus { get; private set; }
@@ -27,6 +27,8 @@ namespace ZaraEngine.HealthEngine
         public float OxygenLevelBonus { get; private set; }
 
         private bool _lastUnderWaterState;
+
+        private DateTime? _gameTimeGotUnderwater;
 
         private readonly IGameController _gc;
         private readonly HealthController _healthController;
@@ -52,13 +54,21 @@ namespace ZaraEngine.HealthEngine
         {
             if (_lastUnderWaterState && !_gc.Player.IsUnderWater)
             {
-                _lastUnderWaterState = _gc.Player.IsUnderWater;
+                _lastUnderWaterState = false;
             }
 
             if (!_lastUnderWaterState && _gc.Player.IsUnderWater)
             {
-                _lastUnderWaterState = _gc.Player.IsUnderWater;
-            }            
+                _lastUnderWaterState = true;
+                _gameTimeGotUnderwater = _gc.WorldTime.Value.AddMilliseconds(-1); // to not trigger the if on a first iteration
+            }
+
+            if (!_lastUnderWaterState && _gameTimeGotUnderwater.HasValue)
+            {
+                _gameTimeGotUnderwater = _gameTimeGotUnderwater.Value.AddSeconds(gameSecondsSinceLastCall*2); // for lerping back
+            }
+
+            CalculateVitalsBonus(deltaTime);
         }
 
         private void CalculateVitalsBonus(float deltaTime)
@@ -70,12 +80,23 @@ namespace ZaraEngine.HealthEngine
                 return;
             }
 
-            var oxyPercent = 1f - _gc.Health.Status.OxygenPercentage / 100f;
+            if (_gameTimeGotUnderwater.HasValue)
+            {
+                if(_gameTimeGotUnderwater.Value >= _gc.WorldTime.Value)
+                {
+                    _gameTimeGotUnderwater = null;
 
-            BloodPressureTopBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
-            BloodPressureBottomBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
-            HeartRateBonus = Helpers.Lerp(0f, MaxHeartRateBonus, oxyPercent);
-            OxygenLevelBonus = -Helpers.Lerp(0f, MaxOxygenBonus, oxyPercent);
+                    return;
+                }
+
+                var gameMinutesUnterwater = (_gc.WorldTime.Value - _gameTimeGotUnderwater.Value).TotalMinutes;
+                var oxyPercent = (float)gameMinutesUnterwater / (float)MaxGameMinutesUnderwater;
+
+                BloodPressureTopBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
+                BloodPressureBottomBonus = Helpers.Lerp(0f, MaxBloodPressureBonus, oxyPercent);
+                HeartRateBonus = Helpers.Lerp(0f, MaxHeartRateBonus, oxyPercent);
+                OxygenLevelBonus = -Helpers.Lerp(0f, MaxOxygenBonus, oxyPercent);
+            }
         }
 
         #region State Manage
@@ -88,7 +109,8 @@ namespace ZaraEngine.HealthEngine
                 BloodPressureTopBonus = this.BloodPressureTopBonus,
                 HeartRateBonus = this.HeartRateBonus,
                 OxygenLevelBonus = this.OxygenLevelBonus,
-                LastUnderWaterState = _lastUnderWaterState
+                LastUnderWaterState = _lastUnderWaterState,
+                GameTimeGotUnderwater = _gameTimeGotUnderwater
             };
 
             state.ChildStates.Add("DrowningDeathEvent", _drowningDeathEvent.GetState());
@@ -106,6 +128,7 @@ namespace ZaraEngine.HealthEngine
             OxygenLevelBonus = state.OxygenLevelBonus;
 
             _lastUnderWaterState = state.LastUnderWaterState;
+            _gameTimeGotUnderwater = state.GameTimeGotUnderwater;
 
             _drowningDeathEvent.RestoreState(state.ChildStates["DrowningDeathEvent"]);
         }

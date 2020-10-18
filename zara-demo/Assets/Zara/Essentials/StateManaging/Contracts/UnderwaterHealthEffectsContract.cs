@@ -11,6 +11,7 @@ namespace ZaraEngine.StateManaging
         public float HeartRateBonus;
         public float OxygenLevelBonus;
         public bool LastUnderWaterState;
+        public DateTimeContract GameTimeGotUnderwater;
 
         public FixedEventContract DrowningDeathEvent;
 
