@@ -91,6 +91,9 @@ namespace ZaraEngine.Player
             var totalSleepSeconds = hours * 60f * 60f;
             var fatigue = (1f - (hours / HoursToFullyRest)) * 100f;
 
+            if(fatigue < 0f)
+                fatigue = 0f;
+
             _sleepStartTime = _gc.WorldTime.Value;
             _wakeUpAction = onWakeUp;
             _sleepTimeAdvanceFunc = timeAdvanceFunc;
