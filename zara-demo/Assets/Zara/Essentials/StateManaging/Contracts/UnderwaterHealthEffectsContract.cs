@@ -13,9 +13,6 @@ namespace ZaraEngine.StateManaging
         public bool LastUnderWaterState;
 
         public FixedEventContract DrowningDeathEvent;
-        public FixedEventContract PlayLightBreath;
-        public FixedEventContract PlayMediumBreath;
-        public FixedEventContract PlayHardBreath;
 
     }
 }

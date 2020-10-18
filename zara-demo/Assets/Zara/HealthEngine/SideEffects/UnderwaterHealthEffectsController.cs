@@ -32,9 +32,6 @@ namespace ZaraEngine.HealthEngine
         private readonly HealthController _healthController;
 
         private readonly FixedEvent _drowningDeathEvent;
-        private readonly FixedEvent _playLightBreath;
-        private readonly FixedEvent _playMediumBreath;
-        private readonly FixedEvent _playHardBreath;
 
         public UnderwaterHealthEffectsController(IGameController gc, HealthController health)
         {
@@ -43,10 +40,7 @@ namespace ZaraEngine.HealthEngine
 
             // Game events produced by the Underwater Effects Controller
 
-            _drowningDeathEvent = new FixedEvent("Drowning death",          ev => Events.NotifyAll(l => l.DeathByDrowning())) { AutoReset = true };
-            _playLightBreath    = new FixedEvent("Off-water light breath",  ev => Events.NotifyAll(l => l.SwimmingOffWaterLightBreath())) { AutoReset = true };
-            _playMediumBreath   = new FixedEvent("Off-water meduim breath", ev => Events.NotifyAll(l => l.SwimmingOffWaterMediumBreath())) { AutoReset = true };
-            _playHardBreath     = new FixedEvent("Off-water hard breath",   ev => Events.NotifyAll(l => l.SwimmingOffWaterHardBreath())) { AutoReset = true };
+            _drowningDeathEvent = new FixedEvent("Drowning death", ev => Events.NotifyAll(l => l.DeathByDrowning())) { AutoReset = true };
         }
 
         public void Update(float gameSecondsSinceLastCall, float deltaTime)
@@ -58,13 +52,6 @@ namespace ZaraEngine.HealthEngine
         {
             if (_lastUnderWaterState && !_gc.Player.IsUnderWater)
             {
-                if (_gc.Health.Status.OxygenPercentage < 20f)
-                    _playHardBreath.Invoke(deltaTime);
-                else if (_gc.Health.Status.OxygenPercentage < 40f)
-                    _playMediumBreath.Invoke(deltaTime);
-                else if (_gc.Health.Status.OxygenPercentage < 70f)
-                    _playLightBreath.Invoke(deltaTime);
-
                 _lastUnderWaterState = _gc.Player.IsUnderWater;
             }
 
@@ -105,9 +92,6 @@ namespace ZaraEngine.HealthEngine
             };
 
             state.ChildStates.Add("DrowningDeathEvent", _drowningDeathEvent.GetState());
-            state.ChildStates.Add("PlayLightBreath", _playLightBreath.GetState());
-            state.ChildStates.Add("PlayMediumBreath", _playMediumBreath.GetState());
-            state.ChildStates.Add("PlayHardBreath", _playHardBreath.GetState());
 
             return state;
         }
@@ -124,9 +108,6 @@ namespace ZaraEngine.HealthEngine
             _lastUnderWaterState = state.LastUnderWaterState;
 
             _drowningDeathEvent.RestoreState(state.ChildStates["DrowningDeathEvent"]);
-            _playLightBreath.RestoreState(state.ChildStates["PlayLightBreath"]);
-            _playMediumBreath.RestoreState(state.ChildStates["PlayMediumBreath"]);
-            _playHardBreath.RestoreState(state.ChildStates["PlayHardBreath"]);
         }
 
         #endregion 

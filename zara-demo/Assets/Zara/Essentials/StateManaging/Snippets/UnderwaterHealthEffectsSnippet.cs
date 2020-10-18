@@ -28,9 +28,6 @@
             };
 
             c.DrowningDeathEvent = (FixedEventContract)ChildStates["DrowningDeathEvent"].ToContract();
-            c.PlayLightBreath = (FixedEventContract)ChildStates["PlayLightBreath"].ToContract();
-            c.PlayMediumBreath = (FixedEventContract)ChildStates["PlayMediumBreath"].ToContract();
-            c.PlayHardBreath = (FixedEventContract)ChildStates["PlayHardBreath"].ToContract();
 
             return c;
         }
@@ -48,9 +45,6 @@
             ChildStates.Clear();
 
             ChildStates.Add("DrowningDeathEvent", new FixedEventSnippet(c.DrowningDeathEvent));
-            ChildStates.Add("PlayLightBreath", new FixedEventSnippet(c.PlayLightBreath));
-            ChildStates.Add("PlayMediumBreath", new FixedEventSnippet(c.PlayMediumBreath));
-            ChildStates.Add("PlayHardBreath", new FixedEventSnippet(c.PlayHardBreath));
         }
 
     }

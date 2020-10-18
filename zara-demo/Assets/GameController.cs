@@ -379,6 +379,19 @@ public class GameController : MonoBehaviour, IGameController
         _player.SetWalking(_isWalking);
     }
 
+    private bool _isUnderwater;
+    public void OnUnderwaterClick(Button e){
+        _isUnderwater = !_isUnderwater;
+
+        if(_isUnderwater){
+            e.gameObject.transform.Find("Text").GetComponent<Text>().text = "Swim Up";
+        } else {
+            e.gameObject.transform.Find("Text").GetComponent<Text>().text = "Go Underwater";
+        }
+
+        _player.SetUnderwater(_isUnderwater);
+    }
+
     #endregion 
 
     #region Disease/Injury Spawner

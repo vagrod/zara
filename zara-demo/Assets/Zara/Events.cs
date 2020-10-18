@@ -11,9 +11,6 @@ namespace ZaraEngine {
         void InventoryOverload();
         void IntenseRunningTriggeredOn();
         void IntenseRunningTriggeredOff();
-        void SwimmingOffWaterLightBreath();
-        void SwimmingOffWaterMediumBreath();
-        void SwimmingOffWaterHardBreath();
 
         void DiseaseDizziness();
         void DiseaseBlackout();
