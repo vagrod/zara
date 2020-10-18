@@ -54,7 +54,7 @@ namespace ZaraEngine.Diseases
 
         public virtual IStateSnippet GetState()
         {
-            return new DiseaseTreatmentsListSnippet();
+            return new DiseaseTreatmentSnippet();
         }
 
         public virtual void RestoreState(IStateSnippet state)

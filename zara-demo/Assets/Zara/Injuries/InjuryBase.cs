@@ -32,7 +32,7 @@ namespace ZaraEngine.Injuries
 
         public virtual IStateSnippet GetState()
         {
-            return new InjuryTreatmentsListSnippet();
+            return new InjuryTreatmentSnippet();
         }
 
         public virtual void RestoreState(IStateSnippet state)

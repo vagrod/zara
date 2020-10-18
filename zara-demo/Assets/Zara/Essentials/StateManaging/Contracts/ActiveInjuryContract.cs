@@ -15,7 +15,7 @@ namespace ZaraEngine.StateManaging
         public DateTime InjuryTriggerTime;
         public bool IsTreated;
         public bool IsDiseaseProbabilityChecked;
-        public InjuryTreatmentsListContract Treatments;
+        public InjuryTreatmentContract Treatments;
 
     }
 }

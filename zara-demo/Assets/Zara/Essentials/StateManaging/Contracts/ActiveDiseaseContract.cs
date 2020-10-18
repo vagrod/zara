@@ -18,7 +18,7 @@ namespace ZaraEngine.StateManaging
 
         public ChangedVitalsInfoContract ChangedVitals;
         public ChangedVitalsInfoContract ChangedCritialStage;
-        public DiseaseTreatmentsListContract Treatments;
+        public DiseaseTreatmentContract Treatments;
 
     }
 }

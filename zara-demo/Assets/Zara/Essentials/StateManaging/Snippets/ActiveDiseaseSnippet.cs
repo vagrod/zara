@@ -18,7 +18,7 @@ namespace ZaraEngine.StateManaging
         public Guid? InjuryId { get; set; }
         public string DiseaseType { get; set; }
 
-        public DiseaseTreatmentsListSnippet Treatments { get; set; }
+        public DiseaseTreatmentSnippet Treatments { get; set; }
 
         public bool IsDiseaseActivated { get; set; }
         public bool IsSelfHealActive { get; set; }
@@ -46,7 +46,7 @@ namespace ZaraEngine.StateManaging
 
             c.ChangedVitals = ChildStates["ChangedVitals"] == null ? null :(ChangedVitalsInfoContract)ChildStates["ChangedVitals"].ToContract();
             c.ChangedCritialStage = ChildStates["ChangedCritialStage"] == null ? null : (ChangedVitalsInfoContract)ChildStates["ChangedCritialStage"].ToContract();
-            c.Treatments = (DiseaseTreatmentsListContract)ChildStates["Treatments"].ToContract();
+            c.Treatments = (DiseaseTreatmentContract)ChildStates["Treatments"].ToContract();
 
             return c;
         }
@@ -69,7 +69,7 @@ namespace ZaraEngine.StateManaging
 
             ChildStates.Add("ChangedVitals", c.ChangedVitals == null ?  null : new ChangedVitalsInfoSnippet(c.ChangedVitals));
             ChildStates.Add("ChangedCritialStage", c.ChangedCritialStage == null ? null :  new ChangedVitalsInfoSnippet(c.ChangedCritialStage));
-            ChildStates.Add("Treatments", new DiseaseTreatmentsListSnippet(c.Treatments));
+            ChildStates.Add("Treatments", new DiseaseTreatmentSnippet(c.Treatments));
         }
 
     }

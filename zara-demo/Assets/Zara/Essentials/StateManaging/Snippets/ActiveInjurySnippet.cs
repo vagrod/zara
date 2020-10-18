@@ -44,7 +44,7 @@ namespace ZaraEngine.StateManaging
                 IsDiseaseProbabilityChecked = this.IsDiseaseProbabilityChecked
             };
 
-            c.Treatments = (InjuryTreatmentsListContract)ChildStates["Treatments"].ToContract();
+            c.Treatments = (InjuryTreatmentContract)ChildStates["Treatments"].ToContract();
 
             return c;
         }
@@ -65,7 +65,7 @@ namespace ZaraEngine.StateManaging
 
             ChildStates.Clear();
 
-            ChildStates.Add("Treatments", new InjuryTreatmentsListSnippet(c.Treatments));
+            ChildStates.Add("Treatments", new InjuryTreatmentSnippet(c.Treatments));
         }
 
     }
