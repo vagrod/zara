@@ -27,6 +27,8 @@ namespace ZaraEngine.StateManaging
         public int Second;
         public int Millisecond;
 
+        public bool IsEmpty => Day == 0 && Month == 0 && Year == 0 && Hour == 0 && Minute == 0 && Second == 0 && Millisecond == 0;
+
         public DateTime ToDateTime()
         {
             return new DateTime(Year, Month, Day, Hour, Minute, Second, Millisecond);

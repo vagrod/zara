@@ -28,7 +28,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (AnginaMonitorContract)o;
 
-            NextCheckTime = c.NextCheckTime == null ? (DateTime?)null : c.NextCheckTime.ToDateTime();
+            NextCheckTime = c.NextCheckTime == null || c.NextCheckTime.IsEmpty ? (DateTime?)null : c.NextCheckTime.ToDateTime();
 
             ChildStates.Clear();
         }

@@ -30,7 +30,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ToolsOnlyInjuryTreatmentContract)o;
 
-            LastToolTime = c.LastToolTime == null ? (DateTime?)null : c.LastToolTime.ToDateTime();
+            LastToolTime = c.LastToolTime == null || c.LastToolTime.IsEmpty ? (DateTime?)null : c.LastToolTime.ToDateTime();
             ToolsUsed = c.ToolsUsed;
 
             ChildStates.Clear();

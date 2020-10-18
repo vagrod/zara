@@ -46,8 +46,8 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ClothesHealthEffectsContract)o;
 
-            LastClothesChangeTime = c.LastClothesChangeTime == null ? (DateTime?)null : c.LastClothesChangeTime.ToDateTime();
-            LastAutoReLerpTime = c.LastAutoReLerpTime == null ? (DateTime?)null : c.LastAutoReLerpTime.ToDateTime();
+            LastClothesChangeTime = c.LastClothesChangeTime == null || c.LastClothesChangeTime.IsEmpty ? (DateTime?)null : c.LastClothesChangeTime.ToDateTime();
+            LastAutoReLerpTime = c.LastAutoReLerpTime == null || c.LastAutoReLerpTime.IsEmpty ? (DateTime?)null : c.LastAutoReLerpTime.ToDateTime();
             TargetBodyTemperatureDelta = c.TargetBodyTemperatureDelta;
             TargetHeartRateDelta = c.TargetHeartRateDelta;
             CurrentTemperatureBonus = c.CurrentTemperatureBonus;

@@ -2,6 +2,7 @@
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class TimeSpanContract
     {
 
@@ -12,6 +13,8 @@ namespace ZaraEngine.StateManaging
         }
 
         public long Ticks;
+
+        public bool IsEmpty => Ticks == 0;
 
         public TimeSpan ToTimeSpan()
         {

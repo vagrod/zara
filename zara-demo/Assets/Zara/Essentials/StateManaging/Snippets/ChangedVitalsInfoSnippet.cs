@@ -17,8 +17,9 @@ namespace ZaraEngine.StateManaging
         public float? InitialBloodPressureBottom { get; set; }
         public float? InitialBodyTemperature { get; set; }
         public TimeSpan InitialStageDuration { get; set; }
+        public bool IsEmpty => (InitialStageDuration == null || InitialStageDuration == default(TimeSpan)) && (!InitialHeartRate.HasValue || InitialHeartRate.Value == 0) && (!InitialBloodPressureTop.HasValue || InitialBloodPressureTop.Value == 0) && (!InitialBloodPressureBottom.HasValue || InitialBloodPressureBottom.Value == 0) && (!InitialBodyTemperature.HasValue || InitialBodyTemperature.Value == 0);
 
-        #endregion 
+        #endregion
 
         public override object ToContract()
         {
@@ -44,7 +45,7 @@ namespace ZaraEngine.StateManaging
             InitialBloodPressureTop = c.InitialBloodPressureTop;
             InitialBloodPressureBottom = c.InitialBloodPressureBottom;
             InitialBodyTemperature = c.InitialBodyTemperature;
-            InitialStageDuration = c.InitialStageDuration.ToTimeSpan();
+            InitialStageDuration = c.InitialStageDuration.IsEmpty ? default(TimeSpan) : c.InitialStageDuration.ToTimeSpan();
 
             ChildStates.Clear();
         }

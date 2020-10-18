@@ -551,10 +551,30 @@ namespace ZaraEngine.Diseases
             IsTreated = state.IsTreated;
 
             if (state.ChildStates["ChangedVitals"] != null)
-                _changedVitals.RestoreState(state.ChildStates["ChangedVitals"]);
+            {
+                var o = (ChangedVitalsInfoSnippet)state.ChildStates["ChangedVitals"];
 
-            if(state.ChildStates["ChangedCritialStage"] != null)
-                _changedCritialStage.RestoreState(state.ChildStates["ChangedCritialStage"]);
+                if (!o.IsEmpty)
+                {
+                    if (_changedVitals == null)
+                        _changedVitals = new ChangedVitalsInfo();
+
+                    _changedVitals.RestoreState(state.ChildStates["ChangedVitals"]);
+                }
+            }
+
+            if (state.ChildStates["ChangedCritialStage"] != null)
+            {
+                var o = (ChangedVitalsInfoSnippet)state.ChildStates["ChangedCritialStage"];
+
+                if (!o.IsEmpty)
+                {
+                    if (_changedCritialStage == null)
+                        _changedCritialStage = new ChangedVitalsInfo();
+
+                    _changedCritialStage.RestoreState(state.ChildStates["ChangedCritialStage"]);
+                }
+            }
 
             ComputeDisease();
 
