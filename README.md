@@ -6,8 +6,9 @@ Zara will be useful for you if you want your game to have weather-aware health c
 Code is open, so you can customize everything for your particular game needs.
 
 
-Saving/Loading of the engine state (including the entire health status, active diseases, injuries, treatment progress, entire inventory, clothes, appliances). At the moment the save/load of the health module and of the inventory is fully implemented. 
-I'm working on the rest. This text will change when I'm done with all of that.
+Saving/Loading of the engine state is fully supported (including the entire health status, active diseases, injuries, treatment progress, entire inventory, clothes, appliances).
+The size of a serialized state object is about 14K (non-formatted JSON). Saving engine state is taking about 35ms, loading -- about 30.
+
 
 To save the engine state and to completely restore it, you have to write two lines of code, like this:
 
