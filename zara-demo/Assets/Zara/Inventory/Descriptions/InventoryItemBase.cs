@@ -8,6 +8,9 @@ namespace ZaraEngine.Inventory
 {
     public abstract class InventoryItemBase : IInventoryItem, IAcceptsStateChange
     {
+
+        public Guid Id { get; } = Guid.NewGuid();
+
         public virtual string Name
         {
             get { return null; }
@@ -31,6 +34,7 @@ namespace ZaraEngine.Inventory
         {
             return new InventoryItemSnippet
             {
+                Id = this.Id,
                 Count = this.Count,
                 ItemType = this.GetType()
             };

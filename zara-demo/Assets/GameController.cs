@@ -687,6 +687,8 @@ public class GameController : MonoBehaviour, IGameController
         _savedState = ZaraEngine.EngineState.GetState(this);
 
         var s = UnityEngine.JsonUtility.ToJson(_savedState);
+
+        _savedState = UnityEngine.JsonUtility.FromJson<ZaraEngineState>(s);
     }
 
     public void OnStateLoadClick()
@@ -695,6 +697,7 @@ public class GameController : MonoBehaviour, IGameController
             return;
 
         // Important: if you are restoring Zara state asyncronously, be sure not to call .Check() methods on _healts and _body during the RestoreState method execution
+        // It is not recommended to save or load during the sleep
 
         ZaraEngine.EngineState.RestoreState(this, _savedState, stateWorldTime => _dateTime = stateWorldTime /* method to restore the saved world time */);
     }

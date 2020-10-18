@@ -711,11 +711,15 @@ namespace ZaraEngine.Inventory
 
             Items.Clear();
 
+            var mapping = new Dictionary<Guid, Guid>(); //old id, new id
+
             foreach(var itemData in state.GenericInventoryItems)
             {
                 var newItem = (InventoryItemBase)Activator.CreateInstance(itemData.ItemType);
 
                 newItem.RestoreState(itemData);
+
+                mapping.Add(itemData.Id, newItem.Id);
 
                 Items.Add(newItem);
             }
@@ -726,6 +730,8 @@ namespace ZaraEngine.Inventory
 
                 newItem.RestoreState(itemData);
 
+                mapping.Add(itemData.Id, newItem.Id);
+
                 Items.Add(newItem);
             }
 
@@ -735,8 +741,12 @@ namespace ZaraEngine.Inventory
 
                 newItem.RestoreState(itemData);
 
+                mapping.Add(itemData.Id, newItem.Id);
+
                 Items.Add(newItem);
             }
+
+            state.SetItemsMapping(mapping);
 
             RebuildCache();
         }

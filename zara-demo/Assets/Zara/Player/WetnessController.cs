@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Player
 {
-    public class WetnessController
+    public class WetnessController : IAcceptsStateChange
     {
 
         public const float HotTemperature    = 30;  // C (and higher)
@@ -136,6 +135,32 @@ namespace ZaraEngine.Player
                 _lastGettingWetTime = null;
             }
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new WetnessControllerSnippet
+            {
+                IsWet = this.IsWet,
+                WetnessValue = _wetnessValue,
+                LastGettingWetTime = _lastGettingWetTime
+            };
+               
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (WetnessControllerSnippet)savedState;
+
+            IsWet = state.IsWet;
+
+            _wetnessValue = state.WetnessValue;
+            _lastGettingWetTime = state.LastGettingWetTime;
+        }
+
+        #endregion
 
     }
 }

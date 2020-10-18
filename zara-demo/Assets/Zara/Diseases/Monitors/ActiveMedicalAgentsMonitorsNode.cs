@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEditor.U2D;
 using ZaraEngine.HealthEngine;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
@@ -170,6 +171,18 @@ namespace ZaraEngine.Diseases
         {
             var state = new ActiveMedicalAgentsMonitorsSnippet();
 
+            state.IsEpinephrineActive = this.IsEpinephrineActive;
+            state.IsAntiVenomActive = this.IsAntiVenomActive;
+            state.IsAtropineActive = this.IsAtropineActive;
+            state.IsMorphineActive = this.IsMorphineActive;
+            state.IsAntibioticActive = this.IsAntibioticActive;
+            state.IsAspirinActive = this.IsAspirinActive;
+            state.IsAcetaminophenActive = this.IsAcetaminophenActive;
+            state.IsLoperamideActive = this.IsLoperamideActive;
+            state.IsOseltamivirActive =this.IsOseltamivirActive;
+            state.IsSedativeActive = this.IsSedativeActive;
+            state.IsDoripenemActive = this.IsDoripenemActive;
+
             state.ChildStates.Add("EpinephrineMedicalAgent", (_monitors[0] as ActiveMedicalAgent).GetState());
             state.ChildStates.Add("AntiVenomMedicalAgent", (_monitors[1] as ActiveMedicalAgent).GetState());
             state.ChildStates.Add("AtropineMedicalAgent", (_monitors[2] as ActiveMedicalAgent).GetState());
@@ -188,6 +201,18 @@ namespace ZaraEngine.Diseases
         public void RestoreState(IStateSnippet savedState)
         {
             var state = (ActiveMedicalAgentsMonitorsSnippet)savedState;
+
+            IsEpinephrineActive = state.IsEpinephrineActive;
+            IsAntiVenomActive = state.IsAntiVenomActive;
+            IsAtropineActive = state.IsAtropineActive;
+            IsMorphineActive = state.IsMorphineActive;
+            IsAntibioticActive = state.IsAntibioticActive;
+            IsAspirinActive = state.IsAspirinActive;
+            IsAcetaminophenActive = state.IsAcetaminophenActive;
+            IsLoperamideActive = state.IsLoperamideActive;
+            IsOseltamivirActive = state.IsOseltamivirActive;
+            IsSedativeActive = state.IsSedativeActive;
+            IsDoripenemActive = state.IsDoripenemActive;
 
             (_monitors[0] as ActiveMedicalAgent).RestoreState(state.ChildStates["EpinephrineMedicalAgent"]);
             (_monitors[1] as ActiveMedicalAgent).RestoreState(state.ChildStates["AntiVenomMedicalAgent"]);

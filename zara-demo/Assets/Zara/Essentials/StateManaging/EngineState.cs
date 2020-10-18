@@ -13,7 +13,7 @@ namespace ZaraEngine {
 
             o.Health = (HealthControllerStateContract)gc.Health.GetState().ToContract();
             o.Inventory = (InventoryControllerStateContract)gc.Inventory.GetState().ToContract();
-            //o.Body = (HealthControllerStateContract)gc.Body.GetState().ToContract();
+            o.Body = (PlayerControllerStateContract)gc.Body.GetState().ToContract();
 
             return o;
         }
@@ -21,8 +21,14 @@ namespace ZaraEngine {
         public static void RestoreState(IGameController gc, ZaraEngine.StateManaging.ZaraEngineState state, Action<DateTime> restoreWorldTime){
             restoreWorldTime?.Invoke(state.WorldTime.ToDateTime());
 
+            var inventoryData = new InventoryControllerStateSnippet(state.Inventory);
+            var playerData = new PlayerControllerStateSnippet(state.Body);
+
+            playerData.SetInventoryData(inventoryData);
+
             gc.Health.RestoreState(new HealthControllerStateSnippet(state.Health));
-            gc.Inventory.RestoreState(new InventoryControllerStateSnippet(state.Inventory));
+            gc.Inventory.RestoreState(inventoryData);
+            gc.Body.RestoreState(playerData);
         }
 
     }

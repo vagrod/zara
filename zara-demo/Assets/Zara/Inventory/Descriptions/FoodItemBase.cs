@@ -128,6 +128,7 @@ namespace ZaraEngine.Inventory
         {
             return new InventoryFoodItemSnippet
             {
+                Id = this.Id,
                 Count = this.Count,
                 ItemType = this.GetType(),
                 IsSpoiled = this.IsSpoiled,

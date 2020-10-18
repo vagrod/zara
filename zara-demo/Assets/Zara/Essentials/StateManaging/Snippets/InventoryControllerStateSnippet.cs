@@ -10,6 +10,13 @@ namespace ZaraEngine.StateManaging
         public InventoryControllerStateSnippet() : base() { }
         public InventoryControllerStateSnippet(object contract) : base(contract) { }
 
+        public Dictionary<Guid, Guid> ItemsMapping { get; private set; }
+
+        public void SetItemsMapping(Dictionary<Guid, Guid> mapping)
+        {
+            ItemsMapping = mapping;
+        }
+
         #region Data Fields
 
         public float RoughWeight { get; set; }

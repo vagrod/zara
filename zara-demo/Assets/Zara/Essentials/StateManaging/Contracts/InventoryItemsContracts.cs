@@ -7,6 +7,7 @@ namespace ZaraEngine.StateManaging
     public class InventoryItemContract
     {
 
+        public string Id;
         public string ItemType;
         public int Count;
 
@@ -15,7 +16,8 @@ namespace ZaraEngine.StateManaging
     [Serializable]
     public class FoodItemContract
     {
-
+        
+        public string Id;
         public string ItemType;
         public int Count;
         public bool IsSpoiled;
@@ -27,6 +29,7 @@ namespace ZaraEngine.StateManaging
     public class WaterVesselItemContract
     {
 
+        public string Id;
         public string ItemType;
         public int Count;
         public int DosesLeft;

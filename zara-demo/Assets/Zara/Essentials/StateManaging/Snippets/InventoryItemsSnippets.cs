@@ -13,6 +13,7 @@ namespace ZaraEngine.StateManaging
 
         #region Data Fields
 
+        public Guid Id { get; set; }
         public Type ItemType { get; set; }
         public int Count { get; set; }
 
@@ -22,6 +23,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = new InventoryItemContract()
             {
+                Id = this.Id.ToString(),
                 ItemType = this.ItemType.FullName,
                 Count = this.Count
             };
@@ -33,6 +35,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (InventoryItemContract)o;
 
+            Id = Guid.Parse(c.Id);
             ItemType = Type.GetType(c.ItemType);
             Count = c.Count;
 
@@ -58,6 +61,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = new FoodItemContract()
             {
+                Id = this.Id.ToString(),
                 ItemType = this.ItemType.FullName,
                 Count = this.Count,
                 IsSpoiled = this.IsSpoiled,
@@ -71,6 +75,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (FoodItemContract)o;
 
+            Id = Guid.Parse(c.Id);
             ItemType = Type.GetType(c.ItemType);
             Count = c.Count;
             IsSpoiled = c.IsSpoiled;
@@ -101,6 +106,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = new WaterVesselItemContract()
             {
+                Id = this.Id.ToString(),
                 ItemType = this.ItemType.FullName,
                 Count = this.Count,
                 DosesLeft = this.DosesLeft,
@@ -117,6 +123,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (WaterVesselItemContract)o;
 
+            Id = Guid.Parse(c.Id);
             ItemType = Type.GetType(c.ItemType);
             Count = c.Count;
             DosesLeft = c.DosesLeft;

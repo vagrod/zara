@@ -94,6 +94,7 @@ namespace ZaraEngine.Inventory
         {
             return new InventoryWaterVesselItemSnippet
             {
+                Id = this.Id,
                 Count = this.Count,
                 ItemType = this.GetType(),
                 DosesLeft = this.DosesLeft,

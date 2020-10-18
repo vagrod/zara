@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using ZaraEngine.HealthEngine;
 using ZaraEngine.Inventory;
 using Foundation.Databinding;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Player
 {
-    public class BodyStatusController
+    public class BodyStatusController : IAcceptsStateChange
     {
 
         private const float WarmthLevelUpdateInterval = 1.6f; // Real reconds
@@ -26,6 +26,15 @@ namespace ZaraEngine.Player
         private float _warmthLerpTarget;
         private float? _warmthLerpCounter;
         private float _warmthLerpBase;
+
+        private Action _wakeUpAction;
+        private float _sleepingCounter; // real seconds
+        private float _sleepDurationGameHours; // game hours
+        private Action<DateTime> _sleepTimeAdvanceFunc;
+        private float _sleepHealthCheckPeriod; // real seconds
+        private int _sleepHealthChecksLeft;
+        private DateTime _sleepStartTime;
+        private float _fatigueValueAfterSleep;
 
         public BodyStatusController(IGameController gc)
         {
@@ -62,26 +71,17 @@ namespace ZaraEngine.Player
 
         public bool IsSleeping { get; private set; }
 
-        private Action _wakeUpAction;
-        private float _sleepingCounter; // real seconds
-        private float _sleepDurationGameHours; // game hours
-        private Action<DateTime> _sleepTimeAdvanceFunc;
-        private float _sleepHealthCheckPeriod; // real seconds
-        private int _sleepHealthChecksLeft;
-        private DateTime _sleepStartTime;
-        private float _fatigueValueAfterSleep;
-
-        public bool Sleep(float hours, float realDurationSeconds, Action onWakeUp, Action<DateTime> timeAdvanceFunc){
-            if(!_gc.WorldTime.HasValue)
+        public bool Sleep(float hours, float realDurationSeconds, Action onWakeUp, Action<DateTime> timeAdvanceFunc) {
+            if (!_gc.WorldTime.HasValue)
                 return false;
 
-            if(IsSleeping)
+            if (IsSleeping)
                 return true;
 
-            if(!_gc.Health.IsSleepAllowed)
+            if (!_gc.Health.IsSleepAllowed)
                 return false;
 
-            if(_gc.Health.UnconsciousMode)
+            if (_gc.Health.UnconsciousMode)
                 return false;
 
             IsSleeping = true;
@@ -146,9 +146,9 @@ namespace ZaraEngine.Player
         /// </summary>
         public float GetWarmthLevel()
         {
-            const float comfortTemperatureNaked           = 22f; // Degrees in C
+            const float comfortTemperatureNaked = 22f; // Degrees in C
             const float maximumWetnessTemperatureDecrease = 10f; // Degrees in C
-            const float maximumWindTemperatureDecrease    = 15f; // Degrees in C
+            const float maximumWindTemperatureDecrease = 15f; // Degrees in C
 
             var temp = _gc.Weather.Temperature;
 
@@ -177,10 +177,10 @@ namespace ZaraEngine.Player
 
             #region Sleeping
 
-            if(IsSleeping){
+            if (IsSleeping) {
                 _sleepingCounter += deltaTime;
 
-                if(_sleepingCounter >= _sleepHealthCheckPeriod){
+                if (_sleepingCounter >= _sleepHealthCheckPeriod) {
                     // need to check health and advance time
 
                     //($"Sleep iteration done. Checks was {_sleepHealthChecksLeft}, now it's {_sleepHealthChecksLeft-1}");
@@ -188,7 +188,7 @@ namespace ZaraEngine.Player
                     _sleepingCounter = 0f;
                     _sleepHealthChecksLeft--;
 
-                    if(_sleepHealthChecksLeft == 0){
+                    if (_sleepHealthChecksLeft == 0) {
                         // Done sleeping
 
                         var newWorldTime = _sleepStartTime.AddHours(_sleepDurationGameHours);
@@ -229,7 +229,7 @@ namespace ZaraEngine.Player
                 if (_warmthLerpCounter < WarmthLevelUpdateInterval)
                     _warmthLerpCounter += deltaTime;
 
-                if(_warmthLerpCounter > WarmthLevelUpdateInterval)
+                if (_warmthLerpCounter > WarmthLevelUpdateInterval)
                     _warmthLerpCounter = WarmthLevelUpdateInterval;
 
                 WarmthLevelCached = Helpers.Lerp(_warmthLerpBase, _warmthLerpTarget, _warmthLerpCounter.Value / WarmthLevelUpdateInterval);
@@ -241,7 +241,7 @@ namespace ZaraEngine.Player
 
             _warmthLevelTimeoutCounter += deltaTime;
 
-            if(_warmthLevelTimeoutCounter > WarmthLevelUpdateInterval)
+            if (_warmthLevelTimeoutCounter > WarmthLevelUpdateInterval)
                 _warmthLevelTimeoutCounter = WarmthLevelUpdateInterval;
 
             if (_warmthLevelTimeoutCounter >= WarmthLevelUpdateInterval)
@@ -260,8 +260,8 @@ namespace ZaraEngine.Player
             #region Wetness Level Refresh
 
             _wetnessLevelTimeoutCounter += deltaTime;
-            
-            if(_wetnessLevelTimeoutCounter > WetnessLevelUpdateInterval)
+
+            if (_wetnessLevelTimeoutCounter > WetnessLevelUpdateInterval)
                 _wetnessLevelTimeoutCounter = WetnessLevelUpdateInterval;
 
             if (_wetnessLevelTimeoutCounter >= WetnessLevelUpdateInterval)
@@ -274,6 +274,83 @@ namespace ZaraEngine.Player
             #endregion
 
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new PlayerControllerStateSnippet
+            {
+                Clothes = this.Clothes.ToList().ConvertAll(x => x.Id),
+                Appliances = this.Appliances.ConvertAll(x => new MedicalBodyApplianceSnippet { BodyPart = x.BodyPart, ItemId = x.Item.Id }),
+
+                WarmthLevelTimeoutCounter = _warmthLevelTimeoutCounter,
+                WetnessLevelTimeoutCounter = _wetnessLevelTimeoutCounter,
+                WarmthLerpTarget = _warmthLerpTarget,
+                WarmthLerpCounter = _warmthLerpCounter,
+                WarmthLerpBase = _warmthLerpBase,
+                SleepingCounter = _sleepingCounter,
+                SleepDurationGameHours = _sleepDurationGameHours,
+                SleepHealthCheckPeriod = _sleepHealthCheckPeriod,
+                SleepHealthChecksLeft = _sleepHealthChecksLeft,
+                SleepStartTime = _sleepStartTime,
+                FatigueValueAfterSleep = _fatigueValueAfterSleep
+            };
+
+            state.ChildStates.Add("WetnessController", _wetnessController.GetState());
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (PlayerControllerStateSnippet)savedState;
+
+            _warmthLevelTimeoutCounter = state.WarmthLevelTimeoutCounter;
+            _wetnessLevelTimeoutCounter = state.WetnessLevelTimeoutCounter;
+            _warmthLerpTarget = state.WarmthLerpTarget;
+            _warmthLerpCounter = state.WarmthLerpCounter;
+            _warmthLerpBase = state.WarmthLerpBase;
+            _sleepingCounter = state.SleepingCounter;
+            _sleepDurationGameHours = state.SleepDurationGameHours;
+            _sleepHealthCheckPeriod = state.SleepHealthCheckPeriod;
+            _sleepHealthChecksLeft = state.SleepHealthChecksLeft;
+            _sleepStartTime = state.SleepStartTime;
+            _fatigueValueAfterSleep = state.FatigueValueAfterSleep;
+
+            _wetnessController.RestoreState((WetnessControllerSnippet)state.ChildStates["WetnessController"]);
+
+            Clothes.Clear();
+
+            foreach(var clothesItem in state.Clothes)
+            {
+                var newId = state.InventoryData.ItemsMapping.ContainsKey(clothesItem) ? state.InventoryData.ItemsMapping[clothesItem] : (Guid?)null;
+                var item = newId.HasValue ? _gc.Inventory.Items.FirstOrDefault(x => x.Id == newId.Value) : null;
+
+                if(item as ClothesItemBase != null)
+                {
+                    Clothes.Add((ClothesItemBase)item);
+                }
+            }
+
+            Appliances.Clear();
+
+            foreach (var applianceItem in state.Appliances)
+            {
+                var newId = state.InventoryData.ItemsMapping.ContainsKey(applianceItem.ItemId) ? state.InventoryData.ItemsMapping[applianceItem.ItemId] : (Guid?)null;
+                var item = newId.HasValue ? _gc.Inventory.Items.FirstOrDefault(x => x.Id == newId.Value) : null;
+
+                if (item as InventoryMedicalItemBase != null)
+                {
+                    Appliances.Add(new MedicalBodyAppliance { 
+                        BodyPart = applianceItem.BodyPart,
+                        Item = (InventoryMedicalItemBase)item
+                    });
+                }
+            }
+        }
+
+        #endregion
 
     }
 }
