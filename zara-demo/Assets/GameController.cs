@@ -684,11 +684,15 @@ public class GameController : MonoBehaviour, IGameController
 
     public void OnStateSaveClick()
     {
+        var sw = new System.Diagnostics.Stopwatch();
+
+        sw.Start();
+
         _savedState = ZaraEngine.EngineState.GetState(this);
 
-        var s = UnityEngine.JsonUtility.ToJson(_savedState);
+        sw.Stop();
 
-        _savedState = UnityEngine.JsonUtility.FromJson<ZaraEngineState>(s);
+        Debug.Log($"Saving took {sw.ElapsedMilliseconds}ms");
     }
 
     public void OnStateLoadClick()
@@ -696,10 +700,18 @@ public class GameController : MonoBehaviour, IGameController
         if (_savedState == null)
             return;
 
+        var sw = new System.Diagnostics.Stopwatch();
+
+        sw.Start();
+
         // Important: if you are restoring Zara state asyncronously, be sure not to call .Check() methods on _healts and _body during the RestoreState method execution
         // It is not recommended to save or load during the sleep
 
         ZaraEngine.EngineState.RestoreState(this, _savedState, stateWorldTime => _dateTime = stateWorldTime /* method to restore the saved world time */);
+
+        sw.Stop();
+
+        Debug.Log($"Loading took {sw.ElapsedMilliseconds}ms");
     }
 
     #endregion 
