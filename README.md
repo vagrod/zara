@@ -7,7 +7,7 @@ Code is open, so you can customize everything for your particular game needs.
 
 
 Saving/Loading of the engine state is fully supported (including the entire health status, active diseases, injuries, treatment progress, entire inventory, clothes, appliances). Of course anything you add to your implementation (new diseases, inventory items, injuries, everything) can be saved the same way too.
-The size of a serialized state object is about 14K (non-formatted JSON). Saving engine state is taking about 35ms, loading -- about 30.
+The size of a serialized state object is about 14K (I measured non-formatted JSON). Saving engine state is taking about 35ms, loading -- about 30.
 
 
 To save the engine state and to completely restore it, you have to write two lines of code, like this:
