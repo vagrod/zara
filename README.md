@@ -6,7 +6,7 @@ Zara will be useful for you if you want your game to have weather-aware health c
 Code is open, so you can customize everything for your particular game needs.
 
 
-Saving/Loading of the engine state is fully supported (including the entire health status, active diseases, injuries, treatment progress, entire inventory, clothes, appliances).
+Saving/Loading of the engine state is fully supported (including the entire health status, active diseases, injuries, treatment progress, entire inventory, clothes, appliances). Of course anything you add to your implementation (new diseases, inventory items, injuries, everything) can be saved the same way too.
 The size of a serialized state object is about 14K (non-formatted JSON). Saving engine state is taking about 35ms, loading -- about 30.
 
 
@@ -53,7 +53,7 @@ It includes:
   - Treatment with pills or injections in any order and with any number of stages
   - Timed treatment (to cure X, you need to take the Y pill every four hours, or else disease will become active again)
   - Every disease progresses gradually, and treatment inverts the effects, so they go in opposite order -- to the "healthy" state. If the treatment is missed mid-way, disease will invert back and will start to get worse, and you will need to start all the treatment steps from scratch
-  - Any number of simultanious diseases, injuries and medicine effects: everything will be combined to a single resulted health state
+  - Any number of simultanious diseases, injuries and medicine effects: everything will be combined into a single resulted health state
   
  + Injury Engine
    - Cuts, Fractures, Open fratcures, or anything custom you like
