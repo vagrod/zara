@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Inventory
 {
@@ -120,5 +121,29 @@ namespace ZaraEngine.Inventory
                     FoodItemsGatheringInfo.Remove(x);
             }
         }
+
+        #region State Manage
+
+        public override IStateSnippet GetState()
+        {
+            return new InventoryFoodItemSnippet
+            {
+                Count = this.Count,
+                ItemType = this.GetType(),
+                IsSpoiled = this.IsSpoiled,
+                FoodItemsGatheringInfo = this.FoodItemsGatheringInfo
+            };
+        }
+
+        public override void RestoreState(IStateSnippet savedState)
+        {
+            var state = (InventoryFoodItemSnippet)savedState;
+
+            Count = state.Count;
+            IsSpoiled = state.IsSpoiled;
+            FoodItemsGatheringInfo = state.FoodItemsGatheringInfo;
+        }
+
+        #endregion
     }
 }

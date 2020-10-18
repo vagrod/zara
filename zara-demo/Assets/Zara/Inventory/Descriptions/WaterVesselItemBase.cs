@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Inventory
 {
@@ -22,15 +23,9 @@ namespace ZaraEngine.Inventory
 
         public bool IsSafe { get; private set; }
 
-        public bool IsFull
-        {
-            get { return DosesLeft == DosesCount; }
-        }
+        public bool IsFull => DosesLeft == DosesCount; 
 
-        public bool IsEmpty
-        {
-            get { return DosesLeft == 0; }
-        }
+        public bool IsEmpty =>  DosesLeft == 0; 
 
         public DateTime? LastFillTime { get; private set; }
 
@@ -48,10 +43,7 @@ namespace ZaraEngine.Inventory
             get { return 0f; }
         }
 
-        public override float WeightGrammsPerUnit
-        {
-            get { return WaterDoseWeightInGramms * DosesLeft + VesselWeightInGramms; }
-        }
+        public override float WeightGrammsPerUnit => WaterDoseWeightInGramms * DosesLeft + VesselWeightInGramms; 
 
         public string NamePostfix
         {
@@ -95,6 +87,36 @@ namespace ZaraEngine.Inventory
             LastDisinfectTime = gameTime;
             LastBoilTime = gameTime;
         }
+
+        #region State Manage
+
+        public override IStateSnippet GetState()
+        {
+            return new InventoryWaterVesselItemSnippet
+            {
+                Count = this.Count,
+                ItemType = this.GetType(),
+                DosesLeft = this.DosesLeft,
+                IsSafe = this.IsSafe,
+                LastBoilTime = this.LastBoilTime,
+                LastDisinfectTime = this.LastDisinfectTime,
+                LastFillTime = this.LastFillTime
+            };
+        }
+
+        public override void RestoreState(IStateSnippet savedState)
+        {
+            var state = (InventoryWaterVesselItemSnippet)savedState;
+
+            Count = state.Count;
+            DosesLeft = state.DosesLeft;
+            IsSafe = state.IsSafe;
+            LastBoilTime = state.LastBoilTime;
+            LastDisinfectTime = state.LastDisinfectTime;
+            LastFillTime = state.LastFillTime;
+        }
+
+        #endregion
 
     }
 }

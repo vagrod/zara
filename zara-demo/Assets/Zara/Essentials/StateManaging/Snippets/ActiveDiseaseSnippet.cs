@@ -13,7 +13,7 @@ namespace ZaraEngine.StateManaging
 
         public Guid DiseaseId { get; set; }
         public Guid? InjuryId { get; set; }
-        public string DiseaseType { get; set; }
+        public Type DiseaseType { get; set; }
 
         public DiseaseTreatmentSnippet Treatments { get; set; }
 
@@ -38,7 +38,7 @@ namespace ZaraEngine.StateManaging
                 DiseaseStartTime = new DateTimeContract(this.DiseaseStartTime),
                 TreatedStageLevel = this.TreatedStageLevel.HasValue ? (int?)this.TreatedStageLevel.Value : (int?)null,
                 IsTreated = this.IsTreated,
-                DiseaseType = this.DiseaseType
+                DiseaseType = this.DiseaseType.FullName
             };
 
             c.ChangedVitals = ChildStates["ChangedVitals"] == null ? null :(ChangedVitalsInfoContract)ChildStates["ChangedVitals"].ToContract();
@@ -60,7 +60,7 @@ namespace ZaraEngine.StateManaging
             DiseaseStartTime = c.DiseaseStartTime.ToDateTime();
             TreatedStageLevel = c.TreatedStageLevel.HasValue ? (DiseaseLevels?)c.TreatedStageLevel.Value : (DiseaseLevels?)null;
             IsTreated = c.IsTreated;
-            DiseaseType = c.DiseaseType;
+            DiseaseType = Type.GetType(c.DiseaseType);
 
             ChildStates.Clear();
 

@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Inventory
 {
     [Serializable]
-    public class InventoryController
+    public class InventoryController : IAcceptsStateChange
     {
 
         public const float MaximumInventoryWeight = 55000f; // gramms
@@ -136,8 +137,6 @@ namespace ZaraEngine.Inventory
         private readonly InventorySpecialActionsProcessor _combinationActionProcessor;
 
         private readonly Dictionary<string, bool> _itemsAvailabilityCache = new Dictionary<string, bool>();
-
-        public DateTime? Alarm { get; set; }
 
         public List<IInventoryItem> Items { get; private set; }
 
@@ -683,6 +682,66 @@ namespace ZaraEngine.Inventory
         {
             RoughWeight = CurrentWeight;
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var generic = Items.Where(x => !(x is FoodItemBase) && !(x is WaterVesselItemBase)).ToList();
+            var food = Items.Where(x => x is FoodItemBase).ToList();
+            var water = Items.Where(x => x is WaterVesselItemBase).ToList();
+
+            var state = new InventoryControllerStateSnippet
+            {
+                RoughWeight = this.RoughWeight,
+
+                GenericInventoryItems = generic.ConvertAll(x => (InventoryItemSnippet)(x as InventoryItemBase).GetState()),
+                FoodInventoryItems = food.ConvertAll(x => (InventoryFoodItemSnippet)(x as FoodItemBase).GetState()),
+                WaterInventoryItems = water.ConvertAll(x => (InventoryWaterVesselItemSnippet)(x as WaterVesselItemBase).GetState())
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (InventoryControllerStateSnippet)savedState;
+
+            RoughWeight = state.RoughWeight;
+
+            Items.Clear();
+
+            foreach(var itemData in state.GenericInventoryItems)
+            {
+                var newItem = (InventoryItemBase)Activator.CreateInstance(itemData.ItemType);
+
+                newItem.RestoreState(itemData);
+
+                Items.Add(newItem);
+            }
+
+            foreach (var itemData in state.FoodInventoryItems)
+            {
+                var newItem = (InventoryItemBase)Activator.CreateInstance(itemData.ItemType);
+
+                newItem.RestoreState(itemData);
+
+                Items.Add(newItem);
+            }
+
+            foreach (var itemData in state.WaterInventoryItems)
+            {
+                var newItem = (InventoryItemBase)Activator.CreateInstance(itemData.ItemType);
+
+                newItem.RestoreState(itemData);
+
+                Items.Add(newItem);
+            }
+
+            RebuildCache();
+        }
+
+        #endregion
     }
 
     public class InventoryCombinatoryResult

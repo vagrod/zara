@@ -263,7 +263,7 @@ namespace ZaraEngine.Injuries
                 BodyPart = this.BodyPart,
                 InjuryId = Injury.Id,
                 InjuryTriggerTime = this.InjuryTriggerTime,
-                InjuryType = Injury.GetType().FullName,
+                InjuryType = Injury.GetType(),
                 IsChainInverted = _isChainInverted,
                 IsDiseaseProbabilityChecked = this.IsDiseaseProbabilityChecked,
                 IsInjuryActivated = _isInjuryActivated,
@@ -280,7 +280,7 @@ namespace ZaraEngine.Injuries
         {
             var state = (ActiveInjurySnippet)savedState;
 
-            Injury = (InjuryBase)Activator.CreateInstance(Type.GetType(state.InjuryType));
+            Injury = (InjuryBase)Activator.CreateInstance(state.InjuryType);
 
             SetUpActiveStage(state.InjuryTriggerTime);
 

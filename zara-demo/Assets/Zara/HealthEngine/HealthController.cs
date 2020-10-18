@@ -1318,7 +1318,7 @@ namespace ZaraEngine.HealthEngine {
         #region State Manage
 
         public IStateSnippet GetState(){
-            var state = new HealthControllerSnippet
+            var state = new HealthControllerStateSnippet
             {
                 ActualFatigueValue = _actualFatigueValue,
                 HealthCheckCooldownTimer = _healthCheckCooldownTimer,
@@ -1374,7 +1374,7 @@ namespace ZaraEngine.HealthEngine {
 
         public void RestoreState(IStateSnippet savedState)
         {
-            var state = (HealthControllerSnippet)savedState;
+            var state = (HealthControllerStateSnippet)savedState;
 
             _actualFatigueValue = state.ActualFatigueValue;
             _healthCheckCooldownTimer = state.HealthCheckCooldownTimer;

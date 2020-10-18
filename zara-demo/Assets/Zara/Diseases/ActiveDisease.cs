@@ -516,7 +516,7 @@ namespace ZaraEngine.Diseases
             {
                 DiseaseId = Disease.Id,
                 InjuryId = _linkedInjury?.Injury?.Id,
-                DiseaseType = Disease.GetType().FullName,
+                DiseaseType = Disease.GetType(),
                 IsDiseaseActivated = _isDiseaseActivated,
                 IsSelfHealActive = _isSelfHealActive,
                 IsChainInverted = _isChainInverted,
@@ -536,7 +536,7 @@ namespace ZaraEngine.Diseases
         {
             var state = (ActiveDiseaseSnippet)savedState;
 
-            Disease = (DiseaseDefinitionBase)Activator.CreateInstance(Type.GetType(state.DiseaseType));
+            Disease = (DiseaseDefinitionBase)Activator.CreateInstance(state.DiseaseType);
             
             if (state.TreatedStageLevel.HasValue)
                 TreatedStage = Disease.Stages.FirstOrDefault(x => x.Level == state.TreatedStageLevel.Value);

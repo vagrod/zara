@@ -13,7 +13,7 @@ namespace ZaraEngine.StateManaging
         #region Data Fields
 
         public Guid InjuryId { get; set; }
-        public string InjuryType { get; set; }
+        public Type InjuryType { get; set; }
 
         public bool IsInjuryActivated { get; set; }
         public bool IsChainInverted { get; set; }
@@ -30,7 +30,7 @@ namespace ZaraEngine.StateManaging
             var c = new ActiveInjuryContract
             {
                 InjuryId = this.InjuryId.ToString(),
-                InjuryType = this.InjuryType,
+                InjuryType = this.InjuryType.FullName,
                 IsInjuryActivated = this.IsInjuryActivated,
                 IsChainInverted = this.IsChainInverted,
                 TreatedStageLevel = this.TreatedStageLevel.HasValue ? (int?)this.TreatedStageLevel.Value : (int?)null,
@@ -50,7 +50,7 @@ namespace ZaraEngine.StateManaging
             var c = (ActiveInjuryContract)o;
 
             InjuryId = Guid.Parse(c.InjuryId);
-            InjuryType = c.InjuryType;
+            InjuryType = Type.GetType(c.InjuryType);
             IsInjuryActivated = c.IsInjuryActivated;
             IsChainInverted = c.IsChainInverted;
             TreatedStageLevel = c.TreatedStageLevel.HasValue ? (DiseaseLevels?)c.TreatedStageLevel.Value : (DiseaseLevels?)null;

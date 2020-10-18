@@ -2,11 +2,11 @@ using System;
 
 namespace ZaraEngine.StateManaging {
 
-    public class HealthControllerSnippet : SnippetBase
+    public class HealthControllerStateSnippet : SnippetBase
     {
 
-        public HealthControllerSnippet() : base() { }
-        public HealthControllerSnippet(object contract) : base(contract) { }
+        public HealthControllerStateSnippet() : base() { }
+        public HealthControllerStateSnippet(object contract) : base(contract) { }
 
         #region Data Fields
 
