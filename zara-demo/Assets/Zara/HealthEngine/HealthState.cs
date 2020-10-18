@@ -267,8 +267,8 @@ namespace ZaraEngine.HealthEngine
                 ActiveDiseasesWorstLevel = this.ActiveDiseasesWorstLevel
             };
 
-            var diseases = ActiveDiseases.ConvertAll(x => (ActiveDiseaseSnippet)x.GetState()).ToArray();
-            var injuries = ActiveInjuries.ConvertAll(x => (ActiveInjurySnippet)x.GetState()).ToArray();
+            var diseases = ActiveDiseases.ConvertAll(x => (ActiveDiseaseSnippet)x.GetState());
+            var injuries = ActiveInjuries.ConvertAll(x => (ActiveInjurySnippet)x.GetState());
 
             state.ChildStates.Add("ActiveDiseasesAndInjuries", new ActiveDiseasesAndInjuriesSnippet { 
                 ActiveDiseases = diseases,
@@ -308,7 +308,7 @@ namespace ZaraEngine.HealthEngine
             CreateAndLinkActiveDiseasesAndInjuries(diseasesAndInjuriesData.ActiveDiseases, diseasesAndInjuriesData.ActiveInjuries);
         }
 
-        private void CreateAndLinkActiveDiseasesAndInjuries(ActiveDiseaseSnippet[] diseasesData, ActiveInjurySnippet[] injuriesData)
+        private void CreateAndLinkActiveDiseasesAndInjuries(List<ActiveDiseaseSnippet> diseasesData, List<ActiveInjurySnippet> injuriesData)
         {
             ActiveInjuries.Clear();
             ActiveDiseases.Clear();

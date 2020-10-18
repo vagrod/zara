@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace ZaraEngine.StateManaging
 {
@@ -10,8 +11,8 @@ namespace ZaraEngine.StateManaging
 
         #region Data Fields
 
-        public ActiveDiseaseSnippet[] ActiveDiseases { get; set; }
-        public ActiveInjurySnippet[] ActiveInjuries { get; set; }
+        public List<ActiveDiseaseSnippet> ActiveDiseases { get; set; } = new List<ActiveDiseaseSnippet>();
+        public List<ActiveInjurySnippet> ActiveInjuries { get; set; } = new List<ActiveInjurySnippet>();
 
         #endregion 
 
@@ -19,8 +20,8 @@ namespace ZaraEngine.StateManaging
         {
             var c = new ActiveDiseasesAndInjuriesContract();
 
-            c.ActiveDiseases = ActiveDiseases.ToList().ConvertAll(x => (ActiveDiseaseContract)x.ToContract()).ToArray();
-            c.ActiveInjuries = ActiveInjuries.ToList().ConvertAll(x => (ActiveInjuryContract)x.ToContract()).ToArray();
+            c.ActiveDiseases = ActiveDiseases.ConvertAll(x => (ActiveDiseaseContract)x.ToContract()).ToArray();
+            c.ActiveInjuries = ActiveInjuries.ConvertAll(x => (ActiveInjuryContract)x.ToContract()).ToArray();
 
             return c;
         }
@@ -29,8 +30,8 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ActiveDiseasesAndInjuriesContract)o;
 
-            ActiveDiseases = c.ActiveDiseases.ToList().ConvertAll(x => new ActiveDiseaseSnippet(x)).ToArray();
-            ActiveInjuries = c.ActiveInjuries.ToList().ConvertAll(x => new ActiveInjurySnippet(x)).ToArray();
+            ActiveDiseases = c.ActiveDiseases.ToList().ConvertAll(x => new ActiveDiseaseSnippet(x));
+            ActiveInjuries = c.ActiveInjuries.ToList().ConvertAll(x => new ActiveInjurySnippet(x));
 
             ChildStates.Clear();
         }
