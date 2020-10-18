@@ -134,6 +134,7 @@ namespace ZaraEngine.HealthEngine {
         private const float FatigueBlackoutLevel              = 95f;  // percents
         private const float FatigueSleepLevel                 = 154f; // percents
         private const float SedativeMaxFatigueImpact          = 136f; // percents
+        private const int HoursToReach100Fatigue              = 18;   // game hours
 
         /* ------------------------------------------------------------------------------------------------------------------ *
          * ------------------------------------------------ Drains and Gains ------------------------------------------------ *
@@ -447,7 +448,7 @@ namespace ZaraEngine.HealthEngine {
 
             var gameSecondsSinceLastCheck = (float)(_gc.WorldTime.Value - newState.CheckTime).TotalSeconds;
 
-            _actualFatigueValue += (gameSecondsSinceLastCheck / (3600f * 18)) * 100;
+            _actualFatigueValue += (gameSecondsSinceLastCheck / (3600f * HoursToReach100Fatigue)) * 100;
 
             if (Medicine.IsEpinephrineActive)
             {
