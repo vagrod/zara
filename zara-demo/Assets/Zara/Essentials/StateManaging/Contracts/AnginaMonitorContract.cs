@@ -2,10 +2,11 @@
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class AnginaMonitorContract
     {
 
-        public DateTime? NextCheckTime;
+        public DateTimeContract NextCheckTime;
 
     }
 }

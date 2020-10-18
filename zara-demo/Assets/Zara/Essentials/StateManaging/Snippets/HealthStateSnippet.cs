@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using ZaraEngine;
 using ZaraEngine.Diseases;
 
 namespace ZaraEngine.StateManaging
@@ -51,8 +49,8 @@ namespace ZaraEngine.StateManaging
                 StaminaPercentage = this.StaminaPercentage,
                 FatiguePercentage = this.FatiguePercentage,
                 BodyTemperature = this.BodyTemperature,
-                LastSleepTime = this.LastSleepTime,
-                CheckTime = this.CheckTime,
+                LastSleepTime = new DateTimeContract(this.LastSleepTime),
+                CheckTime = new DateTimeContract(this.CheckTime),
                 IsBloodLoss = this.IsBloodLoss,
                 IsActiveInjury = this.IsActiveInjury,
                 IsActiveDisease = this.IsActiveDisease,
@@ -82,8 +80,8 @@ namespace ZaraEngine.StateManaging
             StaminaPercentage = c.StaminaPercentage;
             FatiguePercentage = c.FatiguePercentage;
             BodyTemperature = c.BodyTemperature;
-            LastSleepTime = c.LastSleepTime;
-            CheckTime = c.CheckTime;
+            LastSleepTime = c.LastSleepTime.ToDateTime();
+            CheckTime = c.CheckTime.ToDateTime();
             IsBloodLoss = c.IsBloodLoss;
             IsActiveInjury = c.IsActiveInjury;
             IsActiveDisease = c.IsActiveDisease;

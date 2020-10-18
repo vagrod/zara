@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class ClothesHealthEffectsContract
     {
 
-        public DateTime? LastClothesChangeTime;
-        public DateTime? LastAutoReLerpTime;
+        public DateTimeContract LastClothesChangeTime;
+        public DateTimeContract LastAutoReLerpTime;
         public float TargetBodyTemperatureDelta;
         public float TargetHeartRateDelta;
         public float CurrentTemperatureBonus;

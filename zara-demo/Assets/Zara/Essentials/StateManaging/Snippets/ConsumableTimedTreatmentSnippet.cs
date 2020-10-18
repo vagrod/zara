@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZaraEngine.Diseases;
 
 namespace ZaraEngine.StateManaging
@@ -33,7 +31,7 @@ namespace ZaraEngine.StateManaging
                 TreatedLevel = (int)this.TreatedLevel,
                 IsFailed = this.IsFailed,
                 IsStarted = this.IsStarted,
-                ConsumedTimes = this.ConsumedTimes.ToArray(),
+                ConsumedTimes = this.ConsumedTimes.ConvertAll(x => new DateTimeContract(x)).ToArray(),
                 InTimeConsumedCount = this.InTimeConsumedCount,
                 IsFinished = this.IsFinished
             };
@@ -49,7 +47,7 @@ namespace ZaraEngine.StateManaging
             TreatedLevel = (DiseaseLevels)c.TreatedLevel;
             IsFailed = c.IsFailed;
             IsStarted = c.IsStarted;
-            ConsumedTimes = c.ConsumedTimes.ToList();
+            ConsumedTimes = c.ConsumedTimes.ToList().ConvertAll(x => x.ToDateTime());
             InTimeConsumedCount = c.InTimeConsumedCount;
             IsFinished = c.IsFinished;
 

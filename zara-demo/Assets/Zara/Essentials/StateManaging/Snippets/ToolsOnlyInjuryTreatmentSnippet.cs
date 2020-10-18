@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZaraEngine.StateManaging
 {
@@ -23,7 +19,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = new ToolsOnlyInjuryTreatmentContract
             {
-                LastToolTime = this.LastToolTime,
+                LastToolTime = this.LastToolTime.HasValue ? new DateTimeContract(this.LastToolTime.Value) : null,
                 ToolsUsed = this.ToolsUsed
             };
 
@@ -34,7 +30,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ToolsOnlyInjuryTreatmentContract)o;
 
-            LastToolTime = c.LastToolTime;
+            LastToolTime = c.LastToolTime == null ? (DateTime?)null : c.LastToolTime.ToDateTime();
             ToolsUsed = c.ToolsUsed;
 
             ChildStates.Clear();

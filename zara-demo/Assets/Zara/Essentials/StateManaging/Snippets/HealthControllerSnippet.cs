@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using ZaraEngine;
 
 namespace ZaraEngine.StateManaging {
 
@@ -28,7 +26,7 @@ namespace ZaraEngine.StateManaging {
         {
             var c = new HealthControllerStateContract
             {
-                LastUpdateGameTime = this.LastUpdateGameTime,
+                LastUpdateGameTime = new DateTimeContract(this.LastUpdateGameTime),
                 PreviousDiseaseVitalsChangeRate = this.PreviousDiseaseVitalsChangeRate,
                 PreviousInjuryVitalsChangeRate = this.PreviousInjuryVitalsChangeRate,
                 HealthCheckCooldownTimer = this.HealthCheckCooldownTimer,
@@ -84,7 +82,7 @@ namespace ZaraEngine.StateManaging {
         {
             var c = (HealthControllerStateContract)o;
 
-            LastUpdateGameTime = c.LastUpdateGameTime;
+            LastUpdateGameTime = c.LastUpdateGameTime.ToDateTime();
             PreviousDiseaseVitalsChangeRate = c.PreviousDiseaseVitalsChangeRate;
             PreviousInjuryVitalsChangeRate = c.PreviousInjuryVitalsChangeRate;
             HealthCheckCooldownTimer = c.HealthCheckCooldownTimer;

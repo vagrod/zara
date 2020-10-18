@@ -2,6 +2,7 @@
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class ConsumableTimedTreatmentContract
     {
 
@@ -9,7 +10,7 @@ namespace ZaraEngine.StateManaging
         public int TreatedLevel;
         public bool IsFailed;
         public bool IsStarted;
-        public DateTime[] ConsumedTimes;
+        public DateTimeContract[] ConsumedTimes;
         public int InTimeConsumedCount;
         public bool IsFinished;
 

@@ -1,12 +1,11 @@
 using System;
-using ZaraEngine;
 
 namespace ZaraEngine.StateManaging
 {
-
+    [Serializable]
     public class HealthControllerStateContract {
 
-        public DateTime LastUpdateGameTime;
+        public DateTimeContract LastUpdateGameTime;
         public float PreviousDiseaseVitalsChangeRate;
         public float PreviousInjuryVitalsChangeRate;
         public float HealthCheckCooldownTimer;

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZaraEngine.Diseases;
 
 namespace ZaraEngine.StateManaging
@@ -33,12 +30,12 @@ namespace ZaraEngine.StateManaging
         {
             var c = new ActiveDiseaseContract
             {
-                DiseaseId = this.DiseaseId,
-                InjuryId = this.InjuryId,
+                DiseaseId = this.DiseaseId.ToString(),
+                InjuryId = this.InjuryId.HasValue ? this.InjuryId.Value.ToString() : null,
                 IsDiseaseActivated = this.IsDiseaseActivated,
                 IsSelfHealActive = this.IsSelfHealActive,
                 IsChainInverted = this.IsChainInverted,
-                DiseaseStartTime = this.DiseaseStartTime,
+                DiseaseStartTime = new DateTimeContract(this.DiseaseStartTime),
                 TreatedStageLevel = this.TreatedStageLevel.HasValue ? (int?)this.TreatedStageLevel.Value : (int?)null,
                 IsTreated = this.IsTreated,
                 DiseaseType = this.DiseaseType
@@ -55,12 +52,12 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ActiveDiseaseContract)o;
 
-            DiseaseId = c.DiseaseId;
-            InjuryId = c.InjuryId;
+            DiseaseId = Guid.Parse(c.DiseaseId);
+            InjuryId = string.IsNullOrEmpty(c.InjuryId) ? (Guid?)null : Guid.Parse(c.InjuryId);
             IsDiseaseActivated = c.IsDiseaseActivated;
             IsSelfHealActive = c.IsSelfHealActive;
             IsChainInverted = c.IsChainInverted;
-            DiseaseStartTime = c.DiseaseStartTime;
+            DiseaseStartTime = c.DiseaseStartTime.ToDateTime();
             TreatedStageLevel = c.TreatedStageLevel.HasValue ? (DiseaseLevels?)c.TreatedStageLevel.Value : (DiseaseLevels?)null;
             IsTreated = c.IsTreated;
             DiseaseType = c.DiseaseType;

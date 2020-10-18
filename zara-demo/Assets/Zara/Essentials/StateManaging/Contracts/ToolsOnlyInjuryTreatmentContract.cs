@@ -2,10 +2,11 @@
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class ToolsOnlyInjuryTreatmentContract
     {
 
-        public DateTime? LastToolTime;
+        public DateTimeContract LastToolTime;
         public int ToolsUsed;
 
     }

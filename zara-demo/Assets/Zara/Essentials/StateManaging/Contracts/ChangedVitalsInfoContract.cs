@@ -2,6 +2,7 @@
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class ChangedVitalsInfoContract
     {
 
@@ -10,7 +11,7 @@ namespace ZaraEngine.StateManaging
         public float? InitialBloodPressureTop;
         public float? InitialBloodPressureBottom;
         public float? InitialBodyTemperature;
-        public TimeSpan InitialStageDuration;
+        public TimeSpanContract InitialStageDuration;
 
     }
 }

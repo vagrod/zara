@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZaraEngine.Diseases;
 using ZaraEngine.Injuries;
 
@@ -33,13 +29,13 @@ namespace ZaraEngine.StateManaging
         {
             var c = new ActiveInjuryContract
             {
-                InjuryId = this.InjuryId,
+                InjuryId = this.InjuryId.ToString(),
                 InjuryType = this.InjuryType,
                 IsInjuryActivated = this.IsInjuryActivated,
                 IsChainInverted = this.IsChainInverted,
                 TreatedStageLevel = this.TreatedStageLevel.HasValue ? (int?)this.TreatedStageLevel.Value : (int?)null,
                 BodyPart = (int)this.BodyPart,
-                InjuryTriggerTime = this.InjuryTriggerTime,
+                InjuryTriggerTime = new DateTimeContract(this.InjuryTriggerTime),
                 IsTreated = this.IsTreated,
                 IsDiseaseProbabilityChecked = this.IsDiseaseProbabilityChecked
             };
@@ -53,13 +49,13 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ActiveInjuryContract)o;
 
-            InjuryId = c.InjuryId;
+            InjuryId = Guid.Parse(c.InjuryId);
             InjuryType = c.InjuryType;
             IsInjuryActivated = c.IsInjuryActivated;
             IsChainInverted = c.IsChainInverted;
             TreatedStageLevel = c.TreatedStageLevel.HasValue ? (DiseaseLevels?)c.TreatedStageLevel.Value : (DiseaseLevels?)null;
             BodyPart = (BodyParts)c.BodyPart;
-            InjuryTriggerTime = c.InjuryTriggerTime;
+            InjuryTriggerTime = c.InjuryTriggerTime.ToDateTime();
             IsTreated = c.IsTreated;
             IsDiseaseProbabilityChecked = c.IsDiseaseProbabilityChecked;
 

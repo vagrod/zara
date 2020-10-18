@@ -2,6 +2,7 @@
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class HealthStateStateContract
     {
 
@@ -15,8 +16,8 @@ namespace ZaraEngine.StateManaging
         public float StaminaPercentage;
         public float FatiguePercentage;
         public float BodyTemperature;
-        public DateTime LastSleepTime;
-        public DateTime CheckTime;
+        public DateTimeContract LastSleepTime;
+        public DateTimeContract CheckTime;
         public bool IsBloodLoss;
         public bool IsActiveInjury;
         public bool IsActiveDisease;

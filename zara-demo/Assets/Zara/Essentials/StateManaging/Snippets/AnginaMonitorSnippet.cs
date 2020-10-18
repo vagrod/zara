@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZaraEngine.StateManaging
 {
@@ -22,7 +18,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = new AnginaMonitorContract
             {
-                NextCheckTime = this.NextCheckTime
+                NextCheckTime = this.NextCheckTime.HasValue ? new DateTimeContract(this.NextCheckTime.Value) : null
             };
 
             return c;
@@ -32,7 +28,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (AnginaMonitorContract)o;
 
-            NextCheckTime = c.NextCheckTime;
+            NextCheckTime = c.NextCheckTime == null ? (DateTime?)null : c.NextCheckTime.ToDateTime();
 
             ChildStates.Clear();
         }

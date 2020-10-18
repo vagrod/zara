@@ -685,6 +685,8 @@ public class GameController : MonoBehaviour, IGameController
     public void OnStateSaveClick()
     {
         _savedState = ZaraEngine.EngineState.GetState(this);
+
+        var s = UnityEngine.JsonUtility.ToJson(_savedState);
     }
 
     public void OnStateLoadClick()

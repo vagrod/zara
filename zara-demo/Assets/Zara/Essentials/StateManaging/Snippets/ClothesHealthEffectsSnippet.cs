@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZaraEngine.StateManaging
 {
@@ -31,8 +27,8 @@ namespace ZaraEngine.StateManaging
         {
             var c = new ClothesHealthEffectsContract
             {
-                LastClothesChangeTime = this.LastClothesChangeTime,
-                LastAutoReLerpTime = this.LastAutoReLerpTime,
+                LastClothesChangeTime = this.LastClothesChangeTime.HasValue ? new DateTimeContract(this.LastClothesChangeTime.Value) : null,
+                LastAutoReLerpTime = this.LastAutoReLerpTime.HasValue ? new DateTimeContract(this.LastAutoReLerpTime.Value) : null,
                 TargetBodyTemperatureDelta = this.TargetBodyTemperatureDelta,
                 TargetHeartRateDelta = this.TargetHeartRateDelta,
                 CurrentTemperatureBonus = this.CurrentTemperatureBonus,
@@ -50,8 +46,8 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ClothesHealthEffectsContract)o;
 
-            LastClothesChangeTime = c.LastClothesChangeTime;
-            LastAutoReLerpTime = c.LastAutoReLerpTime;
+            LastClothesChangeTime = c.LastClothesChangeTime == null ? (DateTime?)null : c.LastClothesChangeTime.ToDateTime();
+            LastAutoReLerpTime = c.LastAutoReLerpTime == null ? (DateTime?)null : c.LastAutoReLerpTime.ToDateTime();
             TargetBodyTemperatureDelta = c.TargetBodyTemperatureDelta;
             TargetHeartRateDelta = c.TargetHeartRateDelta;
             CurrentTemperatureBonus = c.CurrentTemperatureBonus;

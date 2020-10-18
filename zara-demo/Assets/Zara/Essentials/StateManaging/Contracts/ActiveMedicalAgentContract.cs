@@ -2,11 +2,12 @@
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class ActiveMedicalAgentContract
     {
 
         public float GameMinutesAgentIsActive;
-        public DateTime[] TimesTaken;
+        public DateTimeContract[] TimesTaken;
 
     }
 }

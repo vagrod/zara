@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ZaraEngine.StateManaging
+﻿namespace ZaraEngine.StateManaging
 {
 
     public class EventByChanceSnippet : SnippetBase

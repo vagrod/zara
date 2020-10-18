@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZaraEngine.Diseases;
 
 namespace ZaraEngine.StateManaging
 {
@@ -30,7 +27,7 @@ namespace ZaraEngine.StateManaging
             {
                 IsNodePart = this.IsNodePart,
                 IsFailed = this.IsFailed,
-                ConsumedTimes = this.ConsumedTimes.ToArray(),
+                ConsumedTimes = this.ConsumedTimes.ConvertAll(x => new DateTimeContract(x)).ToArray(),
                 InTimeConsumedCount = this.InTimeConsumedCount,
                 IsFinished = this.IsFinished,
                 IsStarted = this.IsStarted
@@ -45,7 +42,7 @@ namespace ZaraEngine.StateManaging
 
             IsNodePart = c.IsNodePart;
             IsFailed = c.IsFailed;
-            ConsumedTimes = c.ConsumedTimes.ToList();
+            ConsumedTimes = c.ConsumedTimes.ToList().ConvertAll(x => x.ToDateTime());
             InTimeConsumedCount = c.InTimeConsumedCount;
             IsFinished = c.IsFinished;
             IsStarted = c.IsStarted;

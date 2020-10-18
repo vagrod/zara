@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZaraEngine.Diseases;
 
 namespace ZaraEngine.StateManaging
@@ -33,7 +29,7 @@ namespace ZaraEngine.StateManaging
                 InitialBloodPressureTop = this.InitialBloodPressureTop,
                 InitialBloodPressureBottom = this.InitialBloodPressureBottom,
                 InitialBodyTemperature = this.InitialBodyTemperature,
-                InitialStageDuration = this.InitialStageDuration
+                InitialStageDuration = new TimeSpanContract(this.InitialStageDuration)
             };
 
             return c;
@@ -48,7 +44,7 @@ namespace ZaraEngine.StateManaging
             InitialBloodPressureTop = c.InitialBloodPressureTop;
             InitialBloodPressureBottom = c.InitialBloodPressureBottom;
             InitialBodyTemperature = c.InitialBodyTemperature;
-            InitialStageDuration = c.InitialStageDuration;
+            InitialStageDuration = c.InitialStageDuration.ToTimeSpan();
 
             ChildStates.Clear();
         }

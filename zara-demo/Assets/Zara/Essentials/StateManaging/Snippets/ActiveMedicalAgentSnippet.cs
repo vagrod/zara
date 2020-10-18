@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZaraEngine.StateManaging
 {
@@ -24,7 +22,7 @@ namespace ZaraEngine.StateManaging
             var c = new ActiveMedicalAgentContract
             {
                 GameMinutesAgentIsActive = this.GameMinutesAgentIsActive,
-                TimesTaken = this.TimesTaken.ToArray()
+                TimesTaken = this.TimesTaken.ConvertAll(x => new DateTimeContract(x)).ToArray()
             };
 
             return c;
@@ -35,7 +33,7 @@ namespace ZaraEngine.StateManaging
             var c = (ActiveMedicalAgentContract)o;
 
             GameMinutesAgentIsActive = c.GameMinutesAgentIsActive;
-            TimesTaken = c.TimesTaken.ToList();
+            TimesTaken = c.TimesTaken.ToList().ConvertAll(x => x.ToDateTime());
 
             ChildStates.Clear();
         }

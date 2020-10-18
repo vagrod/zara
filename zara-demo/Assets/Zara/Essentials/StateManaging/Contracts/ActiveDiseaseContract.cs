@@ -2,17 +2,18 @@
 
 namespace ZaraEngine.StateManaging
 {
+    [Serializable]
     public class ActiveDiseaseContract
     {
 
-        public Guid DiseaseId;
-        public Guid? InjuryId;
+        public string DiseaseId;
+        public string InjuryId;
         public string DiseaseType;
 
         public bool IsDiseaseActivated;
         public bool IsSelfHealActive;
         public bool IsChainInverted;
-        public DateTime DiseaseStartTime;
+        public DateTimeContract DiseaseStartTime;
         public int? TreatedStageLevel;
         public bool IsTreated;
 
