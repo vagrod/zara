@@ -43,7 +43,7 @@ It includes:
 + Inventory Engine
   - Support for a different item types (handheld, tools, medical items, food (incl. food spoiling), water (incl. disinfection and boiling))
   - Inventory controller with weight and overweight support
-  - Crafting engine that uses simple fluent syntax .Any combinations of any number of items in any amounts are supported. "Stick"+"Rope"+"Pin"+"Worm(2)"="Fishing Rod With Bait", including custom actions like "Water"+"Lit Torch"="Unlit Torch"
+  - Crafting engine that uses simple fluent syntax. Any combinations of any number of items in any amounts are supported. "Stick"+"Rope"+"Pin"+"Worm(2)"="Fishing Rod With Bait", including custom actions like "Water"+"Lit Torch"="Unlit Torch"
   - Custom validation rules for any crafting recipe
   
 + Disease Engine
