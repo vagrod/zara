@@ -6,7 +6,10 @@ Zara will be useful for you if you want your game to have weather-aware health c
 Code is open, so you can customize everything for your particular game needs.
 
 
-What is missing at the moment -- is save/load mechanic, but I'm already working on it. So you'll be able to serialize Zara state and completely restore it from the save like that:
+Saving/Loading of the engine state (including the entire health status, active diseases, injuries, treatment progress, entire inventory, clothes, appliances). At the moment the save/load of the health module is fully implemented. 
+I'm working on the rest. This text will change when I'm done with all of that.
+
+To save the engine state and to completely restore it, you have to write two lines of code, like this:
 
 ``` csharp
 var state = ZaraEngine.EngineState.GetState(gc);
