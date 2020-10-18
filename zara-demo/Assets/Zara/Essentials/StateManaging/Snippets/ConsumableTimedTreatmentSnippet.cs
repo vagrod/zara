@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZaraEngine.Diseases;
 
 namespace ZaraEngine.StateManaging
 {
@@ -14,7 +15,13 @@ namespace ZaraEngine.StateManaging
 
         #region Data Fields
 
-        
+        public bool IsNodePart { get; set; }
+        public DiseaseLevels TreatedLevel { get; set; }
+        public bool IsFailed { get; set; }
+        public bool IsStarted { get; set; }
+        public List<DateTime> ConsumedTimes { get; set; }
+        public int InTimeConsumedCount { get; set; }
+        public bool IsFinished { get; set; }
 
         #endregion 
 
@@ -22,7 +29,13 @@ namespace ZaraEngine.StateManaging
         {
             var c = new ConsumableTimedTreatmentContract
             {
-                
+                IsNodePart = this.IsNodePart,
+                TreatedLevel = (int)this.TreatedLevel,
+                IsFailed = this.IsFailed,
+                IsStarted = this.IsStarted,
+                ConsumedTimes = this.ConsumedTimes.ToArray(),
+                InTimeConsumedCount = this.InTimeConsumedCount,
+                IsFinished = this.IsFinished
             };
 
             return c;
@@ -32,7 +45,13 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ConsumableTimedTreatmentContract)o;
 
-            
+            IsNodePart = c.IsNodePart;
+            TreatedLevel = (DiseaseLevels)c.TreatedLevel;
+            IsFailed = c.IsFailed;
+            IsStarted = c.IsStarted;
+            ConsumedTimes = c.ConsumedTimes.ToList();
+            InTimeConsumedCount = c.InTimeConsumedCount;
+            IsFinished = c.IsFinished;
 
             ChildStates.Clear();
         }

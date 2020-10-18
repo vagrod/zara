@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases.Treatment
 {
-    public class ConsumableTimedTreatmentNode
+    public class ConsumableTimedTreatmentNode : IAcceptsStateChange
     {
 
         private readonly List<ConsumableTimedTreatment> _treatments = new List<ConsumableTimedTreatment>();
@@ -105,6 +106,34 @@ namespace ZaraEngine.Diseases.Treatment
         {
             _treatments.ForEach(x => x.Reset());
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ConsumableTimedTreatmentNodeSnippet
+            {
+                IsOverallHealingStarted = _isOverallHealingStarted,
+                List = _treatments.ConvertAll(x => (ConsumableTimedTreatmentSnippet)x.GetState()).ToList()
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ConsumableTimedTreatmentNodeSnippet)savedState;
+
+            _isOverallHealingStarted = state.IsOverallHealingStarted;
+
+            // For the node instance, treatments count cannot change
+            for (int i = 0; i < _treatments.Count; i++)
+            {
+                _treatments[i].RestoreState(state.List[i]);
+            }
+        }
+
+        #endregion
 
     }
 }

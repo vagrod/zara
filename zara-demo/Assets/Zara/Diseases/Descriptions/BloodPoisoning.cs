@@ -7,6 +7,7 @@ using ZaraEngine.Diseases.Stages.Fluent;
 using ZaraEngine.Diseases.Treatment;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
@@ -123,6 +124,30 @@ namespace ZaraEngine.Diseases
             _worryingStageTreatment.Check(disease, gc);
             _criticalingStageTreatment.Check(disease, gc);
         }
+
+        #region State Manage
+
+        public override IStateSnippet GetState()
+        {
+            var state = new DiseaseTreatmentSnippet();
+
+            state.ApplianceTimedTreatmentNodes.Add((ApplianceTimedTreatmentNodeSnippet)_progressingStageTreatment.GetState());
+            state.ApplianceTimedTreatmentNodes.Add((ApplianceTimedTreatmentNodeSnippet)_worryingStageTreatment.GetState());
+            state.ApplianceTimedTreatmentNodes.Add((ApplianceTimedTreatmentNodeSnippet)_criticalingStageTreatment.GetState());
+
+            return state;
+        }
+
+        public override void RestoreState(IStateSnippet savedState)
+        {
+            var state = (DiseaseTreatmentSnippet)savedState;
+
+            _progressingStageTreatment.RestoreState(state.ApplianceTimedTreatmentNodes[0]);
+            _worryingStageTreatment.RestoreState(state.ApplianceTimedTreatmentNodes[1]);
+            _criticalingStageTreatment.RestoreState(state.ApplianceTimedTreatmentNodes[2]);
+        }
+
+        #endregion 
 
     }
 }

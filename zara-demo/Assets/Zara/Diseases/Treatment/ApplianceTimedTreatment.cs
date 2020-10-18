@@ -6,10 +6,11 @@ using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Diseases.Stages.Fluent;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases.Treatment
 {
-    public class ApplianceTimedTreatment
+    public class ApplianceTimedTreatment : IAcceptsStateChange
     {
 
         private const int TimingDeltaBetweenAllowedConsuming = 20; // Game minutes
@@ -231,6 +232,39 @@ namespace ZaraEngine.Diseases.Treatment
             _consumedTimes.Clear();
             _inTimeConsumedCount = 0;
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ApplianceTimedTreatmentSnippet
+            {
+                IsNodePart = this.IsNodePart,
+                IsFailed = this.IsFailed,
+                ConsumedTimes = _consumedTimes.ToList(),
+                InTimeConsumedCount = _inTimeConsumedCount,
+                IsFinished = this.IsFinished,
+                IsStarted = this.IsStarted
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ApplianceTimedTreatmentSnippet)savedState;
+
+            IsNodePart = this.IsNodePart;
+            IsFailed = this.IsFailed;
+            IsFinished = this.IsFinished;
+            IsStarted = this.IsStarted;
+
+            _consumedTimes.Clear();
+            _consumedTimes.AddRange(state.ConsumedTimes);
+            _inTimeConsumedCount = state.InTimeConsumedCount;
+        }
+
+        #endregion 
 
     }
 }

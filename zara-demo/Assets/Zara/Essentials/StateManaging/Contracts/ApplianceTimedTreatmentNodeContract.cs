@@ -6,6 +6,7 @@ namespace ZaraEngine.StateManaging
     {
 
         public ApplianceTimedTreatmentContract[] List;
+        public bool IsOverallHealingStarted;
 
     }
 }

@@ -14,7 +14,8 @@ namespace ZaraEngine.StateManaging
 
         #region Data Fields
 
-        public ConsumableTimedTreatmentSnippet[] List { get; set; }
+        public List<ConsumableTimedTreatmentSnippet> List { get; set; } = new List<ConsumableTimedTreatmentSnippet>();
+        public bool IsOverallHealingStarted { get; set; }
 
         #endregion 
 
@@ -22,7 +23,8 @@ namespace ZaraEngine.StateManaging
         {
             var c = new ConsumableTimedTreatmentNodeContract
             {
-                List = this.List.ToList().ConvertAll(x => (ConsumableTimedTreatmentContract)x.ToContract()).ToArray()
+                List = this.List.ToList().ConvertAll(x => (ConsumableTimedTreatmentContract)x.ToContract()).ToArray(),
+                IsOverallHealingStarted = this.IsOverallHealingStarted
             };
 
             return c;
@@ -32,7 +34,8 @@ namespace ZaraEngine.StateManaging
         {
             var c = (ConsumableTimedTreatmentNodeContract)o;
 
-            List = c.List.ToList().ConvertAll(x => new ConsumableTimedTreatmentSnippet(x)).ToArray();
+            List = c.List.ToList().ConvertAll(x => new ConsumableTimedTreatmentSnippet(x));
+            IsOverallHealingStarted = c.IsOverallHealingStarted;
 
             ChildStates.Clear();
         }

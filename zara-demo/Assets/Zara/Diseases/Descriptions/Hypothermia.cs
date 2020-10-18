@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Diseases.Stages.Fluent;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
@@ -41,6 +42,24 @@ namespace ZaraEngine.Diseases
         {
 
         }
+
+        #region State Manage
+
+        public override IStateSnippet GetState()
+        {
+            var state = new DiseaseTreatmentSnippet();
+
+            return state;
+        }
+
+        public override void RestoreState(IStateSnippet savedState)
+        {
+            var state = (DiseaseTreatmentSnippet)savedState;
+
+            //...
+        }
+
+        #endregion 
 
     }
 }

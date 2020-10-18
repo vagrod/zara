@@ -3,6 +3,7 @@ using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Diseases.Stages.Fluent;
 using ZaraEngine.Diseases.Treatment;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
@@ -120,5 +121,31 @@ namespace ZaraEngine.Diseases
             _worryingStageTreatment.Check(disease, gc);
             _criticalingStageTreatment.Check(disease, gc);
         }
+
+        #region State Manage
+
+        public override IStateSnippet GetState()
+        {
+            var state = new DiseaseTreatmentSnippet();
+
+            state.ConsumableTimedTreatments.Add((ConsumableTimedTreatmentSnippet)_initialStageTreatment.GetState());
+            state.ConsumableTimedTreatments.Add((ConsumableTimedTreatmentSnippet)_progressingStageTreatment.GetState());
+            state.ConsumableTimedTreatmentNodes.Add((ConsumableTimedTreatmentNodeSnippet)_worryingStageTreatment.GetState());
+            state.ConsumableTimedTreatmentNodes.Add((ConsumableTimedTreatmentNodeSnippet)_criticalingStageTreatment.GetState());
+
+            return state;
+        }
+
+        public override void RestoreState(IStateSnippet savedState)
+        {
+            var state = (DiseaseTreatmentSnippet)savedState;
+
+            _initialStageTreatment.RestoreState(state.ConsumableTimedTreatments[0]);
+            _progressingStageTreatment.RestoreState(state.ConsumableTimedTreatments[1]);
+            _worryingStageTreatment.RestoreState(state.ConsumableTimedTreatmentNodes[0]);
+            _criticalingStageTreatment.RestoreState(state.ConsumableTimedTreatmentNodes[1]);
+        }
+
+        #endregion 
     }
 }

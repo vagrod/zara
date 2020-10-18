@@ -6,10 +6,11 @@ using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Diseases.Stages.Fluent;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases.Treatment
 {
-    public class ApplianceTimedTreatmentNode
+    public class ApplianceTimedTreatmentNode : IAcceptsStateChange
     {
 
         private readonly List<ApplianceTimedTreatment> _treatments = new List<ApplianceTimedTreatment>();
@@ -112,6 +113,34 @@ namespace ZaraEngine.Diseases.Treatment
         {
             _treatments.ForEach(x => x.Reset());
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ApplianceTimedTreatmentNodeSnippet
+            {
+                IsOverallHealingStarted = _isOverallHealingStarted,
+                List = _treatments.ConvertAll(x => (ApplianceTimedTreatmentSnippet)x.GetState()).ToList()
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ApplianceTimedTreatmentNodeSnippet)savedState;
+
+            _isOverallHealingStarted = state.IsOverallHealingStarted;
+
+            // For the node instance, treatments count cannot change
+            for(int i = 0; i < _treatments.Count; i++)
+            {
+                _treatments[i].RestoreState(state.List[i]);
+            }
+        }
+
+        #endregion 
 
     }
 }

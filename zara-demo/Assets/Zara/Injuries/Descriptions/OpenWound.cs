@@ -6,17 +6,22 @@ using ZaraEngine.Diseases;
 using ZaraEngine.Injuries.Stages.Fluent;
 using ZaraEngine.Injuries.Treatment;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Injuries
 {
     public class OpenWound : InjuryBase
     {
 
+        private readonly ToolsOnlyInjuryTreatment _initialStageTreatment;
+        private readonly ToolsOnlyInjuryTreatment _progressingStageTreatment;
+        private readonly ToolsOnlyInjuryTreatment _worryingStageTreatment;
+
         public OpenWound()
         {
-            var initialStageTreatment = new ToolsOnlyInjuryTreatment(MedicalAppliancesGroup.AntisepticGroup, InventoryController.MedicalItems.Bandage);
-            var progressingStageTreatment = new ToolsOnlyInjuryTreatment(MedicalAppliancesGroup.AntisepticGroup, InventoryController.MedicalItems.Bandage);
-            var worryingStageTreatment = new ToolsOnlyInjuryTreatment(InventoryController.MedicalItems.SuctionPump, MedicalAppliancesGroup.AntisepticGroup, InventoryController.MedicalItems.Bandage);
+            _initialStageTreatment = new ToolsOnlyInjuryTreatment(MedicalAppliancesGroup.AntisepticGroup, InventoryController.MedicalItems.Bandage);
+            _progressingStageTreatment = new ToolsOnlyInjuryTreatment(MedicalAppliancesGroup.AntisepticGroup, InventoryController.MedicalItems.Bandage);
+            _worryingStageTreatment = new ToolsOnlyInjuryTreatment(InventoryController.MedicalItems.SuctionPump, MedicalAppliancesGroup.AntisepticGroup, InventoryController.MedicalItems.Bandage);
 
             Name = "Open Wound";
             Stages = new[]
@@ -30,7 +35,7 @@ namespace ZaraEngine.Injuries
                     .BloodPerSecond(0.0025f)
                     .WillNotAffectControls()
                     .Treatment
-                        .WithTreatmentAction(initialStageTreatment.OnApplianceTaken)
+                        .WithTreatmentAction(_initialStageTreatment.OnApplianceTaken)
                     .Build(),
 
                 InjuryStageBuilder.NewStage().WithLevelOfSeriousness(DiseaseLevels.Progressing)
@@ -42,7 +47,7 @@ namespace ZaraEngine.Injuries
                         .BloodPerSecond(0.002f)
                     .WillNotAffectControls()
                     .Treatment
-                        .WithTreatmentAction(progressingStageTreatment.OnApplianceTaken)
+                        .WithTreatmentAction(_progressingStageTreatment.OnApplianceTaken)
                     .Build(),
 
                 InjuryStageBuilder.NewStage().WithLevelOfSeriousness(DiseaseLevels.Worrying)
@@ -54,10 +59,34 @@ namespace ZaraEngine.Injuries
                         .BloodPerSecond(0.0025f)
                     .WillNotAffectControls()
                     .Treatment
-                        .WithTreatmentAction(worryingStageTreatment.OnApplianceTaken)
+                        .WithTreatmentAction(_worryingStageTreatment.OnApplianceTaken)
                     .Build()
             };
         }
+
+        #region State Manage
+
+        public override IStateSnippet GetState()
+        {
+            var state = new InjuryTreatmentSnippet();
+
+            state.ToolsOnlyTreatments.Add((ToolsOnlyInjuryTreatmentSnippet)_initialStageTreatment.GetState());
+            state.ToolsOnlyTreatments.Add((ToolsOnlyInjuryTreatmentSnippet)_progressingStageTreatment.GetState());
+            state.ToolsOnlyTreatments.Add((ToolsOnlyInjuryTreatmentSnippet)_worryingStageTreatment.GetState());
+
+            return state;
+        }
+
+        public override void RestoreState(IStateSnippet savedState)
+        {
+            var state = (InjuryTreatmentSnippet)savedState;
+
+            _initialStageTreatment.RestoreState(state.ToolsOnlyTreatments[0]);
+            _progressingStageTreatment.RestoreState(state.ToolsOnlyTreatments[1]);
+            _worryingStageTreatment.RestoreState(state.ToolsOnlyTreatments[2]);
+        }
+
+        #endregion 
 
     }
 }

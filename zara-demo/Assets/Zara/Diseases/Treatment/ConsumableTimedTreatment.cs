@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Inventory;
+using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases.Treatment
 {
-    public class ConsumableTimedTreatment
+    public class ConsumableTimedTreatment : IAcceptsStateChange
     {
 
         private const int TimingDeltaBetweenAllowedConsuming = 20; // Game minutes
@@ -226,6 +227,41 @@ namespace ZaraEngine.Diseases.Treatment
             _consumedTimes.Clear();
             _inTimeConsumedCount = 0;
         }
+
+        #region State Manage
+
+        public IStateSnippet GetState()
+        {
+            var state = new ConsumableTimedTreatmentSnippet
+            {
+                IsNodePart = this.IsNodePart,
+                TreatedLevel = _treatedLevel,
+                IsFailed = this.IsFailed,
+                IsStarted = this.IsStarted,
+                ConsumedTimes = _consumedTimes.ToList(),
+                InTimeConsumedCount = _inTimeConsumedCount,
+                IsFinished = this.IsFinished
+            };
+
+            return state;
+        }
+
+        public void RestoreState(IStateSnippet savedState)
+        {
+            var state = (ConsumableTimedTreatmentSnippet)savedState;
+
+            IsNodePart = state.IsNodePart;
+            IsFailed = state.IsFailed;
+            IsStarted = state.IsStarted;
+            IsFinished = state.IsFinished;
+
+            _consumedTimes.Clear();
+            _consumedTimes.AddRange(state.ConsumedTimes);
+            _treatedLevel = state.TreatedLevel;
+            _inTimeConsumedCount = state.InTimeConsumedCount;
+        }
+
+        #endregion 
 
     }
 }
