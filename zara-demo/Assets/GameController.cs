@@ -119,8 +119,13 @@ public class GameController : MonoBehaviour, IGameController
         _inventory.AddItem(_boots);
         _inventory.AddItem(_hat);
 
+        var meat = new ZaraEngine.Inventory.Meat { Count = 1 };
+
+        // We gust gathere two of Meat. If will spoil in MinutesUntilSpoiled game minutes
+        meat.AddGatheringInfo(WorldTime.Value, 2);
+
         _inventory.AddItem(new ZaraEngine.Inventory.Cloth { Count = 20 });
-        _inventory.AddItem(new ZaraEngine.Inventory.Meat { Count = 3 });
+        _inventory.AddItem(meat);
         _inventory.AddItem(new ZaraEngine.Inventory.Bandage { Count = 5 });
         _inventory.AddItem(new ZaraEngine.Inventory.Acetaminophen { Count = 10 });
         _inventory.AddItem(new ZaraEngine.Inventory.Antibiotic { Count = 10 });
@@ -448,7 +453,7 @@ public class GameController : MonoBehaviour, IGameController
         {
             var medItem = item as InventoryMedicalItemBase;
 
-            if(medItem != null) // it is a medical item of some sort -- pill, solution, syringe
+            if (medItem != null) // it is a medical item of some sort -- pill, solution, syringe
             {
                 // This is for demo only: showing in a first list an empty syringe (so we can combine it with med solutions) -- UI limitations let's say ;)
                 if (!(medItem is ZaraEngine.Inventory.EmptySyringe))
@@ -456,17 +461,24 @@ public class GameController : MonoBehaviour, IGameController
                     if (medItem.MedicineKind != ZaraEngine.Inventory.InventoryMedicalItemBase.MedicineKinds.Consumable)
                         continue; // do not show in Consumables medical tools like solutions
                 }
-            } else {
-                if(!item.Type.Contains(ZaraEngine.Inventory.InventoryController.InventoryItemType.Organic))
+            }
+            else
+            {
+                if (!item.Type.Contains(ZaraEngine.Inventory.InventoryController.InventoryItemType.Organic))
                     continue; // do not show in Consumables non-organic items (cloth, knife, rope and whatnot)
             }
 
             var s = $"{item.Count}";
 
-            if(item is ZaraEngine.Inventory.Flask)
+            if (item is ZaraEngine.Inventory.Flask)
                 s += $" ({(item as ZaraEngine.Inventory.Flask).DosesLeft} doses)";
 
-            FirstInventoryItemsList.options.Add (new Dropdown.OptionData() {text=$"{item.Name}: {s}"});
+            if(item is ZaraEngine.Inventory.Meat){
+                var meat = (item as ZaraEngine.Inventory.Meat);
+                s += $" ({meat.GetCountNormal(WorldTime.Value) + meat.GetCountSpoiled(WorldTime.Value)} pieces)";
+            }
+
+            FirstInventoryItemsList.options.Add(new Dropdown.OptionData() { text = $"{item.Name}: {s}" });
         }
 
         FirstInventoryItemsList.value = index;

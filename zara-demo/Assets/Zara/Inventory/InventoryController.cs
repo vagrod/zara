@@ -445,10 +445,10 @@ namespace ZaraEngine.Inventory
 
                 if (inventoryObject == null)
                     return new ItemUseResult
-                        {
-                            Item = null,
-                            Result = ItemUseResult.UsageResult.InsufficientResources
-                        };
+                    {
+                        Item = null,
+                        Result = ItemUseResult.UsageResult.InsufficientResources
+                    };
 
                 if (food.IsSpoiled)
                     isSpoiledFoodUsedAll = inventoryObject.TakeOneFromSpoiledGroup(_gc.WorldTime.Value) == 0;
@@ -499,10 +499,31 @@ namespace ZaraEngine.Inventory
                 {
                     if (!(item is IInventoryInfiniteItem))
                     {
-                        if (!checkOnly)
-                            RemoveItem(item.Name, null);
+                        var foodCount = -1;
 
-                        return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedAll };
+                        if(food != null){
+                            foodCount = food.GetCountNormal(_gc.WorldTime.Value) + food.GetCountSpoiled(_gc.WorldTime.Value);
+                        }
+
+                        if (!checkOnly)
+                        {
+                            if (food == null)
+                            {
+                                RemoveItem(item.Name, null);
+                            } else {
+                                if(foodCount == 0)
+                                    Items.Remove(item);
+                            }
+                        }
+
+                        if(food == null)
+                            return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedAll };
+                        else {
+                            if(foodCount == 0)
+                                return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedAll };
+                            else 
+                                return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedSingle };
+                        }
                     }
                     else
                     {
