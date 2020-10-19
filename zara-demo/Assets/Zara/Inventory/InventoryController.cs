@@ -388,7 +388,7 @@ namespace ZaraEngine.Inventory
                 var result = (FoodItemBase)Activator.CreateInstance(item.GetType());
 
                 result.IsSpoiled = false;
-                result.Count = food.Count - food.GetCountSpoiled(_gc.WorldTime.Value);
+                result.Count = food.GetCountNormal(_gc.WorldTime.Value);
 
                 return result;
             }
