@@ -21,6 +21,8 @@ ZaraEngine.EngineState.RestoreState(gc, state, savedWorldTime => _worldTime = sa
 
 ![Zara Demo app screen](http://imw.su/ZaraDemoScreen_06.png)
 
+See [wiki](https://github.com/vagrod/zara/wiki) for detailed technical info.
+
 It includes:
 + Health Engine that controls
   - Heart Rate
