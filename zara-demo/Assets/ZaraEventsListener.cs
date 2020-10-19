@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using ZaraEngine;
 using ZaraEngine.Diseases;
 using ZaraEngine.Injuries;
@@ -10,6 +11,13 @@ public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
 
     void Start(){
         Events.Subscribe(this);
+    }
+
+    public Canvas DeathScreen;
+
+    private void ShowDeathScreen(string causeOfDeath){
+        DeathScreen.gameObject.transform.Find("Text").GetComponent<Text>().text = $"Character is dead\nCause of death: {causeOfDeath}";
+        DeathScreen.gameObject.SetActive(true);
     }
 
     public void InventoryOverload() { }
@@ -32,14 +40,14 @@ public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
     public void SedativeSleepTrigger() { }
     public void StartDrowning() { }
 
-    public void DeathByDrowning() { }
-    public void DeathFromDisease() { }
-    public void DeathFromBadVitals() { }
-    public void DeathByOverdose() { }
-    public void DeathByHeartFailure() { }
-    public void DeathByBloodLoss() { }
-    public void DeathByDehydration() { }
-    public void DeathByStarvation() { }
+    public void DeathByDrowning() { ShowDeathScreen("drowned"); }
+    public void DeathFromDisease() { ShowDeathScreen("disease");}
+    public void DeathFromBadVitals() { ShowDeathScreen("bad vitals"); }
+    public void DeathByOverdose() {ShowDeathScreen("medicine overdose"); }
+    public void DeathByHeartFailure() { ShowDeathScreen("heart failure");}
+    public void DeathByBloodLoss() {ShowDeathScreen("blood loss"); }
+    public void DeathByDehydration() { ShowDeathScreen("dehydration");}
+    public void DeathByStarvation() { ShowDeathScreen("starvation");}
 
     public void Sneeze() { }
     public void Cough(HealthController.CoughLevels level) { }

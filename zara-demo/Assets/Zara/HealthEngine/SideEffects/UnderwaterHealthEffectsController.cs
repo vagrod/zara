@@ -16,8 +16,8 @@ namespace ZaraEngine.HealthEngine
          * ------------------------------------------------------------------------------------------------------------------ */
 
         public const float UnderwaterOxygenDrainRate          = 0.16f; // percents per game second
-        private const float MaxHeartRateBonus                 = 54f;   // bpm
-        private const float MaxBloodPressureBonus             = 32f;   // mmHg
+        private const float MaxHeartRateBonus                 = 41f;   // bpm
+        private const float MaxBloodPressureBonus             = 26f;   // mmHg
         private const float MaxOxygenBonus                    = 100f;  // percents
         private const float MaxGameMinutesUnderwater          = 6.5f;  // game minutes
 
