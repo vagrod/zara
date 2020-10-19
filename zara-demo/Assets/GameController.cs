@@ -758,7 +758,7 @@ public class GameController : MonoBehaviour, IGameController
 
         sw.Start();
 
-        // Important: if you are restoring Zara state asyncronously, be sure not to call .Check() methods on _healts and _body during the RestoreState method execution
+        // Important: if you are restoring Zara state asyncronously, be sure not to call .Check() methods on _health and _body during the RestoreState method execution
         // It is not recommended to save or load during the sleep
 
         ZaraEngine.EngineState.RestoreState(this, _savedState, stateWorldTime => _dateTime = stateWorldTime /* method to restore the saved world time */);

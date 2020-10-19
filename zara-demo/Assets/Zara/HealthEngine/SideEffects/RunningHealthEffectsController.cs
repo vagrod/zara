@@ -59,9 +59,7 @@ namespace ZaraEngine.HealthEngine
             if (_healthController.UnconsciousMode)
                 return;
 
-            var isRunning = !_gc.Player.IsWalking && !_gc.Player.IsStanding;
-
-            if (isRunning && !_gc.Health.Status.CannotRun && !_gc.Player.IsUnderWater && !_gc.Player.IsSwimming && !_healthController.Status.IsLegFracture && !_healthController.IsInventoryOverload)
+            if (_gc.Player.IsRunning && !_gc.Health.Status.CannotRun && !_gc.Player.IsUnderWater && !_gc.Player.IsSwimming && !_healthController.Status.IsLegFracture && !_healthController.IsInventoryOverload)
                 _gameSecondsInRunningState += gameSecondsSinceLastCall;
             else
                 _gameSecondsInRunningState -= gameSecondsSinceLastCall;

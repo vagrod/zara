@@ -7,6 +7,7 @@ namespace ZaraEngine.Player {
         bool IsUnderWater { get; }
         bool IsWalking { get; }
         bool IsStanding { get; }
+        bool IsRunning { get; }
         bool IsSwimming { get; }
         bool IsLimping { get; }
 

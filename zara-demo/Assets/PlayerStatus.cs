@@ -5,6 +5,7 @@ public class PlayerStatus : IPlayerStatus {
     private bool _isStanding = true;
     private bool _isWalking;
     private bool _isSwimming;
+    private bool _isRunning;
     private bool _isLimping;
     private bool _isUnderWater;
     private float _runSpeed;
@@ -14,6 +15,7 @@ public class PlayerStatus : IPlayerStatus {
     public bool IsUnderWater => _isUnderWater;
     public bool IsWalking => _isWalking;
     public bool IsStanding => _isStanding;
+    public bool IsRunning => _isRunning;
     public bool IsSwimming => _isSwimming;
     public bool IsLimping => _isLimping;
 
@@ -25,20 +27,24 @@ public class PlayerStatus : IPlayerStatus {
         if(value){
             _isStanding = false;
             _isWalking = false;
+            _isRunning = true;
         } else {
             _isStanding = true;
             _isWalking = false;
+            _isRunning = false;
         }
     }
 
     public void SetWalking(bool value){
         _isStanding = !value;
         _isWalking = value;
+        _isRunning = false;
     }
 
      public void SetStanding(bool value){
         _isWalking = !value;
         _isStanding = value;
+        _isRunning = false;
     }
 
     public void SetWalkSpeed(float value){
@@ -55,14 +61,23 @@ public class PlayerStatus : IPlayerStatus {
 
     public void SetLimping(bool value){
         _isLimping = value;
+        _isStanding = false;
+        _isRunning = false;
+        _isWalking = false;
     }
 
      public void SetSwimming(bool value){
         _isSwimming = value;
+        _isStanding = false;
+        _isRunning = false;
+        _isWalking = false;
     }
 
     public void SetUnderwater(bool value){
         _isUnderWater = value;
+        _isStanding = false;
+        _isRunning = false;
+        _isWalking = false;
     }
 
 }

@@ -749,7 +749,7 @@ namespace ZaraEngine.HealthEngine {
                 return;
             }
 
-            if (!_gc.Player.IsWalking && !_gc.Player.IsStanding) {
+            if (_gc.Player.IsRunning) {
                 // Fatigue increase when running
                 if (gameSecondsSinceLastCall > 0f)
                 {
@@ -1101,8 +1101,7 @@ namespace ZaraEngine.HealthEngine {
         private float GetWaterDrainRate() {
             var value = UnconsciousMode ? UnconsciousWaterDrainPerSecond : BasicWaterDrainPerSecond;
 
-            if (!_gc.Player.IsWalking && !_gc.Player.IsStanding) {
-                // Running
+            if (_gc.Player.IsRunning) {
                 value += AdditionalWaterDrainWhileRunningPerSecond;
             }
 
@@ -1117,8 +1116,7 @@ namespace ZaraEngine.HealthEngine {
         private float GetFoodDrainRate() {
             var value = UnconsciousMode ? UnconsciousFoodDrainPerSecond : BasicFoodDrainPerSecond;
 
-            if (!_gc.Player.IsWalking && !_gc.Player.IsStanding) {
-                // Running
+            if (_gc.Player.IsRunning) {
                 value += AdditionalFoodDrainWhileRunningPerSecond;
             }
 
@@ -1161,12 +1159,18 @@ namespace ZaraEngine.HealthEngine {
                     {
                         if (_gc.Player.IsWalking)
                             value = -StaminaRegainRateWhileWalkingPerSecond + fatigueBonus + weatherBonus + clothesBonus; // Increase by little
-                        else // Running
+                        else
                         {
-                            if (Medicine.IsEpinephrineActive)
-                                value = 0f;
-                            else
-                                value = StaminaDecreaseRateWhileRunningPerSecond - fatigueBonus - weatherBonus - clothesBonus;
+                            if (_gc.Player.IsRunning)
+                            {
+                                if (Medicine.IsEpinephrineActive)
+                                    value = 0f;
+                                else
+                                    value = StaminaDecreaseRateWhileRunningPerSecond - fatigueBonus - weatherBonus - clothesBonus;
+                            } else {
+                                // Strange player state, we'll pretend that he is standing
+                                value = -StaminaRegainRatePerSecond + fatigueBonus + weatherBonus - clothesBonus; // Increasing stamina
+                            }
                         }
                     }
                 }
