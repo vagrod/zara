@@ -30,6 +30,7 @@ Zara includes:
  ~~~
  Drowning
  From Disease
+ Hypothermia
  From Bad Vitals (too low ot too high blood pressure, too low or high body temp. and so on)
  Medicine Overdose
  Heart Failure (can be caused by eating incompatible medicine)
