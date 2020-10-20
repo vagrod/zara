@@ -32,6 +32,7 @@ namespace ZaraEngine.StateManaging
         public bool CannotRun { get; set; }
         public bool IsLegFracture { get; set; }
         public DiseaseLevels ActiveDiseasesWorstLevel { get; set; }
+        public Guid? WorstDiseaseId { get; set; }
 
         #endregion 
 
@@ -58,7 +59,8 @@ namespace ZaraEngine.StateManaging
                 IsSleepDisorder = this.IsSleepDisorder,
                 CannotRun = this.CannotRun,
                 IsLegFracture = this.IsLegFracture,
-                ActiveDiseasesWorstLevel = (int)this.ActiveDiseasesWorstLevel
+                ActiveDiseasesWorstLevel = (int)this.ActiveDiseasesWorstLevel,
+                WorstDiseaseId = this.WorstDiseaseId?.ToString()
             };
 
             c.ActiveDiseasesAndInjuries = (ActiveDiseasesAndInjuriesContract)ChildStates["ActiveDiseasesAndInjuries"].ToContract();
@@ -90,6 +92,7 @@ namespace ZaraEngine.StateManaging
             CannotRun = c.CannotRun;
             IsLegFracture = c.IsLegFracture;
             ActiveDiseasesWorstLevel = (DiseaseLevels)c.ActiveDiseasesWorstLevel;
+            WorstDiseaseId = string.IsNullOrEmpty(c.WorstDiseaseId) ? (Guid?)null : Guid.Parse(c.WorstDiseaseId);
 
             ChildStates.Clear();
 

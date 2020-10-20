@@ -8,39 +8,73 @@ using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
+    // No treatment here. Hypothermia is controller totally from the <see cref="HypothermiaMonitor"/>
     public class Hypothermia : DiseaseDefinitionBase
     {
 
         public Hypothermia()
         {
             Name = "Hypothermia";
-            IsDynamic = true;
 
             Stages = new List<DiseaseStage>(new[]
             {
                 StageBuilder.NewStage().WithLevelOfSeriousness(DiseaseLevels.InitialStage)
-                    .SelfHealChance(20)
+                    .NoSelfHeal()
                     .Vitals
-                    .WithTargetBodyTemperature(37.1f)
+                        .WithTargetBodyTemperature(35.9f)
+                        .WithTargetHeartRate(52)
                     .WillReachTargetsInHours(1)
-                    .AndLastForHours(3)
+                    .AndLastForHours(1)
                     .AdditionalEffects
-                    .WithLowChanceOfSneeze()
+                        .WithLowAdditionalStaminaDrain()
                     .NoDisorders()
-                    .NoDrains()
+                    .Drain
+                        .FatigueIncreasePerSecond(0.0035f)
                     .Treatment
-                    .WithConsumable((gc, consumable, disease) =>
-                    {
-                        return false;
-                    })
-                    .AndWithoutSpecialItems()
+                        .WithoutConsumable()
+                        .AndWithoutSpecialItems()
+                    .Build(),
+
+                StageBuilder.NewStage().WithLevelOfSeriousness(DiseaseLevels.Worrying)
+                    .NoSelfHeal()
+                    .Vitals
+                        .WithTargetBodyTemperature(35.1f)
+                        .WithTargetHeartRate(41)
+                    .WillReachTargetsInHours(1)
+                    .AndLastForHours(1)
+                    .AdditionalEffects
+                        .WithMediumAdditionalStaminaDrain()
+                    .Disorders
+                        .WillNotBeAbleToRun()
+                        .NotDeadly()
+                    .Drain
+                        .FatigueIncreasePerSecond(0.0128f)
+                    .Treatment
+                        .WithoutConsumable()
+                        .AndWithoutSpecialItems()
+                    .Build(),
+
+                StageBuilder.NewStage().WithLevelOfSeriousness(DiseaseLevels.Critical)
+                    .NoSelfHeal()
+                    .Vitals
+                        .WithTargetBodyTemperature(33.4f)
+                        .WithTargetHeartRate(33)
+                        .WithTargetBloodPressure(91f, 52)
+                    .WillReachTargetsInHours(1)
+                    .AndLastUntilEnd()
+                    .AdditionalEffects
+                        .WithMediumAdditionalStaminaDrain()
+                    .Disorders
+                        .WillNotBeAbleToRun()
+                        .WithFoodDisgust()
+                        .NotDeadly()
+                    .Drain
+                        .FatigueIncreasePerSecond(0.0628f)
+                    .Treatment
+                        .WithoutConsumable()
+                        .AndWithoutSpecialItems()
                     .Build()
             });
-        }
-
-        public override void Check(ActiveDisease disease, IGameController gc)
-        {
-
         }
 
         #region State Manage
@@ -56,7 +90,7 @@ namespace ZaraEngine.Diseases
         {
             var state = (DiseaseTreatmentSnippet)savedState;
 
-            //...
+            // Nothing to store really
         }
 
         #endregion 

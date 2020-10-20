@@ -41,13 +41,14 @@ public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
     public void StartDrowning() { }
 
     public void DeathByDrowning() { ShowDeathScreen("drowned"); }
-    public void DeathFromDisease() { ShowDeathScreen("disease");}
+    public void DeathFromDisease(DiseaseDefinitionBase disease) { ShowDeathScreen(disease.Name);}
     public void DeathFromBadVitals() { ShowDeathScreen("bad vitals"); }
     public void DeathByOverdose() {ShowDeathScreen("medicine overdose"); }
     public void DeathByHeartFailure() { ShowDeathScreen("heart failure");}
     public void DeathByBloodLoss() {ShowDeathScreen("blood loss"); }
     public void DeathByDehydration() { ShowDeathScreen("dehydration");}
     public void DeathByStarvation() { ShowDeathScreen("starvation");}
+    public void HypothermiaDeath() { ShowDeathScreen("hypothermia"); }
 
     public void Sneeze() { }
     public void Cough(HealthController.CoughLevels level) { }

@@ -11,7 +11,7 @@ namespace ZaraEngine.Diseases
 
         public HyperthermiaMonitor(IGameController gc) : base(gc) { }
 
-        public override void Check()
+        public override void Check(float deltaTime)
         {
 
         }

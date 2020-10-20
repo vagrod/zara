@@ -6,7 +6,9 @@ namespace ZaraEngine.StateManaging
     public class HypothermiaMonitorContract
     {
 
-        
+        public DateTimeContract NextCheckTime;
+        public bool IsDiseaseActivated;
+        public float CurrentHypothermiaWarmthLevelThreshold;
 
     }
 }

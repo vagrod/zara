@@ -16,7 +16,7 @@ namespace ZaraEngine.Diseases
             _gc = gc;
         }
 
-        public virtual void Check()
+        public virtual void Check(float deltaTime)
         {
             
         }

@@ -33,7 +33,7 @@ namespace ZaraEngine.Diseases
 
         public FluMonitor(IGameController gc) : base(gc) { }
 
-        public override void Check()
+        public override void Check(float deltaTime)
         {
             if (!_gc.WorldTime.HasValue)
                 return;

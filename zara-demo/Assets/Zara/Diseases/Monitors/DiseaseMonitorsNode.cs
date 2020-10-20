@@ -24,9 +24,9 @@ namespace ZaraEngine.Diseases
             });
         }
 
-        public void Check()
+        public void Check(float deltaTime)
         {
-            _monitors.ForEach(x => x.Check());
+            _monitors.ForEach(x => x.Check(deltaTime));
         }
 
         public void OnConsumeItem(InventoryConsumableItemBase item)

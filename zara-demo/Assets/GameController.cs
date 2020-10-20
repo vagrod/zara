@@ -244,7 +244,7 @@ public class GameController : MonoBehaviour, IGameController
                 } else
                 {
                     // Active disease
-                    sb.AppendLine($"\t  Active. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
+                    sb.AppendLine($"\t  {(d.TreatedStage == null ? "Active" : "Getting Better")}. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
                 }
 
                 if(d.LinkedInjury != null){

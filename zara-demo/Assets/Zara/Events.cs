@@ -26,13 +26,14 @@ namespace ZaraEngine {
         void StartDrowning();
 
         void DeathByDrowning();
-        void DeathFromDisease();
+        void DeathFromDisease(DiseaseDefinitionBase disease);
         void DeathFromBadVitals();
         void DeathByOverdose();
         void DeathByHeartFailure();
         void DeathByBloodLoss();
         void DeathByDehydration();
         void DeathByStarvation();
+        void HypothermiaDeath();
 
         void Sneeze();
         void Cough(HealthEngine.HealthController.CoughLevels level);

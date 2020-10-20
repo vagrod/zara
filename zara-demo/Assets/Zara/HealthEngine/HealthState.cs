@@ -65,6 +65,8 @@ namespace ZaraEngine.HealthEngine
 
         public DiseaseLevels ActiveDiseasesWorstLevel { get; set; }
 
+        public DiseaseDefinitionBase WorstDisease { get; set; }
+
         public static HealthState Empty { get { return default(HealthState); } }
 
         private const float Tolerance = 0.00001f;
@@ -235,7 +237,8 @@ namespace ZaraEngine.HealthEngine
                 FatiguePercentage = this.FatiguePercentage,
                 LastSleepTime = this.LastSleepTime,
                 CheckTime = this.CheckTime,
-                OxygenPercentage = this.OxygenPercentage
+                OxygenPercentage = this.OxygenPercentage,
+                WorstDisease = this.WorstDisease
             };
         }
 
@@ -264,7 +267,8 @@ namespace ZaraEngine.HealthEngine
                 IsSleepDisorder = this.IsSleepDisorder,
                 CannotRun = this.CannotRun,
                 IsLegFracture = this.IsLegFracture,
-                ActiveDiseasesWorstLevel = this.ActiveDiseasesWorstLevel
+                ActiveDiseasesWorstLevel = this.ActiveDiseasesWorstLevel,
+                WorstDiseaseId = this.WorstDisease?.Id
             };
 
             var diseases = ActiveDiseases.ConvertAll(x => (ActiveDiseaseSnippet)x.GetState());
@@ -305,10 +309,10 @@ namespace ZaraEngine.HealthEngine
 
             var diseasesAndInjuriesData = (ActiveDiseasesAndInjuriesSnippet)state.ChildStates["ActiveDiseasesAndInjuries"];
 
-            CreateAndLinkActiveDiseasesAndInjuries(diseasesAndInjuriesData.ActiveDiseases, diseasesAndInjuriesData.ActiveInjuries);
+            CreateAndLinkActiveDiseasesAndInjuries(state.WorstDiseaseId, diseasesAndInjuriesData.ActiveDiseases, diseasesAndInjuriesData.ActiveInjuries);
         }
 
-        private void CreateAndLinkActiveDiseasesAndInjuries(List<ActiveDiseaseSnippet> diseasesData, List<ActiveInjurySnippet> injuriesData)
+        private void CreateAndLinkActiveDiseasesAndInjuries(Guid? worstDiseaseId, List<ActiveDiseaseSnippet> diseasesData, List<ActiveInjurySnippet> injuriesData)
         {
             ActiveInjuries.Clear();
             ActiveDiseases.Clear();
@@ -326,6 +330,8 @@ namespace ZaraEngine.HealthEngine
                 ActiveInjuries.Add(inj);
             }
 
+            var diseasesMapping = new Dictionary<Guid, Guid>(); // old id, new id
+
             foreach (var diseaseData in diseasesData)
             {
                 var injKey = diseaseData.InjuryId.HasValue ? (injuriesMapping.ContainsKey(diseaseData.InjuryId.Value) ? injuriesMapping[diseaseData.InjuryId.Value] : (Guid?)null) : (Guid?)null;
@@ -334,10 +340,18 @@ namespace ZaraEngine.HealthEngine
 
                 disease.RestoreState(diseaseData);
 
+                diseasesMapping.Add(diseaseData.DiseaseId, disease.Disease.Id);
+
                 ActiveDiseases.Add(disease);
             }
 
+            var diseaseKey = worstDiseaseId.HasValue ? (diseasesMapping.ContainsKey(worstDiseaseId.Value) ? diseasesMapping[worstDiseaseId.Value] : (Guid?)null) : (Guid?)null;
+            var worstDisease = diseaseKey.HasValue ? ActiveDiseases.FirstOrDefault(x => x.Disease.Id == diseaseKey.Value) : null;
+
+            WorstDisease = worstDisease?.Disease;
+
             injuriesMapping.Clear();
+            diseasesMapping.Clear();
         }
 
         #endregion

@@ -326,7 +326,7 @@ namespace ZaraEngine.HealthEngine {
 
             /******* Health death events (deaths from natural causes) *******/
 
-            _diseaseDeathEvent                = new EventByChance("Disease death check"      , ev => Events.NotifyAll(l => l.DeathFromDisease()), DiseaseDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _diseaseDeathEvent                = new EventByChance("Disease death check"      , ev => Events.NotifyAll(l => l.DeathFromDisease((DiseaseDefinitionBase)ev.Param)), DiseaseDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
             _vitalsDeathEvent                 = new EventByChance("Vitals death check"       , ev => Events.NotifyAll(l => l.DeathFromBadVitals()), VitalsDeathChance, VitalsDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
             _overdoseDeathEvent               = new EventByChance("Overdose death check"     , ev => Events.NotifyAll(l => l.DeathByOverdose()), OverdoseDeathChance, OverdoseDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
             _heartFailureDeathEvent           = new EventByChance("Heart failure death check", ev => Events.NotifyAll(l => l.DeathByHeartFailure()), HeartFailureDeathChance, HeartFailureDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
@@ -432,7 +432,7 @@ namespace ZaraEngine.HealthEngine {
                 newState.LastSleepTime = _gc.WorldTime.Value;
             }
 
-            _diseaseMonitors.Check();
+            _diseaseMonitors.Check(deltaTime);
             _medicalAgentsMonitors.Check();
 
             FluctuateVitals(_healthyStatus);
@@ -468,12 +468,17 @@ namespace ZaraEngine.HealthEngine {
                 newState.FatiguePercentage = _actualFatigueValue;
             }
 
+            if (newState.FatiguePercentage > 100f)
+                newState.FatiguePercentage = 100f;
+
             newState.CheckTime = _gc.WorldTime.Value;
 
             _fatigueEffects.SlowUpdate();
 
             #region Diseases
 
+            DiseaseDefinitionBase worstDisease = null;
+            DiseaseLevels worstDiseaseLevel = DiseaseLevels.InitialStage;
             List<DiseaseStage> activeStages = null;
 
             // New disease can appear here, after _diseaseMonitors.Check() call, already After the cloning 
@@ -488,6 +493,19 @@ namespace ZaraEngine.HealthEngine {
                     var stage = x.GetActiveStage(_gc.WorldTime.Value);
 
                     if (stage != null) {
+                        if (worstDisease == null) {
+                            worstDiseaseLevel = stage.Level;
+                            worstDisease = x.Disease;
+                        }
+                        else
+                        {
+                            if ((int)worstDiseaseLevel < (int)stage.Level)
+                            {
+                                worstDiseaseLevel = stage.Level;
+                                worstDisease = x.Disease;
+                            }
+                        }
+
                         x.Disease.Check(x, _gc);
                         activeStages.Add(stage);
                     }
@@ -499,6 +517,7 @@ namespace ZaraEngine.HealthEngine {
             if (superStage != null) {
                 newState.IsActiveDisease = true;
                 newState.ActiveDiseasesWorstLevel = superStage.Level;
+                newState.WorstDisease = worstDisease;
                 newState.IsFoodDisgust = superStage.CannotEat;
                 newState.IsSleepDisorder = superStage.CannotSleep;
                 newState.CannotRun = superStage.CannotRun;
@@ -562,7 +581,7 @@ namespace ZaraEngine.HealthEngine {
             // Check for deaths from natural causes 
             CheckVitalsDeath(newState, deltaTime);
             CheckCommonDeath(newState, deltaTime);
-            CheckDiseaseDeath(superStage, deltaTime);
+            CheckDiseaseDeath(newState, superStage, deltaTime);
             CheckOverdoseDeath(deltaTime);
             CheckHeartFailureDeath(deltaTime);
 
@@ -1015,7 +1034,7 @@ namespace ZaraEngine.HealthEngine {
             }
         }
 
-        private void CheckDiseaseDeath(DiseaseStage superStage, float deltaTime)
+        private void CheckDiseaseDeath(HealthState status, DiseaseStage superStage, float deltaTime)
         {
             if (superStage == null)
                 return;
@@ -1023,6 +1042,8 @@ namespace ZaraEngine.HealthEngine {
             if (superStage.ChanceOfDeath > 0)
             {
                 // Disease death chance
+
+                _diseaseDeathEvent.Param = status.WorstDisease;
                 _diseaseDeathEvent.Check(superStage.ChanceOfDeath, deltaTime);
             }
         }
