@@ -6,7 +6,7 @@ namespace ZaraEngine.Diseases
     public class HyperthermiaMonitor : DiseaseMonitorBase, IAcceptsStateChange
     {
 
-        private const int MonitorCheckInterval               = 2;     // Game minutes
+        private const int MonitorCheckInterval               = 7;     // Game minutes
         private const float HyperthermiaWarmthLevelThreshold = 24f;   // Warmth Score
         private const int HyperthermiaChance                 = 62;    // Percent
 
