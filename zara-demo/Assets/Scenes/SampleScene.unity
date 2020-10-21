@@ -9009,7 +9009,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0.1
+  m_Text: 0.1 m/s
 --- !u!222 &1277162441
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9103,7 +9103,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 575455840}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 20
   m_WholeNumbers: 0
   m_Value: 0.1
   m_OnValueChanged:

@@ -343,7 +343,7 @@ public class GameController : MonoBehaviour, IGameController
     }
 
     public void OnWindSpeedValueChanged(Slider e){
-        e.gameObject.transform.Find("Value").GetComponent<Text>().text = e.value.ToString("0.0");
+        e.gameObject.transform.Find("Value").GetComponent<Text>().text = e.value.ToString("0.0") + " m/s";
 
         _weather.SetWindSpeed(e.value);
     }
