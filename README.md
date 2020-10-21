@@ -40,10 +40,10 @@ Zara includes:
  Starvation 
  ~~~
  
-Zara is talking to your outside game world via events (you can subscribe and listen to them from anywhere).
+Zara is talking to your outside game world via [events](https://github.com/vagrod/zara/wiki/Handling-Zara-Events) (you can subscribe and listen to them from anywhere).
 
 Zara will not eat your game performance: it is re-evaluating health state and all needed internals only once a second (you can customize this to be any number).
 
-Zara is aware of the game surroundings if provided (air temperature, wind speed, rain intensity, time of day), and will adjust its parameters dynamically (in a hot day water will drain faster; in rainy cold day it is more likely to get flu, and so on.)
+Zara is aware of the [game surroundings](https://github.com/vagrod/zara/wiki/Setting-Up-Weather-Desctiption) if provided (air temperature, wind speed, rain intensity, time of day), and will adjust its parameters dynamically (in a hot day water will drain faster; in rainy cold day it is more likely to get flu, and so on.)
 
 If you have any technical questions about Zara, contact me: zara-survival (at) imw (dot) su
