@@ -2,7 +2,7 @@
   
 Zara is written in C# (3D-engine-agnostic code: no specific 3D-engine references).
 
-Zara will be useful for you if you want your game to have weather-aware health control with ton of intertwined parameters, sleeping, fatigue, diseases (flu, food poisoning, venom poisoning, angina and so on), injuries (cuts, fractures), food spoiling, water disinfecting, inventory, crafting, clothes with different water/cold resistance levels and more. On a surface, it is really easy to use. [Basic setup](https://github.com/vagrod/zara/wiki/Getting-Started) is very easy – and you have everything at your disposal ;) 
+Zara will be useful for you if you want your game to have weather-aware health control with ton of intertwined parameters, sleeping, fatigue, diseases (flu, food poisoning, venom poisoning, angina and so on), injuries (cuts, fractures), food spoiling, water disinfecting, inventory, crafting, clothes with different water/cold resistance levels and more. On a surface, it is really easy to [set up](https://github.com/vagrod/zara/wiki/Getting-Started) and use. 
 
 Code is open, so you can customize everything for your particular game needs.
 
@@ -30,6 +30,7 @@ Zara includes:
  ~~~
  Drowning
  From Disease
+ Hypothermia
  From Bad Vitals (too low ot too high blood pressure, too low or high body temp. and so on)
  Medicine Overdose
  Heart Failure (can be caused by eating incompatible medicine)
