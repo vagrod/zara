@@ -1,5 +1,3 @@
-using System;
-
 namespace ZaraEngine.Player {
 
     public interface IPlayerStatus {

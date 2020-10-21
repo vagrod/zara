@@ -1,4 +1,6 @@
-﻿namespace ZaraEngine.StateManaging
+﻿using System;
+
+namespace ZaraEngine.StateManaging
 {
     public class HyperthermiaMonitorSnippet : SnippetBase
     {
@@ -8,7 +10,9 @@
 
         #region Data Fields
 
-
+        public DateTime? NextCheckTime { get; set; }
+        public bool IsDiseaseActivated { get; set; }
+        public float CurrentHyperthermiaWarmthLevelThreshold { get; set; }
 
         #endregion 
 
@@ -16,7 +20,9 @@
         {
             var c = new HyperthermiaMonitorContract
             {
-
+                NextCheckTime = this.NextCheckTime.HasValue ? new DateTimeContract(this.NextCheckTime.Value) : null,
+                IsDiseaseActivated = this.IsDiseaseActivated,
+                CurrentHyperthermiaWarmthLevelThreshold = this.CurrentHyperthermiaWarmthLevelThreshold 
             };
 
             return c;
@@ -26,7 +32,9 @@
         {
             var c = (HyperthermiaMonitorContract)o;
 
-
+            NextCheckTime = (c.NextCheckTime == null || c.NextCheckTime.IsEmpty) ? (DateTime?)null : c.NextCheckTime.ToDateTime();
+            IsDiseaseActivated = c.IsDiseaseActivated;
+            CurrentHyperthermiaWarmthLevelThreshold = c.CurrentHyperthermiaWarmthLevelThreshold;
 
             ChildStates.Clear();
         }

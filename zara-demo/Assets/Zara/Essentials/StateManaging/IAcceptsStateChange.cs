@@ -1,6 +1,3 @@
-using System;
-using ZaraEngine;
-
 namespace ZaraEngine.StateManaging {
 
     public interface IAcceptsStateChange {

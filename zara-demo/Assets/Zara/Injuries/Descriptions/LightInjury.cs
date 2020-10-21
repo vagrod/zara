@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZaraEngine.Diseases;
+﻿using ZaraEngine.Diseases;
 using ZaraEngine.Injuries.Stages.Fluent;
 
 namespace ZaraEngine.Injuries

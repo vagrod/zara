@@ -49,6 +49,7 @@ public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
     public void DeathByDehydration() { ShowDeathScreen("dehydration");}
     public void DeathByStarvation() { ShowDeathScreen("starvation");}
     public void HypothermiaDeath() { ShowDeathScreen("hypothermia"); }
+    public void HyperthermiaDeath() { ShowDeathScreen("hyperthermia"); }
 
     public void Sneeze() { }
     public void Cough(HealthController.CoughLevels level) { }

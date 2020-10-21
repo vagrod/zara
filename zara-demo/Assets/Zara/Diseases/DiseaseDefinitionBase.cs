@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Injuries;
 using ZaraEngine.StateManaging;
@@ -25,8 +24,6 @@ namespace ZaraEngine.Diseases
         public string Name { get; protected set; }
 
         public List<DiseaseStage> Stages { get; protected set; }
-
-        public bool IsDynamic { get; protected set; }
 
         public bool RequiresBodyPart{ get; protected set; }
 

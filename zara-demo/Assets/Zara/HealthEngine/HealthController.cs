@@ -507,6 +507,7 @@ namespace ZaraEngine.HealthEngine {
                         }
 
                         x.Disease.Check(x, _gc);
+
                         activeStages.Add(stage);
                     }
                 });

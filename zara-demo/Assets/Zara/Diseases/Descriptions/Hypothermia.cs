@@ -48,7 +48,7 @@ namespace ZaraEngine.Diseases
                         .WillNotBeAbleToRun()
                         .NotDeadly()
                     .Drain
-                        .FatigueIncreasePerSecond(0.0128f)
+                        .FatigueIncreasePerSecond(0.0124f)
                     .Treatment
                         .WithoutConsumable()
                         .AndWithoutSpecialItems()
@@ -59,7 +59,7 @@ namespace ZaraEngine.Diseases
                     .Vitals
                         .WithTargetBodyTemperature(33.4f)
                         .WithTargetHeartRate(33)
-                        .WithTargetBloodPressure(91f, 52)
+                        .WithTargetBloodPressure(91f, 52f)
                     .WillReachTargetsInHours(1)
                     .AndLastUntilEnd()
                     .AdditionalEffects
@@ -69,7 +69,7 @@ namespace ZaraEngine.Diseases
                         .WithFoodDisgust()
                         .NotDeadly()
                     .Drain
-                        .FatigueIncreasePerSecond(0.0628f)
+                        .FatigueIncreasePerSecond(0.0328f)
                     .Treatment
                         .WithoutConsumable()
                         .AndWithoutSpecialItems()

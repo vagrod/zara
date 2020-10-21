@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Diseases.Stages.Fluent;

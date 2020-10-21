@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ZaraEngine.Inventory.Combinatory.Fluent;
-using ZaraEngine.Inventory.Descriptions.Medical;
 
 namespace ZaraEngine.Inventory
 {

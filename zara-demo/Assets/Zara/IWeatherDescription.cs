@@ -1,5 +1,3 @@
-using System;
-
 namespace ZaraEngine {
 
     public interface IWeatherDescription {

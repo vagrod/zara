@@ -34,6 +34,7 @@ namespace ZaraEngine {
         void DeathByDehydration();
         void DeathByStarvation();
         void HypothermiaDeath();
+        void HyperthermiaDeath();
 
         void Sneeze();
         void Cough(HealthEngine.HealthController.CoughLevels level);

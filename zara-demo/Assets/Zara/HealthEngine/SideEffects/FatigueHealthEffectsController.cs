@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZaraEngine.Player;
 using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine

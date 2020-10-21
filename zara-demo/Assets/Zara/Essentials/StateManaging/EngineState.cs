@@ -1,5 +1,4 @@
 using System;
-using ZaraEngine;
 using ZaraEngine.StateManaging;
 
 namespace ZaraEngine {

@@ -14,33 +14,65 @@ namespace ZaraEngine.Diseases
         public Hyperthermia()
         {
             Name = "Hyperthermia";
-            IsDynamic = true;
 
             Stages = new List<DiseaseStage>(new[]
             {
                 StageBuilder.NewStage().WithLevelOfSeriousness(DiseaseLevels.InitialStage)
-                    .SelfHealChance(20)
+                    .NoSelfHeal()
                     .Vitals
-                    .WithTargetBodyTemperature(37.1f)
+                        .WithTargetBodyTemperature(37.5f)
+                        .WithTargetHeartRate(76)
                     .WillReachTargetsInHours(1)
-                    .AndLastForHours(3)
+                    .AndLastForHours(1)
                     .AdditionalEffects
-                    .WithLowChanceOfSneeze()
+                        .WithLowAdditionalStaminaDrain()
                     .NoDisorders()
                     .NoDrains()
                     .Treatment
-                    .WithConsumable((gc, consumable, disease) =>
-                    {
-                        return false;
-                    })
-                    .AndWithoutSpecialItems()
+                        .WithoutConsumable()
+                        .AndWithoutSpecialItems()
+                    .Build(),
+
+                StageBuilder.NewStage().WithLevelOfSeriousness(DiseaseLevels.Worrying)
+                    .NoSelfHeal()
+                    .Vitals
+                        .WithTargetBodyTemperature(38.3f)
+                        .WithTargetHeartRate(85)
+                        .WithTargetBloodPressure(132f, 78)
+                    .WillReachTargetsInHours(1)
+                    .AndLastForHours(1)
+                    .AdditionalEffects
+                        .WithMediumAdditionalStaminaDrain()
+                    .Disorders
+                        .NotDeadly()
+                    .Drain
+                        .FatigueIncreasePerSecond(0.0078f)
+                    .Treatment
+                        .WithoutConsumable()
+                        .AndWithoutSpecialItems()
+                    .Build(),
+
+                StageBuilder.NewStage().WithLevelOfSeriousness(DiseaseLevels.Critical)
+                    .NoSelfHeal()
+                    .Vitals
+                        .WithTargetBodyTemperature(39.9f)
+                        .WithTargetHeartRate(108)
+                        .WithTargetBloodPressure(152f, 101f)
+                    .WillReachTargetsInHours(1)
+                    .AndLastUntilEnd()
+                    .AdditionalEffects
+                        .WithMediumAdditionalStaminaDrain()
+                    .Disorders
+                        .WillNotBeAbleToRun()
+                        .WithFoodDisgust()
+                        .NotDeadly()
+                    .Drain
+                        .FatigueIncreasePerSecond(0.0106f)
+                    .Treatment
+                        .WithoutConsumable()
+                        .AndWithoutSpecialItems()
                     .Build()
             });
-        }
-
-        public override void Check(ActiveDisease disease, IGameController gc)
-        {
-            
         }
 
         #region State Manage
