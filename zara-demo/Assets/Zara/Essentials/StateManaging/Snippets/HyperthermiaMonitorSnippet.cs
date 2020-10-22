@@ -25,6 +25,8 @@ namespace ZaraEngine.StateManaging
                 CurrentHyperthermiaWarmthLevelThreshold = this.CurrentHyperthermiaWarmthLevelThreshold 
             };
 
+            c.HyperthermiaDeathEvent = (EventByChanceContract)this.ChildStates["HyperthermiaDeathEvent"].ToContract();
+
             return c;
         }
 
@@ -37,6 +39,8 @@ namespace ZaraEngine.StateManaging
             CurrentHyperthermiaWarmthLevelThreshold = c.CurrentHyperthermiaWarmthLevelThreshold;
 
             ChildStates.Clear();
+
+            ChildStates.Add("HyperthermiaDeathEvent", new EventByChanceSnippet(c.HyperthermiaDeathEvent));
         }
 
     }

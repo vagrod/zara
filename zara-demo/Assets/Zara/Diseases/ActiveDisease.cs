@@ -537,18 +537,21 @@ namespace ZaraEngine.Diseases
 
             Disease = (DiseaseDefinitionBase)Activator.CreateInstance(state.DiseaseType);
             
-            if (state.TreatedStageLevel.HasValue)
-                TreatedStage = Disease.Stages.FirstOrDefault(x => x.Level == state.TreatedStageLevel.Value);
-            else
-                TreatedStage = null;
-
             _isDiseaseActivated = state.IsDiseaseActivated;
             _isSelfHealActive = state.IsSelfHealActive;
-            _isChainInverted = state.IsChainInverted;
             _diseaseStartTime = state.DiseaseStartTime;
 
             IsTreated = state.IsTreated;
 
+            ComputeDisease();
+
+            if (state.TreatedStageLevel.HasValue)
+                Invert();
+            else
+                TreatedStage = null;
+
+            _isChainInverted = state.IsChainInverted;
+            
             if (state.ChildStates["ChangedVitals"] != null)
             {
                 var o = (ChangedVitalsInfoSnippet)state.ChildStates["ChangedVitals"];
@@ -574,8 +577,6 @@ namespace ZaraEngine.Diseases
                     _changedCritialStage.RestoreState(state.ChildStates["ChangedCritialStage"]);
                 }
             }
-
-            ComputeDisease();
 
             Disease.RestoreState(state.ChildStates["Treatments"]);
 

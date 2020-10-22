@@ -9,6 +9,7 @@ namespace ZaraEngine.StateManaging
         public DateTimeContract NextCheckTime;
         public bool IsDiseaseActivated;
         public float CurrentHyperthermiaWarmthLevelThreshold;
+        public EventByChanceContract HyperthermiaDeathEvent;
 
     }
 }

@@ -23,7 +23,7 @@ namespace ZaraEngine.Diseases
         public HyperthermiaMonitor(IGameController gc) : base(gc) 
         {
             // Events produced by the Hyperthermia Monitor
-            _hyperthermiaDeathEvent = new EventByChance("Hyperthermia death", ev => Events.NotifyAll(l => l.HyperthermiaDeath()), ZaraEngine.HealthEngine.HealthController.HealthUpdateInterval) { AutoReset = true };
+            _hyperthermiaDeathEvent = new EventByChance("Hyperthermia death", ev => Events.NotifyAll(l => l.HyperthermiaDeath()), 0 /*will be set in Check()*/, ZaraEngine.HealthEngine.HealthController.HealthUpdateInterval /*will roll the dice on every Check() call */, ZaraEngine.HealthEngine.HealthController.HealthUpdateInterval) { AutoReset = true };
         }
 
         public override void Check(float deltaTime)
@@ -43,11 +43,13 @@ namespace ZaraEngine.Diseases
                     {
                         if(sleepyHyperthermiaState.Level == DiseaseLevels.Worrying)
                         {
-                            _hyperthermiaDeathEvent.Check(ChanceToDieInSleepForWorryingStage, deltaTime);
+                            if(sleepyHyperthermia.TreatedStage == null)
+                                _hyperthermiaDeathEvent.Check(ChanceToDieInSleepForWorryingStage, deltaTime);
                         }
                         if (sleepyHyperthermiaState.Level == DiseaseLevels.Critical)
                         {
-                            _hyperthermiaDeathEvent.Check(ChanceToDieInSleepForCriticalStage, deltaTime);
+                            if(sleepyHyperthermia.TreatedStage == null)
+                                _hyperthermiaDeathEvent.Check(ChanceToDieInSleepForCriticalStage, deltaTime);
                         }
                     }
                 }
@@ -81,7 +83,8 @@ namespace ZaraEngine.Diseases
 
                 if (stage != null && stage.Level == DiseaseLevels.Critical)
                 {
-                    _hyperthermiaDeathEvent.Check(ChanceToDieForCriticalStage, deltaTime);
+                    if(activeDisease.TreatedStage == null)
+                        _hyperthermiaDeathEvent.Check(ChanceToDieForCriticalStage, deltaTime);
                 }
             }
 
@@ -224,6 +227,8 @@ namespace ZaraEngine.Diseases
                 CurrentHyperthermiaWarmthLevelThreshold = _currentHyperthermiaWarmthLevelThreshold
             };
 
+            state.ChildStates.Add("HyperthermiaDeathEvent", _hyperthermiaDeathEvent.GetState());
+
             return state;
         }
 
@@ -234,6 +239,8 @@ namespace ZaraEngine.Diseases
             _nextCheckTime = state.NextCheckTime;
             _isDiseaseActivated = state.IsDiseaseActivated;
             _currentHyperthermiaWarmthLevelThreshold = state.CurrentHyperthermiaWarmthLevelThreshold;
+
+            _hyperthermiaDeathEvent.RestoreState(state.ChildStates["HyperthermiaDeathEvent"]);
         }
 
         #endregion 
