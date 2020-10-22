@@ -107,10 +107,8 @@ namespace ZaraEngine.Injuries.Treatment
                 if (_toolsNeeded.Count == 0)
                 {
                     injury.Invert();
-                    injury.DeclareInjuryTreated();
 
-                    if (OnTreated != null)
-                        OnTreated.Invoke();
+                    OnTreated?.Invoke();
 
                     Events.NotifyAll(l => l.InjuryHealed(injury.Injury));
                 }

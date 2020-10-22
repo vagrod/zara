@@ -126,6 +126,7 @@ public class GameController : MonoBehaviour, IGameController
 
         _inventory.AddItem(new ZaraEngine.Inventory.Cloth { Count = 20 });
         _inventory.AddItem(meat);
+        _inventory.AddItem(new ZaraEngine.Inventory.AntisepticSponge { Count = 5 });
         _inventory.AddItem(new ZaraEngine.Inventory.Bandage { Count = 5 });
         _inventory.AddItem(new ZaraEngine.Inventory.Acetaminophen { Count = 10 });
         _inventory.AddItem(new ZaraEngine.Inventory.Antibiotic { Count = 10 });
@@ -275,7 +276,7 @@ public class GameController : MonoBehaviour, IGameController
                         sb.AppendLine($"\t  Active. Current stage is {st.Level}, will self-heal at {st.SelfHealAt.Value.ToString("HH:mm")}");
                     } else
                     {
-                        sb.AppendLine($"\t  Active. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
+                        sb.AppendLine($"\t  {(inj.TreatedStage == null ? "Active" : "Getting Better")}. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
                     }
                 }
 

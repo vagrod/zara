@@ -46,6 +46,8 @@ namespace ZaraEngine.Injuries
         private bool _isInjuryActivated;
         private bool _isChainInverted;
 
+        private DateTime _injuryTriggerTimeInitial;
+
         private readonly IGameController _gc;
 
         public ActiveInjury(IGameController gc)
@@ -60,6 +62,8 @@ namespace ZaraEngine.Injuries
             Injury = (InjuryBase)Activator.CreateInstance(injuryType);
             BodyPart = bodyPart;
             InjuryTriggerTime = injuryTriggerTime;
+
+            _injuryTriggerTimeInitial = injuryTriggerTime;
 
             SetUpActiveStage(injuryTriggerTime);
         }
@@ -131,15 +135,17 @@ namespace ZaraEngine.Injuries
 
                 if (foundStage.SelfHealAt.HasValue && currentWorldTime >= foundStage.SelfHealAt.Value)
                 {
-                    _isInjuryActivated = false;
-
                     DeclareInjuryTreated();
 
                     return null;
                 }
             }
             else
-                _isInjuryActivated = false;
+            {
+                if(TreatedStage != null){
+                    DeclareInjuryTreated();
+                }
+            }
 
             return foundStage;
         }
@@ -262,7 +268,7 @@ namespace ZaraEngine.Injuries
             {
                 BodyPart = this.BodyPart,
                 InjuryId = Injury.Id,
-                InjuryTriggerTime = this.InjuryTriggerTime,
+                InjuryTriggerTime = _injuryTriggerTimeInitial,
                 InjuryType = Injury.GetType(),
                 IsChainInverted = _isChainInverted,
                 IsDiseaseProbabilityChecked = this.IsDiseaseProbabilityChecked,
@@ -282,22 +288,24 @@ namespace ZaraEngine.Injuries
 
             Injury = (InjuryBase)Activator.CreateInstance(state.InjuryType);
 
-            SetUpActiveStage(state.InjuryTriggerTime);
-
-            Injury.RestoreState(state.ChildStates["Treatments"]);
-
-            if (state.TreatedStageLevel.HasValue)
-                TreatedStage = Injury.Stages.FirstOrDefault(x => x.Level == state.TreatedStageLevel.Value);
-            else
-                TreatedStage = null;
-
-            _isChainInverted = state.IsChainInverted;
-            _isInjuryActivated = state.IsInjuryActivated;
+            _injuryTriggerTimeInitial = state.InjuryTriggerTime;
 
             InjuryTriggerTime = state.InjuryTriggerTime;
             IsDiseaseProbabilityChecked = state.IsDiseaseProbabilityChecked;
             BodyPart = state.BodyPart;
             IsTreated = state.IsTreated;
+
+            SetUpActiveStage(state.InjuryTriggerTime);
+
+            Injury.RestoreState(state.ChildStates["Treatments"]);
+
+            if (state.TreatedStageLevel.HasValue)
+                Invert();
+            else
+                TreatedStage = null;
+
+            _isChainInverted = state.IsChainInverted;
+            _isInjuryActivated = state.IsInjuryActivated;
         }
 
         #endregion 
