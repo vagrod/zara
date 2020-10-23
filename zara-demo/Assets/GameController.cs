@@ -766,6 +766,14 @@ public class GameController : MonoBehaviour, IGameController
 
         sw.Stop();
 
+        // We need to reload our demo local variables as well, because after the loading, every inventory item, every disease and injury has been re-created from scratch
+        // but we are still storing the old references
+
+        _jacket = _inventory.GetByName(_jacket.Name) as ZaraEngine.Inventory.WaterproofJacket;
+        _pants = _inventory.GetByName(_pants.Name) as ZaraEngine.Inventory.WaterproofPants;
+        _boots = _inventory.GetByName(_boots.Name) as ZaraEngine.Inventory.RubberBoots;
+        _hat = _inventory.GetByName(_hat.Name) as ZaraEngine.Inventory.LeafHat;
+
         Debug.Log($"Loading took {sw.ElapsedMilliseconds}ms");
     }
 
