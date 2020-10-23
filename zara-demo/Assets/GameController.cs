@@ -75,6 +75,8 @@ public class GameController : MonoBehaviour, IGameController
     public Text CurrentTimeText;
 
     public Text SleepingText;
+    public Text SpeedText;
+    public Text LimpText;
 
     #endregion 
 
@@ -176,6 +178,8 @@ public class GameController : MonoBehaviour, IGameController
 
         if (_infoUpdateCounter >= 1f)
         {
+            SpeedText.text = $"Speed: Running = {_player.RunSpeed:0.0}, Walking = {_player.WalkSpeed:0.0}, Crouching = {_player.CrouchSpeed:0.0}";
+            LimpText.text = $"Is Limping? {(_player.IsLimping ? "yes" : "no")}";
             WeightText.text = $"({_inventory.CurrentWeight.ToString("# ### ##0").Trim()} grams)";
             CurrentTimeText.text = $"World time is {WorldTime.Value.ToString("MMMM dd, HH:mm:ss")}";
 

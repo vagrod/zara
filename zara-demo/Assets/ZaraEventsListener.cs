@@ -9,8 +9,12 @@ using ZaraEngine.HealthEngine;
 
 public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
 
+    private GameController _gc;
+
     void Start(){
         Events.Subscribe(this);
+
+        _gc = GameObject.Find("GameController").GetComponent<GameController>();
     }
 
     public Canvas DeathScreen;
@@ -69,8 +73,34 @@ public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
     public void InjuryHealed(InjuryBase injury) { }
     public void InjectionApplied(InventoryMedicalItemBase appliance) { }
 
-    public void MovementSpeedChange(float? newRunSpeed,float? newWalkSpeed, float? newCrouchSpeed) { }
-    public void ApplyMovementSpeedDelta(float? newRunSpeedDelta,float? newWalkSpeedDelta, float? newCrouchSpeedDelta) { }
-    public void ReportLimpingState(bool isLimping) { }
+    public void MovementSpeedChange(float? newRunSpeed,float? newWalkSpeed, float? newCrouchSpeed) {
+        var p = _gc.Player as PlayerStatus;
+
+        if(newRunSpeed.HasValue)
+            p.SetRunSpeed(newRunSpeed.Value);
+
+        if(newWalkSpeed.HasValue)
+            p.SetWalkSpeed(newWalkSpeed.Value);
+
+        if(newCrouchSpeed.HasValue)
+            p.SetCrouchSpeed(newCrouchSpeed.Value);
+    }
+    public void ApplyMovementSpeedDelta(float? newRunSpeedDelta,float? newWalkSpeedDelta, float? newCrouchSpeedDelta) { 
+        var p = _gc.Player as PlayerStatus;
+        
+        if(newRunSpeedDelta.HasValue)
+            p.SetRunSpeed(_gc.Player.RunSpeed + newRunSpeedDelta.Value);
+
+        if(newWalkSpeedDelta.HasValue)
+            p.SetWalkSpeed(_gc.Player.WalkSpeed + newWalkSpeedDelta.Value);
+
+        if(newCrouchSpeedDelta.HasValue)
+            p.SetCrouchSpeed(_gc.Player.CrouchSpeed + newCrouchSpeedDelta.Value);
+    }
+    public void ReportLimpingState(bool isLimping) { 
+        var p = _gc.Player as PlayerStatus;
+
+        p.SetLimping(isLimping);
+    }
 
 }
