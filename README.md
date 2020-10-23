@@ -6,9 +6,10 @@ Zara will be useful for you if you want your game to have weather-aware health c
 
 Code is open, so you can customize everything for your particular game needs.
 
-Saving/Loading of the engine state is fully supported: more on it [here](https://github.com/vagrod/zara/wiki/How-To-Save-and-Load-Engine-State) and [here](https://github.com/vagrod/zara/wiki/Add-Stuff-to-State-Saving-and-Loading).\
+Saving/Loading of the engine state is fully supported: more on it [here](https://github.com/vagrod/zara/wiki/How-To-Save-and-Load-Engine-State) and [here](https://github.com/vagrod/zara/wiki/Add-Stuff-to-State-Saving-and-Loading).
+***
 Zara is a complete package with full implementation of the inventory system with crafting. Everything, including built-inventory, will be saved and loaded on your demand, you don't have to worry about this low-level stuff, and you can dedicade more time to an actual game making.
-
+***
 ![Zara Demo app screen](http://imw.su/ZaraDemoScreen_06.png)
 
 See [wiki](https://github.com/vagrod/zara/wiki) for the detailed technical info.
