@@ -1,5 +1,9 @@
 ![Zara Survival Engine](http://imw.su/zaralogo_gh.png)
-  
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/vagrod/zara/blob/master/LICENSE)
+[![made-with-csharp](https://img.shields.io/badge/Made%20with-C%23%207.3-%23239120.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-7)
+[![Unity-tested](https://img.shields.io/badge/Tested%20with-Unity%20-%23000000.svg?&logo=unity)](https://github.com/vagrod/zara/blob/master/LICENSE)
+ 
 Zara is written in C# (3D-engine-agnostic code: no specific 3D-engine references).
 
 Zara will be useful for you if you want your game to have weather-aware health control with ton of intertwined parameters, sleeping, fatigue, diseases (flu, food poisoning, venom poisoning, angina and so on), injuries (cuts, fractures), food spoiling, water disinfecting, inventory, crafting, clothes with different water/cold resistance levels and more. On a surface, it is really easy to [set up](https://github.com/vagrod/zara/wiki/Getting-Started) and use.
