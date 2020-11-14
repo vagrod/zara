@@ -29,12 +29,12 @@ namespace ZaraEngine.Diseases
 
         public virtual void Check(ActiveDisease disease, IGameController gc)
         {
-            
+            // Optional for children
         }
 
         public virtual void OnResumeDisease()
         {
-            
+            // Optional for children
         }
 
         public void SwapChain(List<DiseaseStage> stages)
@@ -44,20 +44,14 @@ namespace ZaraEngine.Diseases
 
         public virtual void InitializeWithInjury(BodyParts initialInjury)
         {
-
+            // Optional for children
         }
 
         #region State Manage
 
-        public virtual IStateSnippet GetState()
-        {
-            return new DiseaseTreatmentSnippet();
-        }
+        public abstract IStateSnippet GetState();
 
-        public virtual void RestoreState(IStateSnippet state)
-        {
-
-        }
+        public abstract void RestoreState(IStateSnippet state);
 
         #endregion
 

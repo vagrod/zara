@@ -27,15 +27,9 @@ namespace ZaraEngine.Injuries
 
         #region State Manage
 
-        public virtual IStateSnippet GetState()
-        {
-            return new InjuryTreatmentSnippet();
-        }
+        public abstract IStateSnippet GetState();
 
-        public virtual void RestoreState(IStateSnippet state)
-        {
-
-        }
+        public abstract void RestoreState(IStateSnippet state);
 
         #endregion
 

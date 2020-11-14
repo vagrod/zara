@@ -24,15 +24,9 @@ namespace ZaraEngine.Inventory
             get { return 0; }
         }
 
-        public virtual int WaterResistance
-        {
-            get { return 0; }
-        }
+        public abstract int WaterResistance { get; }
 
-        public virtual int ColdResistance
-        {
-            get { return 0; }
-        }
+        public abstract int ColdResistance { get; }
 
         public virtual bool CanBeTool()
         {

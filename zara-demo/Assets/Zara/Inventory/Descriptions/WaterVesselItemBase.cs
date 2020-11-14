@@ -8,15 +8,9 @@ namespace ZaraEngine.Inventory
 
         public int DosesLeft { get; private set; }
 
-        public virtual int DosesCount
-        {
-            get { return -1; }
-        }
+        public abstract int DosesCount { get; }
 
-        public virtual int WaterValuePerDose
-        {
-            get { return -1; }
-        }
+        public abstract int WaterValuePerDose { get; }
 
         public bool IsSafe { get; private set; }
 
@@ -30,15 +24,9 @@ namespace ZaraEngine.Inventory
         
         public DateTime? LastBoilTime { get; private set; }
 
-        public virtual float VesselWeightInGramms
-        {
-            get { return 0f; }
-        }
+        public abstract float VesselWeightInGramms{ get; }
 
-        public virtual float WaterDoseWeightInGramms
-        {
-            get { return 0f; }
-        }
+        public abstract float WaterDoseWeightInGramms { get; }
 
         public override float WeightGrammsPerUnit => WaterDoseWeightInGramms * DosesLeft + VesselWeightInGramms; 
 

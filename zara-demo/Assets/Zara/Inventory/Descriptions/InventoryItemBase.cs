@@ -8,22 +8,13 @@ namespace ZaraEngine.Inventory
 
         public Guid Id { get; } = Guid.NewGuid();
 
-        public virtual string Name
-        {
-            get { return null; }
-        }
-
         public int Count { get; set; }
 
-        public virtual InventoryController.InventoryItemType[] Type
-        {
-            get { return new InventoryController.InventoryItemType[]{}; }
-        }
+        public abstract string Name { get; }
 
-        public virtual float WeightGrammsPerUnit
-        {
-            get { return -1f; }
-        }
+        public abstract InventoryController.InventoryItemType[] Type { get; }
+
+        public abstract float WeightGrammsPerUnit { get; }
 
         #region State Manage
 

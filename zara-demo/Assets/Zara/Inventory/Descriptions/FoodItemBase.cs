@@ -26,22 +26,13 @@ namespace ZaraEngine.Inventory
             }
         }
 
-        public virtual string OriginalName
-        {
-            get { return null; }
-        }
+        public abstract string OriginalName{ get; }
 
         private List<Tuple<DateTime, int>> FoodItemsGatheringInfo { get; set; }
 
-        public virtual float FoodValue
-        {
-            get { return 0f; }
-        }
+        public abstract float FoodValue { get; }
 
-        public virtual float WaterValue
-        {
-            get { return 0f; }
-        }
+        public abstract float WaterValue { get; }
 
         public int GetCountSpoiled(DateTime currentTime)
         {
@@ -60,10 +51,7 @@ namespace ZaraEngine.Inventory
 
         public bool IsSpoiled { get; set; }
 
-        public virtual int MinutesUntilSpoiled
-        {
-            get { return -1; }
-        }
+        public abstract int MinutesUntilSpoiled{ get; }
 
         public int TakeOneFromSpoiledGroup(DateTime currentTime)
         {

@@ -17,8 +17,8 @@ namespace ZaraEngine.StateManaging
 
         public Dictionary<string, IStateSnippet> ChildStates { get; } = new Dictionary<string, IStateSnippet>();
 
-        public virtual void FromContract(object o) { }
+        public abstract void FromContract(object o);
 
-        public virtual object ToContract() { return null; }
+        public abstract object ToContract();
     }
 }
