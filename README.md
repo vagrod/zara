@@ -23,6 +23,8 @@ See [wiki](https://github.com/vagrod/zara/wiki) for the detailed technical info.
 Zara includes:
 + [Health Engine](https://github.com/vagrod/zara/wiki/Health-Controller) that controls dozen of parameters
 + [Disease Engine](https://github.com/vagrod/zara/wiki/Diseases) with treatment
++ [Hypothermia](https://github.com/vagrod/zara/wiki/How-Hypothermia-Works)
++ [Hyperthermia](https://github.com/vagrod/zara/wiki/How-Hyperthermia-Works)
 + [Disease Monitors](https://github.com/vagrod/zara/wiki/Disease-Monitors)
 + [Medical Agents](https://github.com/vagrod/zara/wiki/Medical-Agents)
 + [Injury Engine](https://github.com/vagrod/zara/wiki/Injuries) with treatment
