@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZaraEngine.NetCore.Demo", "ZaraEngine.NetCore.Demo.csproj", "{FB91FC6F-0F02-4F9D-A4FE-F5799F822AD9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB91FC6F-0F02-4F9D-A4FE-F5799F822AD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB91FC6F-0F02-4F9D-A4FE-F5799F822AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB91FC6F-0F02-4F9D-A4FE-F5799F822AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB91FC6F-0F02-4F9D-A4FE-F5799F822AD9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1159009A-1FA3-4014-AF13-83870885E072}
+	EndGlobalSection
+EndGlobal
