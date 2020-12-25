@@ -4,7 +4,7 @@
 [![made-with-csharp](https://img.shields.io/badge/Made%20with-C%23%207.3-%23239120.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-7)
 [![Unity-tested](https://img.shields.io/badge/Tested%20with-Unity%20-%23000000.svg?&logo=unity)](https://unity.com)
  
-Zara is written in C# (3D-engine-agnostic code: no specific 3D-engine references).\
+Zara is written in C# (no particular 3D-engine references: see barebones .Net Core example).\
 If you want to download only Zara code without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
 It is also available in the Unity Asset format: [here](https://assetstore.unity.com/packages/templates/systems/zara-survival-engine-182386#description).
 
