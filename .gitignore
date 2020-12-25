@@ -60,9 +60,9 @@ crashlytics-build.properties
 
 /Bin
 /obj
-/zara-demo/obj
-/zara-demo/Library
-/zara-demo/Temp
+/zara-demo-unity/obj
+/zara-demo-unity/Library
+/zara-demo-unity/Temp
 /zara-demo-netcore/obj
 /zara-demo-netcore/bin/Debug/netcoreapp3.1
 !ZaraEngine.NetCore.Demo.csproj
