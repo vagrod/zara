@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
 using ZaraEngine;
 using ZaraEngine.Player;
 using ZaraEngine.Inventory;
 using ZaraEngine.HealthEngine;
-using System.Text;
-using ZaraEngine.StateManaging;
 
 public class GameController : IGameController
 {
@@ -62,6 +59,7 @@ public class GameController : IGameController
         _weather.SetWindSpeed(0.1f);
         _weather.SetRainIntensity(0f);
 
+        // Start the "game loop"
         _loop = new System.Threading.Thread(LoopThread, 0);
         _loop.Start();
 
