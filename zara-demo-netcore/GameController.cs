@@ -28,18 +28,11 @@ public class GameController : IGameController
 
     #region Demo app fields
 
+    private System.Threading.Thread _loop;
     private float _infoUpdateCounter;
     private float _dateTimeCounter;
 
-    // our clothes references
-    private ZaraEngine.Inventory.WaterproofJacket _jacket;
-    private ZaraEngine.Inventory.WaterproofPants _pants;
-    private ZaraEngine.Inventory.RubberBoots _boots;
-    private ZaraEngine.Inventory.LeafHat _hat;
-
     #endregion 
-
-    private System.Threading.Thread _loop;
 
     public void Initialize()
     {
@@ -64,57 +57,15 @@ public class GameController : IGameController
 
         #region Demo app init
 
-        // Let's add some items to the inventory to play with in this demo
-
-        var flaskWithWater = new ZaraEngine.Inventory.Flask();
-
-        flaskWithWater.FillUp(WorldTime.Value);
-        //flaskWithWater.Disinfect(WorldTime.Value);
-
-        _jacket = new ZaraEngine.Inventory.WaterproofJacket();
-        _pants = new ZaraEngine.Inventory.WaterproofPants();
-        _boots = new ZaraEngine.Inventory.RubberBoots();
-        _hat = new ZaraEngine.Inventory.LeafHat();
-
-        _inventory.AddItem(flaskWithWater);
-
-        _inventory.AddItem(_jacket);
-        _inventory.AddItem(_pants);
-        _inventory.AddItem(_boots);
-        _inventory.AddItem(_hat);
-
-        var meat = new ZaraEngine.Inventory.Meat { Count = 1 };
-
-        // We just gathered two of Meat. If will spoil in MinutesUntilSpoiled game minutes
-        meat.AddGatheringInfo(WorldTime.Value, 2);
-
-        _inventory.AddItem(new ZaraEngine.Inventory.Cloth { Count = 20 });
-        _inventory.AddItem(meat);
-        _inventory.AddItem(new ZaraEngine.Inventory.AntisepticSponge { Count = 5 });
-        _inventory.AddItem(new ZaraEngine.Inventory.Bandage { Count = 5 });
-        _inventory.AddItem(new ZaraEngine.Inventory.Acetaminophen { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.Antibiotic { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.Aspirin { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.EmptySyringe { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.Loperamide { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.Oseltamivir { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.Sedative { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.AtropineSolution { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.EpinephrineSolution { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.AntiVenomSolution { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.DoripenemSolution { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.MorphineSolution { Count = 10 });
-        _inventory.AddItem(new ZaraEngine.Inventory.DisinfectingPellets { Count = 5 });
-
         // Defaults
         _weather.SetTemperature(27f);
         _weather.SetWindSpeed(0.1f);
         _weather.SetRainIntensity(0f);
 
-        #endregion
-
         _loop = new System.Threading.Thread(LoopThread, 0);
         _loop.Start();
+
+        #endregion
     }
 
     private void LoopThread(object state)
@@ -139,7 +90,7 @@ public class GameController : IGameController
         _body.Check(deltaTime);
         _health.Check(deltaTime);
 
-        #region Demo App Output
+        #region Demo App: Advancing the Time and displaying Output
 
         _infoUpdateCounter += deltaTime;
         _dateTimeCounter += deltaTime;
