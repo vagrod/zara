@@ -97,7 +97,7 @@ namespace ZaraEngine.Diseases.Treatment
                     {
                         IsFinished = false;
 
-                        CheckIfTreatmentFinished(disease);
+                        CheckIfTreatmentFinished(disease, gc);
 
                         if (OnTreatmentStarted != null)
                             OnTreatmentStarted.Invoke();
@@ -110,7 +110,7 @@ namespace ZaraEngine.Diseases.Treatment
                         {
                             //("Overall disease treatment started.");
 
-                            Events.NotifyAll(l => l.DiseaseTreatmentStarted(disease.Disease));
+                            Events.NotifyAll(l => l.DiseaseTreatmentStarted(gc, disease.Disease));
 
                             // We're starting to heal
                             disease.Invert();
@@ -131,7 +131,7 @@ namespace ZaraEngine.Diseases.Treatment
                         _consumedTimes.Add(currentTime);
 
                         if (isTreatedLevel)
-                            CheckIfTreatmentFinished(disease);
+                            CheckIfTreatmentFinished(disease, gc);
                     }
                 }
 
@@ -141,7 +141,7 @@ namespace ZaraEngine.Diseases.Treatment
             return false;
         }
 
-        private void CheckIfTreatmentFinished(ActiveDisease disease)
+        private void CheckIfTreatmentFinished(ActiveDisease disease, IGameController gc)
         {
             if (_inTimeConsumedCount == _countToConsume)
             {
@@ -156,7 +156,7 @@ namespace ZaraEngine.Diseases.Treatment
 
                     disease.Invert();
 
-                    Events.NotifyAll(l => l.DiseaseHealed(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseHealed(gc, disease.Disease));
                 }
 
                 //("Disease treatment finished.");
@@ -167,7 +167,7 @@ namespace ZaraEngine.Diseases.Treatment
 
                 if (!IsNodePart && IsStarted)
                 {
-                    Events.NotifyAll(l => l.DiseaseHealingContinued(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseHealingContinued(gc, disease.Disease));
                 }
             }
         }
@@ -204,7 +204,7 @@ namespace ZaraEngine.Diseases.Treatment
 
                 if (!IsNodePart)
                 {
-                    Events.NotifyAll(l => l.DiseaseStartProgressing(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseStartProgressing(gc, disease.Disease));
                 }
 
                 Reset();

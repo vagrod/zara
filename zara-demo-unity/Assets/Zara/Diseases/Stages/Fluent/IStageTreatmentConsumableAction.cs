@@ -17,7 +17,7 @@ namespace ZaraEngine.Diseases.Stages.Fluent
 
     public class ApplianceInfo
     {
-        public BodyParts BodyPart { get; set; }
+        public Player.BodyParts BodyPart { get; set; }
         public InventoryMedicalItemBase Appliance { get; set; }
     }
 }

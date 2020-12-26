@@ -60,7 +60,7 @@ namespace ZaraEngine.Diseases
             ComputeDisease();
             Refresh(gc.WorldTime.Value);
 
-            Events.NotifyAll(l => l.DiseaseTriggered(disease, linkedInjury, diseaseStartTime));
+            Events.NotifyAll(l => l.DiseaseTriggered(_gc, disease, linkedInjury, diseaseStartTime));
         }
 
         private void ComputeDisease()
@@ -446,7 +446,7 @@ namespace ZaraEngine.Diseases
             _changedVitals = null;
             _changedCritialStage = null;
 
-            Events.NotifyAll(l => l.DiseaseReActivated(Disease));
+            Events.NotifyAll(l => l.DiseaseReActivated(_gc, Disease));
         }
 
         #endregion
@@ -471,7 +471,7 @@ namespace ZaraEngine.Diseases
             }
         }
 
-        public void OnApplianceTaken(IGameController gc, InventoryMedicalItemBase appliance, BodyParts bodyPart)
+        public void OnApplianceTaken(IGameController gc, InventoryMedicalItemBase appliance, Player.BodyParts bodyPart)
         {
             if (IsTreated)
                 return;

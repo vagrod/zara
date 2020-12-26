@@ -42,7 +42,7 @@ namespace ZaraEngine.Diseases
             Stages = stages;
         }
 
-        public virtual void InitializeWithInjury(BodyParts initialInjury)
+        public virtual void InitializeWithInjury(Player.BodyParts initialInjury)
         {
             // Optional for children
         }

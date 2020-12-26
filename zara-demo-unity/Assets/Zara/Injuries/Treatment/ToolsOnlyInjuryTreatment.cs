@@ -79,7 +79,7 @@ namespace ZaraEngine.Injuries.Treatment
             _toolsOriginal = groups.ToList();
         }
 
-        public bool OnApplianceTaken(IGameController gc, InventoryMedicalItemBase tool, BodyParts bodyPart, ActiveInjury injury)
+        public bool OnApplianceTaken(IGameController gc, InventoryMedicalItemBase tool, Player.BodyParts bodyPart, ActiveInjury injury)
         {
             if (_toolsNeeded.Count == 0)
                 return true;
@@ -110,7 +110,7 @@ namespace ZaraEngine.Injuries.Treatment
 
                     OnTreated?.Invoke();
 
-                    Events.NotifyAll(l => l.InjuryHealed(injury.Injury));
+                    Events.NotifyAll(l => l.InjuryHealed(gc, injury.Injury));
                 }
 
                 return true;

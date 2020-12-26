@@ -22,7 +22,7 @@ namespace ZaraEngine.HealthEngine
 
             // Game events produced by the Inventory Effects Controller
 
-            _freezedByInventoryOverloadEvent = new FixedEvent("Player freezed by inventory overload", ev => Events.NotifyAll(l => l.InventoryOverload())) { AutoReset = true };
+            _freezedByInventoryOverloadEvent = new FixedEvent("Player freezed by inventory overload", ev => Events.NotifyAll(l => l.InventoryOverload(gc))) { AutoReset = true };
         }
 
         public void Update(float deltaTime)

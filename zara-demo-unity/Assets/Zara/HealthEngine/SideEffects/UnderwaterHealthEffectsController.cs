@@ -38,7 +38,7 @@ namespace ZaraEngine.HealthEngine
 
             // Game events produced by the Underwater Effects Controller
 
-            _drowningDeathEvent = new FixedEvent("Drowning death", ev => Events.NotifyAll(l => l.DeathByDrowning())) { AutoReset = true };
+            _drowningDeathEvent = new FixedEvent("Drowning death", ev => Events.NotifyAll(l => l.DeathByDrowning(gc))) { AutoReset = true };
         }
 
         public void Update(float gameSecondsSinceLastCall, float deltaTime)

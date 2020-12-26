@@ -6,7 +6,7 @@ namespace ZaraEngine.HealthEngine
     public class MedicalBodyAppliance
     {
 
-        public BodyParts BodyPart { get; set; }
+        public Player.BodyParts BodyPart { get; set; }
         public InventoryMedicalItemBase Item { get; set; }
 
     }

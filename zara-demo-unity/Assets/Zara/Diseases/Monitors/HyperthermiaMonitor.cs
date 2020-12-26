@@ -23,7 +23,7 @@ namespace ZaraEngine.Diseases
         public HyperthermiaMonitor(IGameController gc) : base(gc) 
         {
             // Events produced by the Hyperthermia Monitor
-            _hyperthermiaDeathEvent = new EventByChance("Hyperthermia death", ev => Events.NotifyAll(l => l.HyperthermiaDeath()), 0 /*will be set in Check()*/, ZaraEngine.HealthEngine.HealthController.HealthUpdateInterval /*will roll the dice on every Check() call */, ZaraEngine.HealthEngine.HealthController.HealthUpdateInterval) { AutoReset = true };
+            _hyperthermiaDeathEvent = new EventByChance("Hyperthermia death", ev => Events.NotifyAll(l => l.HyperthermiaDeath(gc)), 0 /*will be set in Check()*/, ZaraEngine.HealthEngine.HealthController.HealthUpdateInterval /*will roll the dice on every Check() call */, ZaraEngine.HealthEngine.HealthController.HealthUpdateInterval) { AutoReset = true };
         }
 
         public override void Check(float deltaTime)

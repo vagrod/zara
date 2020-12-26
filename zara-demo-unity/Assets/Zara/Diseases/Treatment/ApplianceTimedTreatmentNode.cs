@@ -59,7 +59,7 @@ namespace ZaraEngine.Diseases.Treatment
 
                     disease.DeclareDiseaseTreated();
 
-                    Events.NotifyAll(l => l.DiseaseHealed(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseHealed(gc, disease.Disease));
 
                     return true;
                 }
@@ -70,14 +70,14 @@ namespace ZaraEngine.Diseases.Treatment
 
                     disease.Invert();
 
-                    Events.NotifyAll(l => l.DiseaseTreatmentStarted(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseTreatmentStarted(gc, disease.Disease));
 
                     return true;
                 }
 
                 if (isApplied && _isOverallHealingStarted)
                 {
-                    Events.NotifyAll(l => l.DiseaseHealingContinued(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseHealingContinued(gc, disease.Disease));
                 }
             }
 
@@ -104,7 +104,7 @@ namespace ZaraEngine.Diseases.Treatment
                 {
                     _treatments.ForEach(x => x.IsFailed = false);
 
-                    Events.NotifyAll(l => l.DiseaseStartProgressing(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseStartProgressing(gc, disease.Disease));
                 }
             }
         }

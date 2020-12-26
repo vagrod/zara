@@ -157,7 +157,7 @@ namespace ZaraEngine.Diseases
             _monitors.ForEach(x => x.OnConsumeItem(item));
         }
 
-        public void OnApplianceTaken(InventoryMedicalItemBase item, BodyParts bodyPart)
+        public void OnApplianceTaken(InventoryMedicalItemBase item, Player.BodyParts bodyPart)
         {
             _monitors.ForEach(x => x.OnApplianceTaken(item, bodyPart));
         }

@@ -109,7 +109,7 @@ namespace ZaraEngine.HealthEngine
             timeoutedAgents.ForEach(x => _timesTaken.Remove(x));
         }
 
-        public void OnApplianceTaken(InventoryItemBase applianceItem, BodyParts bodyPart)
+        public void OnApplianceTaken(InventoryItemBase applianceItem, Player.BodyParts bodyPart)
         {
             if (_group.IsApplicableToGroup(applianceItem))
             {
@@ -190,7 +190,7 @@ namespace ZaraEngine.HealthEngine
     public interface IActiveMedicalAgent
     {
         void Check();
-        void OnApplianceTaken(InventoryItemBase applianceItem, BodyParts bodyPart);
+        void OnApplianceTaken(InventoryItemBase applianceItem, Player.BodyParts bodyPart);
         void OnConsumeItem(InventoryConsumableItemBase item);
         bool IsActive { get; }
         int ActiveDosesCount { get; }

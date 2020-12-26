@@ -40,8 +40,8 @@ namespace ZaraEngine.HealthEngine
 
             // Game events produced by Running Effects Controller
 
-            _intenseRunningOnEvent  = new FixedEvent("Intence running on trigger",  ev => Events.NotifyAll(l => l.IntenseRunningTriggeredOn())) { AutoReset = true };
-            _intenseRunningOffEvent = new FixedEvent("Intence running off trigger", ev => Events.NotifyAll(l => l.IntenseRunningTriggeredOff())) { AutoReset = true };
+            _intenseRunningOnEvent  = new FixedEvent("Intence running on trigger",  ev => Events.NotifyAll(l => l.IntenseRunningTriggeredOn(gc))) { AutoReset = true };
+            _intenseRunningOffEvent = new FixedEvent("Intence running off trigger", ev => Events.NotifyAll(l => l.IntenseRunningTriggeredOff(gc))) { AutoReset = true };
         }
 
         public void Update(float gameSecondsSinceLastCall, float deltaTime)

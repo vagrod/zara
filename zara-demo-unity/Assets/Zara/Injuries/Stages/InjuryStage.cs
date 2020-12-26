@@ -53,6 +53,6 @@ namespace ZaraEngine.Injuries.Stages
 
         public int DiseaseProbability { get; set; }
 
-        internal Func<IGameController, InventoryMedicalItemBase, BodyParts, ActiveInjury, bool> OnApplySpecialItem { get; set; }
+        internal Func<IGameController, InventoryMedicalItemBase, Player.BodyParts, ActiveInjury, bool> OnApplySpecialItem { get; set; }
     }
 }

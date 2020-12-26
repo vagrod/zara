@@ -469,7 +469,7 @@ namespace ZaraEngine.Inventory
 
                     vessel.TakeAwayOneDose();
 
-                    Events.NotifyAll(l => l.Drink());
+                    Events.NotifyAll(l => l.Drink(_gc));
 
                     RefreshRoughWeight();
 

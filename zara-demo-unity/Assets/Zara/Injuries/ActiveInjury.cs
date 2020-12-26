@@ -8,37 +8,6 @@ using ZaraEngine.StateManaging;
 namespace ZaraEngine.Injuries
 {
 
-    public enum BodyParts
-    {
-        Unknown = -1,
-        Forehead = 0,
-        Nape = 1,
-        Eye = 2,
-        Ear = 3,
-        Nose = 4,
-        Throat = 5,
-        LeftShoulder = 6,
-        RightShoulder = 7,
-        LeftForearm = 8,
-        RightForearm = 9,
-        LeftSpokebone = 10,
-        RightSpokebone = 11,
-        LeftBrush = 12,
-        RightBrush = 13,
-        LeftChest = 14,
-        RightChest = 15,
-        Belly = 16,
-        LeftHip = 17,
-        RightHip = 18,
-        LeftKnee = 19,
-        RightKnee = 20,
-        LeftShin = 21,
-        RightShin = 22,
-        LeftFoot = 23,
-        RightFoot = 24,
-        Back = 25
-    }
-
     [Serializable]
     public class ActiveInjury : IAcceptsStateChange
     {
@@ -55,7 +24,7 @@ namespace ZaraEngine.Injuries
             _gc = gc;
         }
 
-        public ActiveInjury(IGameController gc, Type injuryType, BodyParts bodyPart, DateTime injuryTriggerTime)
+        public ActiveInjury(IGameController gc, Type injuryType, Player.BodyParts bodyPart, DateTime injuryTriggerTime)
         {
             _gc = gc;
 
@@ -92,7 +61,7 @@ namespace ZaraEngine.Injuries
             get { return _isInjuryActivated; }
         }
 
-        public BodyParts BodyPart { get; set; }
+        public Player.BodyParts BodyPart { get; set; }
 
         public InjuryBase Injury { get; set; }
 
@@ -150,7 +119,7 @@ namespace ZaraEngine.Injuries
             return foundStage;
         }
 
-        public void OnApplianceTaken(IGameController gc, InventoryMedicalItemBase item, BodyParts bodyPart)
+        public void OnApplianceTaken(IGameController gc, InventoryMedicalItemBase item, Player.BodyParts bodyPart)
         {
             InjuryStage stage = null;
 

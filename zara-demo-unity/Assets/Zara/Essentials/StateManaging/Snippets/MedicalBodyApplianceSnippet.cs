@@ -11,7 +11,7 @@ namespace ZaraEngine.StateManaging
 
         #region Data Fields
 
-        public BodyParts BodyPart { get; set; }
+        public Player.BodyParts BodyPart { get; set; }
         public Guid ItemId { get; set; }
 
         #endregion 
@@ -31,7 +31,7 @@ namespace ZaraEngine.StateManaging
         {
             var c = (MedicalBodyApplianceContract)o;
 
-            BodyPart = (BodyParts)c.BodyPart;
+            BodyPart = (Player.BodyParts)c.BodyPart;
             ItemId = Guid.Parse(c.ItemId);
 
             ChildStates.Clear();

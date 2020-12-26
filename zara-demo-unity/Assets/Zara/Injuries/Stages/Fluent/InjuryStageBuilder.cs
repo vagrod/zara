@@ -174,7 +174,7 @@ namespace ZaraEngine.Injuries.Stages.Fluent
         }
 
 
-        public IInjuryStageEnd WithTreatmentAction(Func<IGameController, InventoryMedicalItemBase, BodyParts, ActiveInjury, bool> treatmentAction)
+        public IInjuryStageEnd WithTreatmentAction(Func<IGameController, InventoryMedicalItemBase, Player.BodyParts, ActiveInjury, bool> treatmentAction)
         {
             _obj.OnApplySpecialItem = treatmentAction;
 

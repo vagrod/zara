@@ -312,38 +312,38 @@ namespace ZaraEngine.HealthEngine {
 
             /******* VFX events produced by the Health Engine *******/
 
-            _diseaseDizzinessEvent            = new EventByChance("Disease dizziness check"             , ev => Events.NotifyAll(l => l.DiseaseDizziness()), DiseaseDizzinessCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _diseaseBlackoutsEvent            = new EventByChance("Disease blackouts check"             , ev => Events.NotifyAll(l => l.DiseaseBlackout()), DiseaseBlackoutsCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _lowBodyTemperatureDizzinessEvent = new EventByChance("Low body temperature dizziness check", ev => Events.NotifyAll(l => l.LowBodyTemperatureDizziness()), LowBodyTemperatureDizzinessCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _lowBodyTemperatureBlackoutsEvent = new EventByChance("Low body temperature blackouts check", ev => Events.NotifyAll(l => l.LowBodyTemperatureBlackout()), LowBodyTemperatureBlackoutsCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _bloodLevelDizzinessEvent         = new EventByChance("Blood level dizziness check"         , ev => Events.NotifyAll(l => l.LowBloodLevelDizziness()), BloodLevelDizzinessChance, BloodLevelDizzinessCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _bloodLevelBlackoutsEvent         = new EventByChance("Blood level blackouts check"         , ev => Events.NotifyAll(l => l.LowBloodLevelBlackout()), BloodLevelBlackoutChance, BloodLevelBlackoutsCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _lsdEffect                        = new EventByChance("LSD effect check"                    , ev => Events.NotifyAll(l => l.OverdoseEffect()), LsdEffectChance, LsdEffectCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _fatigueDizzinessEvent            = new EventByChance("Fatigue dizziness check"             , ev => Events.NotifyAll(l => l.FatigueDizziness()), FatigueDizzinessChance, FatigueDizzinessCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _fatigueBlackoutsEvent            = new EventByChance("Fatigue blackouts check"             , ev => Events.NotifyAll(l => l.FatigueBlackout()), FatigueBlackoutChance, FatigueBlackoutsCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _fatigueSleepEvent                = new EventByChance("Extreme fatigue sleep check"         , ev => Events.NotifyAll(l => l.ExtremeFatigueSleepTrigger()), FatigueSleepChance, FatigueSleepCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _sedativeSleepEvent               = new EventByChance("Sedative extreme sleep check"        , ev => Events.NotifyAll(l => l.SedativeSleepTrigger()), SedativeSleepChance, SedativeSleepCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _diseaseDizzinessEvent            = new EventByChance("Disease dizziness check"             , ev => Events.NotifyAll(l => l.DiseaseDizziness(_gc)), DiseaseDizzinessCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _diseaseBlackoutsEvent            = new EventByChance("Disease blackouts check"             , ev => Events.NotifyAll(l => l.DiseaseBlackout(_gc)), DiseaseBlackoutsCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _lowBodyTemperatureDizzinessEvent = new EventByChance("Low body temperature dizziness check", ev => Events.NotifyAll(l => l.LowBodyTemperatureDizziness(_gc)), LowBodyTemperatureDizzinessCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _lowBodyTemperatureBlackoutsEvent = new EventByChance("Low body temperature blackouts check", ev => Events.NotifyAll(l => l.LowBodyTemperatureBlackout(_gc)), LowBodyTemperatureBlackoutsCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _bloodLevelDizzinessEvent         = new EventByChance("Blood level dizziness check"         , ev => Events.NotifyAll(l => l.LowBloodLevelDizziness(_gc)), BloodLevelDizzinessChance, BloodLevelDizzinessCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _bloodLevelBlackoutsEvent         = new EventByChance("Blood level blackouts check"         , ev => Events.NotifyAll(l => l.LowBloodLevelBlackout(_gc)), BloodLevelBlackoutChance, BloodLevelBlackoutsCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _lsdEffect                        = new EventByChance("LSD effect check"                    , ev => Events.NotifyAll(l => l.OverdoseEffect(_gc)), LsdEffectChance, LsdEffectCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _fatigueDizzinessEvent            = new EventByChance("Fatigue dizziness check"             , ev => Events.NotifyAll(l => l.FatigueDizziness(_gc)), FatigueDizzinessChance, FatigueDizzinessCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _fatigueBlackoutsEvent            = new EventByChance("Fatigue blackouts check"             , ev => Events.NotifyAll(l => l.FatigueBlackout(_gc)), FatigueBlackoutChance, FatigueBlackoutsCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _fatigueSleepEvent                = new EventByChance("Extreme fatigue sleep check"         , ev => Events.NotifyAll(l => l.ExtremeFatigueSleepTrigger(_gc)), FatigueSleepChance, FatigueSleepCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _sedativeSleepEvent               = new EventByChance("Sedative extreme sleep check"        , ev => Events.NotifyAll(l => l.SedativeSleepTrigger(_gc)), SedativeSleepChance, SedativeSleepCheckInterval, HealthUpdateInterval) { AutoReset = true };
 
             /******* Health death events (deaths from natural causes) *******/
 
-            _diseaseDeathEvent                = new EventByChance("Disease death check"      , ev => Events.NotifyAll(l => l.DeathFromDisease((DiseaseDefinitionBase)ev.Param)), DiseaseDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _vitalsDeathEvent                 = new EventByChance("Vitals death check"       , ev => Events.NotifyAll(l => l.DeathFromBadVitals()), VitalsDeathChance, VitalsDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _overdoseDeathEvent               = new EventByChance("Overdose death check"     , ev => Events.NotifyAll(l => l.DeathByOverdose()), OverdoseDeathChance, OverdoseDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _heartFailureDeathEvent           = new EventByChance("Heart failure death check", ev => Events.NotifyAll(l => l.DeathByHeartFailure()), HeartFailureDeathChance, HeartFailureDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _bloodLevelDeathEvent             = new EventByChance("Blood level death check"  , ev => Events.NotifyAll(l => l.DeathByBloodLoss()), BloodLevelDeathChance, BloodLevelDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _dehydrationDeathEvent            = new EventByChance("Dehydration death check"  , ev => Events.NotifyAll(l => l.DeathByDehydration()), DehydrationDeathChance, DehydrationDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _starvationDeathEvent             = new EventByChance("Starvation death check"   , ev => Events.NotifyAll(l => l.DeathByStarvation()), StarvationDeathChance, StarvationDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _diseaseDeathEvent                = new EventByChance("Disease death check"      , ev => Events.NotifyAll(l => l.DeathFromDisease(_gc, (DiseaseDefinitionBase)ev.Param)), DiseaseDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _vitalsDeathEvent                 = new EventByChance("Vitals death check"       , ev => Events.NotifyAll(l => l.DeathFromBadVitals(_gc)), VitalsDeathChance, VitalsDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _overdoseDeathEvent               = new EventByChance("Overdose death check"     , ev => Events.NotifyAll(l => l.DeathByOverdose(_gc)), OverdoseDeathChance, OverdoseDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _heartFailureDeathEvent           = new EventByChance("Heart failure death check", ev => Events.NotifyAll(l => l.DeathByHeartFailure(_gc)), HeartFailureDeathChance, HeartFailureDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _bloodLevelDeathEvent             = new EventByChance("Blood level death check"  , ev => Events.NotifyAll(l => l.DeathByBloodLoss(_gc)), BloodLevelDeathChance, BloodLevelDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _dehydrationDeathEvent            = new EventByChance("Dehydration death check"  , ev => Events.NotifyAll(l => l.DeathByDehydration(_gc)), DehydrationDeathChance, DehydrationDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _starvationDeathEvent             = new EventByChance("Starvation death check"   , ev => Events.NotifyAll(l => l.DeathByStarvation(_gc)), StarvationDeathChance, StarvationDeathCheckInterval, HealthUpdateInterval) { AutoReset = true };
 
             /******* SFX events produced by the Health Engine *******/
 
-            _sneezeEvent = new EventByChance("Sneeze check", ev => Events.NotifyAll(l => l.Sneeze()), SneezeCheckInterval, HealthUpdateInterval) { AutoReset = true };
-            _coughEvent  = new EventByChance("Cough check" , ev => Events.NotifyAll(l => l.Cough((CoughLevels)ev.Param)), CoughCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _sneezeEvent = new EventByChance("Sneeze check", ev => Events.NotifyAll(l => l.Sneeze(_gc)), SneezeCheckInterval, HealthUpdateInterval) { AutoReset = true };
+            _coughEvent  = new EventByChance("Cough check" , ev => Events.NotifyAll(l => l.Cough(_gc, (CoughLevels)ev.Param)), CoughCheckInterval, HealthUpdateInterval) { AutoReset = true };
 
             /******* Other events produced by the Health Engine *******/
 
-            _highPressureEvent   = new FixedEvent("High pressure trigger"  , ev => Events.NotifyAll(l => l.HighBloodPressureTriggeredOn())) { AutoReset = true };
-            _normalPressureEvent = new FixedEvent("Normal pressure trigger", ev => Events.NotifyAll(l => l.HighBloodPressureTriggeredOff())) { AutoReset = true };
-            _drowningEvent       = new FixedEvent("Drowning", ev => Events.NotifyAll(l => l.StartDrowning())) { AutoReset = true };
+            _highPressureEvent   = new FixedEvent("High pressure trigger"  , ev => Events.NotifyAll(l => l.HighBloodPressureTriggeredOn(_gc))) { AutoReset = true };
+            _normalPressureEvent = new FixedEvent("Normal pressure trigger", ev => Events.NotifyAll(l => l.HighBloodPressureTriggeredOff(_gc))) { AutoReset = true };
+            _drowningEvent       = new FixedEvent("Drowning", ev => Events.NotifyAll(l => l.StartDrowning(_gc))) { AutoReset = true };
         }
 
         public void Initialize() {
@@ -559,10 +559,10 @@ namespace ZaraEngine.HealthEngine {
             if (superInjury != null) {
                 newState.IsActiveInjury = true;
                 newState.IsLegFracture = activeInjuries.Any(x => x.Item1.IsFracture && 
-                                          (x.Item2.BodyPart == BodyParts.LeftKnee || x.Item2.BodyPart == BodyParts.RightKnee ||
-                                           x.Item2.BodyPart == BodyParts.LeftShin || x.Item2.BodyPart == BodyParts.RightShin ||
-                                           x.Item2.BodyPart == BodyParts.LeftHip  || x.Item2.BodyPart == BodyParts.RightHip  ||
-                                           x.Item2.BodyPart == BodyParts.LeftFoot || x.Item2.BodyPart == BodyParts.RightFoot));
+                                          (x.Item2.BodyPart == Player.BodyParts.LeftKnee || x.Item2.BodyPart == Player.BodyParts.RightKnee ||
+                                           x.Item2.BodyPart == Player.BodyParts.LeftShin || x.Item2.BodyPart == Player.BodyParts.RightShin ||
+                                           x.Item2.BodyPart == Player.BodyParts.LeftHip  || x.Item2.BodyPart == Player.BodyParts.RightHip  ||
+                                           x.Item2.BodyPart == Player.BodyParts.LeftFoot || x.Item2.BodyPart == Player.BodyParts.RightFoot));
 
                 ProcessInjuryVitals(superInjury, newState, gameSecondsSinceLastCheck);
             }
@@ -746,7 +746,7 @@ namespace ZaraEngine.HealthEngine {
             // Reading cached value here
             if (Medicine.IsEpinephrineActive && Medicine.EpinephrineAgent.PercentOfActivity >= 50f)
             {
-                Events.NotifyAll(l => l.MovementSpeedChange(HealthyRunSpeed,HealthyWalkSpeed,HealthyCrouchSpeed));
+                Events.NotifyAll(l => l.MovementSpeedChange(_gc, HealthyRunSpeed,HealthyWalkSpeed,HealthyCrouchSpeed));
 
                 return;
             }
@@ -756,7 +756,7 @@ namespace ZaraEngine.HealthEngine {
             {
                 //("Player speed reduced by leg fracture");
 
-                Events.NotifyAll(l => l.MovementSpeedChange(CriticalCrouchSpeed,CriticalCrouchSpeed,CriticalCrouchSpeed));
+                Events.NotifyAll(l => l.MovementSpeedChange(_gc, CriticalCrouchSpeed,CriticalCrouchSpeed,CriticalCrouchSpeed));
 
                 return;
             }
@@ -764,7 +764,7 @@ namespace ZaraEngine.HealthEngine {
             // Too sick to move normally
             if (Status.CannotRun)
             {
-                Events.NotifyAll(l => l.MovementSpeedChange(CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
+                Events.NotifyAll(l => l.MovementSpeedChange(_gc, CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
 
                 return;
             }
@@ -781,31 +781,31 @@ namespace ZaraEngine.HealthEngine {
             if (Status.StaminaPercentage < StaminaLevelAffectingPlayerSpeed) {
                 //("Player speed reduced by stamina");
 
-                Events.NotifyAll(l => l.MovementSpeedChange(CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
+                Events.NotifyAll(l => l.MovementSpeedChange(_gc, CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
             } else {
                 if (state.FatiguePercentage > StaminaLevelRecoveringPlayerSpeed) {
                     //("Player speed reduced by fatigue");
 
-                    Events.NotifyAll(l => l.MovementSpeedChange(CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
+                    Events.NotifyAll(l => l.MovementSpeedChange(_gc, CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
                 } else {
-                    Events.NotifyAll(l => l.MovementSpeedChange(HealthyRunSpeed,HealthyWalkSpeed,HealthyCrouchSpeed));
+                    Events.NotifyAll(l => l.MovementSpeedChange(_gc, HealthyRunSpeed,HealthyWalkSpeed,HealthyCrouchSpeed));
                 }
             }
 
             if (_inventoryEffects.IsFreezed) {
-                Events.NotifyAll(l => l.MovementSpeedChange(0f,0f,0f));
+                Events.NotifyAll(l => l.MovementSpeedChange(_gc,0f,0f,0f));
             } else {
-                Events.NotifyAll(l => l.ApplyMovementSpeedDelta(_inventoryEffects.PlayerRunSpeedBonus,_inventoryEffects.PlayerWalkSpeedBonus,_inventoryEffects.PlayerCrouchSpeedBonus));
+                Events.NotifyAll(l => l.ApplyMovementSpeedDelta(_gc, _inventoryEffects.PlayerRunSpeedBonus,_inventoryEffects.PlayerWalkSpeedBonus,_inventoryEffects.PlayerCrouchSpeedBonus));
             }
 
-            Events.NotifyAll(l => l.ApplyMovementSpeedDelta(_clothesSideEffects.PlayerRunSpeedBonus,null,null));
+            Events.NotifyAll(l => l.ApplyMovementSpeedDelta(_gc, _clothesSideEffects.PlayerRunSpeedBonus,null,null));
         }
 
         private void ProcessDiseaseLevelEffects(DiseaseStage superStage) {
             if (superStage.CannotRun || superStage.Level == DiseaseLevels.Critical) {
                 //("Player speed reduced by disease");
 
-                Events.NotifyAll(l => l.MovementSpeedChange(CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
+                Events.NotifyAll(l => l.MovementSpeedChange(_gc, CriticalRunSpeed,CriticalWalkSpeed,CriticalCrouchSpeed));
             }
         }
 
@@ -881,10 +881,10 @@ namespace ZaraEngine.HealthEngine {
             }
 
             if (superInjury.WalkSpeedDecrease > 0) {
-                Events.NotifyAll(l => l.ApplyMovementSpeedDelta(-superInjury.WalkSpeedDecrease,-superInjury.WalkSpeedDecrease,null));
+                Events.NotifyAll(l => l.ApplyMovementSpeedDelta(_gc, -superInjury.WalkSpeedDecrease,-superInjury.WalkSpeedDecrease,null));
             }
 
-            Events.NotifyAll(l => l.ReportLimpingState(newState.IsLegFracture));
+            Events.NotifyAll(l => l.ReportLimpingState(_gc, newState.IsLegFracture));
         }
 
         #endregion
@@ -1316,7 +1316,7 @@ namespace ZaraEngine.HealthEngine {
             }
         }
 
-        public void OnApplianceTaken(InventoryMedicalItemBase applianceItem, BodyParts bodyPart) {
+        public void OnApplianceTaken(InventoryMedicalItemBase applianceItem, Player.BodyParts bodyPart) {
             if (applianceItem.Name == InventoryController.MedicalItems.Bandage ||
                 applianceItem.Name == InventoryController.MedicalItems.Splint)
             {
@@ -1336,7 +1336,7 @@ namespace ZaraEngine.HealthEngine {
                 applianceItem.Name == InventoryController.MedicalItems.Plasma ||
                 applianceItem.Name == InventoryController.MedicalItems.SuctionPump ||
                 applianceItem.Name == InventoryController.MedicalItems.BioactiveHydrogel)
-                Events.NotifyAll(l => l.InjectionApplied(applianceItem));
+                Events.NotifyAll(l => l.InjectionApplied(_gc, applianceItem));
         }
 
         #endregion

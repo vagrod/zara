@@ -419,14 +419,14 @@ public class GameController : MonoBehaviour, IGameController
 
         // Blood Poisoning requires a body part (from where blood poisoning has started) to be present. We'll do any body part, does not matter whitch one
         if(diseaseName == "BloodPoisoning"){
-            var injuryThatCausedBloodPoisoning = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType("ZaraEngine.Injuries.DeepCut"), ZaraEngine.Injuries.BodyParts.RightForearm, WorldTime.Value);
+            var injuryThatCausedBloodPoisoning = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType("ZaraEngine.Injuries.DeepCut"), ZaraEngine.Player.BodyParts.RightForearm, WorldTime.Value);
 
             _health.Status.ActiveInjuries.Add(injuryThatCausedBloodPoisoning);
             _health.Status.ActiveDiseases.Add(new ZaraEngine.Diseases.ActiveDisease(this, disease, injuryThatCausedBloodPoisoning, WorldTime.Value));
         } else {
              // Venom Poisoning requires a body part (from where venom poisoning has started) to be present. We'll do any body part, does not matter whitch one
             if(diseaseName == "VenomPoisoning"){
-                var injuryThatCausedVenomPoisoning = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType("ZaraEngine.Injuries.LightCut"), ZaraEngine.Injuries.BodyParts.LeftFoot, WorldTime.Value);
+                var injuryThatCausedVenomPoisoning = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType("ZaraEngine.Injuries.LightCut"), ZaraEngine.Player.BodyParts.LeftFoot, WorldTime.Value);
 
                 _health.Status.ActiveInjuries.Add(injuryThatCausedVenomPoisoning);
                 _health.Status.ActiveDiseases.Add(new ZaraEngine.Diseases.ActiveDisease(this, disease, injuryThatCausedVenomPoisoning, WorldTime.Value));
@@ -439,7 +439,7 @@ public class GameController : MonoBehaviour, IGameController
     public void OnSpawnInjuryClick(Dropdown e)
     {
         var injuryName = e.options[e.value].text?.Replace(" ", "");
-        var bodyPart = (ZaraEngine.Injuries.BodyParts)e.gameObject.transform.Find("BodyPart").GetComponent<Dropdown>().value;
+        var bodyPart = (ZaraEngine.Player.BodyParts)e.gameObject.transform.Find("BodyPart").GetComponent<Dropdown>().value;
         var injury = new ZaraEngine.Injuries.ActiveInjury(this, Type.GetType($"ZaraEngine.Injuries.{injuryName}"), bodyPart, WorldTime.Value);
 
         _health.Status.ActiveInjuries.Add(injury);
@@ -586,14 +586,14 @@ public class GameController : MonoBehaviour, IGameController
 
     /* Body appliances example code (injections, clothes) */
     public void OnInvenrotyApplyClick(Dropdown e){
-        var bodyPart = (ZaraEngine.Injuries.BodyParts)e.value;
+        var bodyPart = (ZaraEngine.Player.BodyParts)e.value;
         var s = SecondInventoryItemsList.options[SecondInventoryItemsList.value].text;
         var item = GetItemByComboText(s);
 
         TryProcessMedicalAppliance(item, bodyPart);
     }
 
-    private bool TryProcessMedicalAppliance(ZaraEngine.Inventory.IInventoryItem item, ZaraEngine.Injuries.BodyParts bodyPart){
+    private bool TryProcessMedicalAppliance(ZaraEngine.Inventory.IInventoryItem item, ZaraEngine.Player.BodyParts bodyPart){
         var appliance = item as ZaraEngine.Inventory.InventoryMedicalItemBase;
 
         if(item is null)
@@ -640,43 +640,43 @@ public class GameController : MonoBehaviour, IGameController
         return false;
     }
 
-    private bool IsApplianceApplicableToBodyPart(ZaraEngine.Inventory.InventoryMedicalItemBase item, ZaraEngine.Injuries.BodyParts bodyPart)
+    private bool IsApplianceApplicableToBodyPart(ZaraEngine.Inventory.InventoryMedicalItemBase item, ZaraEngine.Player.BodyParts bodyPart)
     {
         if (item.Name == InventoryController.MedicalItems.Splint)
         {
-            if (bodyPart != ZaraEngine.Injuries.BodyParts.LeftForearm &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftShin &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftSpokebone &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightForearm &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightShin &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightSpokebone)
+            if (bodyPart != ZaraEngine.Player.BodyParts.LeftForearm &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftShin &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftSpokebone &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightForearm &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightShin &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightSpokebone)
 
                 return false;
         }
 
         if (item.Name == InventoryController.MedicalItems.Bandage)
         {
-            if (bodyPart != ZaraEngine.Injuries.BodyParts.Belly &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.Forehead &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftBrush &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftChest &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftFoot &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftForearm &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftHip &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftKnee &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftShin &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftShoulder &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.LeftSpokebone &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightBrush &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightChest &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightFoot &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightForearm &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightHip &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightKnee &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightShin &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightShoulder &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.RightSpokebone &&
-                bodyPart != ZaraEngine.Injuries.BodyParts.Throat)
+            if (bodyPart != ZaraEngine.Player.BodyParts.Belly &&
+                bodyPart != ZaraEngine.Player.BodyParts.Forehead &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftBrush &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftChest &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftFoot &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftForearm &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftHip &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftKnee &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftShin &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftShoulder &&
+                bodyPart != ZaraEngine.Player.BodyParts.LeftSpokebone &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightBrush &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightChest &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightFoot &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightForearm &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightHip &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightKnee &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightShin &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightShoulder &&
+                bodyPart != ZaraEngine.Player.BodyParts.RightSpokebone &&
+                bodyPart != ZaraEngine.Player.BodyParts.Throat)
 
                 return false;
         }

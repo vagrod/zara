@@ -33,17 +33,17 @@ namespace ZaraEngine.Diseases.Treatment
 
         private int _inTimeConsumedCount;
 
-        private readonly BodyParts? _bodyPart;
+        private readonly Player.BodyParts? _bodyPart;
 
         public bool IsFinished { get; private set; }
         public bool IsStarted { get; private set; }
 
-        public ApplianceTimedTreatment(BodyParts? bodyPart, string applianceName) : this(bodyPart, applianceName, 0, 1)
+        public ApplianceTimedTreatment(Player.BodyParts? bodyPart, string applianceName) : this(bodyPart, applianceName, 0, 1)
         {
 
         }
 
-        public ApplianceTimedTreatment(BodyParts? bodyPart, string applianceName, int timingInGameMinutes, int count)
+        public ApplianceTimedTreatment(Player.BodyParts? bodyPart, string applianceName, int timingInGameMinutes, int count)
         {
             _bodyPart = bodyPart;
             _applianceName = applianceName;
@@ -51,12 +51,12 @@ namespace ZaraEngine.Diseases.Treatment
             _countToConsume = count;
         }
 
-        public ApplianceTimedTreatment(DiseaseLevels treatedLevel, BodyParts? bodyPart, string applianceName) : this(treatedLevel, bodyPart, applianceName, 0, 1)
+        public ApplianceTimedTreatment(DiseaseLevels treatedLevel, Player.BodyParts? bodyPart, string applianceName) : this(treatedLevel, bodyPart, applianceName, 0, 1)
         {
 
         }
 
-        public ApplianceTimedTreatment(DiseaseLevels treatedLevel, BodyParts? bodyPart, string applianceName, int timingInGameMinutes, int count)
+        public ApplianceTimedTreatment(DiseaseLevels treatedLevel, Player.BodyParts? bodyPart, string applianceName, int timingInGameMinutes, int count)
         {
             _treatedLevel = treatedLevel;
             _bodyPart = bodyPart;
@@ -105,7 +105,7 @@ namespace ZaraEngine.Diseases.Treatment
                     {
                         IsFinished = false;
 
-                        CheckIfTreatmentFinished(disease);
+                        CheckIfTreatmentFinished(disease, gc);
 
                         if (OnTreatmentStarted != null)
                             OnTreatmentStarted.Invoke();
@@ -118,7 +118,7 @@ namespace ZaraEngine.Diseases.Treatment
                         {
                             //("Overall disease treatment started.");
 
-                            Events.NotifyAll(l => l.DiseaseTreatmentStarted(disease.Disease));
+                            Events.NotifyAll(l => l.DiseaseTreatmentStarted(gc, disease.Disease));
 
                             // We're starting to heal
                             disease.Invert();
@@ -139,7 +139,7 @@ namespace ZaraEngine.Diseases.Treatment
                         _consumedTimes.Add(currentTime);
 
                         if (isTreatedLevel)
-                            CheckIfTreatmentFinished(disease);
+                            CheckIfTreatmentFinished(disease, gc);
                     }
                 }
 
@@ -149,7 +149,7 @@ namespace ZaraEngine.Diseases.Treatment
             return false;
         }
 
-        private void CheckIfTreatmentFinished(ActiveDisease disease)
+        private void CheckIfTreatmentFinished(ActiveDisease disease, IGameController gc)
         {
             if (_inTimeConsumedCount == _countToConsume)
             {
@@ -164,7 +164,7 @@ namespace ZaraEngine.Diseases.Treatment
 
                     disease.Invert();
 
-                    Events.NotifyAll(l => l.DiseaseHealed(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseHealed(gc, disease.Disease));
                 }
 
                 //("Disease treatment finished.");
@@ -175,7 +175,7 @@ namespace ZaraEngine.Diseases.Treatment
 
                 if (!IsNodePart && IsStarted)
                 {
-                    Events.NotifyAll(l => l.DiseaseHealingContinued(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseHealingContinued(gc, disease.Disease));
                 }
             }
         }
@@ -209,7 +209,7 @@ namespace ZaraEngine.Diseases.Treatment
 
                 if (!IsNodePart)
                 {
-                    Events.NotifyAll(l => l.DiseaseStartProgressing(disease.Disease));
+                    Events.NotifyAll(l => l.DiseaseStartProgressing(gc, disease.Disease));
                 }
 
                 Reset();

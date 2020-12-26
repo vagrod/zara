@@ -18,7 +18,7 @@ namespace ZaraEngine.StateManaging
         public bool IsInjuryActivated { get; set; }
         public bool IsChainInverted { get; set; }
         public DiseaseLevels? TreatedStageLevel { get; set; }
-        public BodyParts BodyPart { get; set; }
+        public Player.BodyParts BodyPart { get; set; }
         public DateTime InjuryTriggerTime { get; set; }
         public bool IsTreated { get; set; }
         public bool IsDiseaseProbabilityChecked { get; set; }
@@ -54,7 +54,7 @@ namespace ZaraEngine.StateManaging
             IsInjuryActivated = c.IsInjuryActivated;
             IsChainInverted = c.IsChainInverted;
             TreatedStageLevel = c.TreatedStageLevel.HasValue ? (DiseaseLevels?)c.TreatedStageLevel.Value : (DiseaseLevels?)null;
-            BodyPart = (BodyParts)c.BodyPart;
+            BodyPart = (Player.BodyParts)c.BodyPart;
             InjuryTriggerTime = c.InjuryTriggerTime.ToDateTime();
             IsTreated = c.IsTreated;
             IsDiseaseProbabilityChecked = c.IsDiseaseProbabilityChecked;

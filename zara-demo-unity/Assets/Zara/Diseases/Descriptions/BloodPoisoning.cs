@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using ZaraEngine.Diseases.Stages;
 using ZaraEngine.Diseases.Stages.Fluent;
 using ZaraEngine.Diseases.Treatment;
-using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
 using ZaraEngine.StateManaging;
 
@@ -14,7 +13,7 @@ namespace ZaraEngine.Diseases
         private ApplianceTimedTreatmentNode _worryingStageTreatment;
         private ApplianceTimedTreatmentNode _criticalingStageTreatment;
 
-        public BodyParts BodyPart { get; private set; }
+        public Player.BodyParts BodyPart { get; private set; }
 
         public BloodPoisoning()
         {
@@ -22,7 +21,7 @@ namespace ZaraEngine.Diseases
             RequiresBodyPart = true;
         }
 
-        public override void InitializeWithInjury(BodyParts initialInjury)
+        public override void InitializeWithInjury(Player.BodyParts initialInjury)
         {
             BodyPart = initialInjury;
 

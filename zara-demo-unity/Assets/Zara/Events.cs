@@ -8,54 +8,54 @@ namespace ZaraEngine {
 
     public interface IZaraEventsListener {
 
-        void InventoryOverload();
-        void IntenseRunningTriggeredOn();
-        void IntenseRunningTriggeredOff();
+        void InventoryOverload(IGameController sender);
+        void IntenseRunningTriggeredOn(IGameController sender);
+        void IntenseRunningTriggeredOff(IGameController sender);
 
-        void DiseaseDizziness();
-        void DiseaseBlackout();
-        void LowBodyTemperatureDizziness();
-        void LowBodyTemperatureBlackout();
-        void LowBloodLevelDizziness();
-        void LowBloodLevelBlackout();
-        void OverdoseEffect();
-        void FatigueDizziness();
-        void FatigueBlackout();
-        void ExtremeFatigueSleepTrigger();
-        void SedativeSleepTrigger();
-        void StartDrowning();
+        void DiseaseDizziness(IGameController sender);
+        void DiseaseBlackout(IGameController sender);
+        void LowBodyTemperatureDizziness(IGameController sender);
+        void LowBodyTemperatureBlackout(IGameController sender);
+        void LowBloodLevelDizziness(IGameController sender);
+        void LowBloodLevelBlackout(IGameController sender);
+        void OverdoseEffect(IGameController sender);
+        void FatigueDizziness(IGameController sender);
+        void FatigueBlackout(IGameController sender);
+        void ExtremeFatigueSleepTrigger(IGameController sender);
+        void SedativeSleepTrigger(IGameController sender);
+        void StartDrowning(IGameController sender);
 
-        void DeathByDrowning();
-        void DeathFromDisease(DiseaseDefinitionBase disease);
-        void DeathFromBadVitals();
-        void DeathByOverdose();
-        void DeathByHeartFailure();
-        void DeathByBloodLoss();
-        void DeathByDehydration();
-        void DeathByStarvation();
-        void HypothermiaDeath();
-        void HyperthermiaDeath();
+        void DeathByDrowning(IGameController sender);
+        void DeathFromDisease(IGameController sender, DiseaseDefinitionBase disease);
+        void DeathFromBadVitals(IGameController sender);
+        void DeathByOverdose(IGameController sender);
+        void DeathByHeartFailure(IGameController sender);
+        void DeathByBloodLoss(IGameController sender);
+        void DeathByDehydration(IGameController sender);
+        void DeathByStarvation(IGameController sender);
+        void HypothermiaDeath(IGameController sender);
+        void HyperthermiaDeath(IGameController sender);
 
-        void Sneeze();
-        void Cough(HealthEngine.HealthController.CoughLevels level);
-        void Drink();
+        void Sneeze(IGameController sender);
+        void Cough(IGameController sender, HealthEngine.HealthController.CoughLevels level);
+        void Drink(IGameController sender);
 
-        void HighBloodPressureTriggeredOn();
-        void HighBloodPressureTriggeredOff();
+        void HighBloodPressureTriggeredOn(IGameController sender);
+        void HighBloodPressureTriggeredOff(IGameController sender);
 
-        void DiseaseTreatmentStarted(DiseaseDefinitionBase disease);
-        void DiseaseHealingContinued(DiseaseDefinitionBase disease);
-        void DiseaseStartProgressing(DiseaseDefinitionBase disease);
-        void DiseaseTriggered(DiseaseDefinitionBase disease, ActiveInjury linkedInjury, DateTime diseaseStartTime);
-        void DiseaseReActivated(DiseaseDefinitionBase disease);
-        void DiseaseHealed(DiseaseDefinitionBase disease);
+        void DiseaseTreatmentStarted(IGameController sender, DiseaseDefinitionBase disease);
+        void DiseaseHealingContinued(IGameController sender, DiseaseDefinitionBase disease);
+        void DiseaseStartProgressing(IGameController sender, DiseaseDefinitionBase disease);
+        void DiseaseTriggered(IGameController sender, DiseaseDefinitionBase disease, ActiveInjury linkedInjury, DateTime diseaseStartTime);
+        void DiseaseReActivated(IGameController sender, DiseaseDefinitionBase disease);
+        void DiseaseHealed(IGameController sender, DiseaseDefinitionBase disease);
 
-        void InjuryHealed(InjuryBase injury);
-        void InjectionApplied(InventoryMedicalItemBase appliance);
+        void InjuryHealed(IGameController sender, InjuryBase injury);
+        void InjectionApplied(IGameController sender, InventoryMedicalItemBase appliance);
 
-        void MovementSpeedChange(float? newRunSpeed,float? newWalkSpeed, float? newCrouchSpeed);
-        void ApplyMovementSpeedDelta(float? newRunSpeedDelta,float? newWalkSpeedDelta, float? newCrouchSpeedDelta);
-        void ReportLimpingState(bool isLimping);
+        void MovementSpeedChange(IGameController sender, float? newRunSpeed,float? newWalkSpeed, float? newCrouchSpeed);
+        void ApplyMovementSpeedDelta(IGameController sender, float? newRunSpeedDelta,float? newWalkSpeedDelta, float? newCrouchSpeedDelta);
+        void ReportLimpingState(IGameController sender, bool isLimping);
     }
 
     public static class Events {
