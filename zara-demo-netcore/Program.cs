@@ -7,6 +7,9 @@ namespace ZaraEngine.NetCore.Demo
         // Declare two persons
         private static Person _person1 = null;
         private static Person _person2 = null;
+        
+        // Will be used for Zara random range function 
+        private static System.Random _random;
 
         // Trepliev will be in a normal climate
         private static WeatherDescription _weatherForTrepliev;
@@ -28,6 +31,10 @@ namespace ZaraEngine.NetCore.Demo
 
         static void Main(string[] args)
         {
+            // Initialize Zara randomizer
+            _random = new Random(DateTime.Now.Millisecond);
+            ZaraEngine.Helpers.InitializeRandomizer((a, b) => (float)(a + ((b-a) * _random.NextDouble())));
+            
             // Initialize our weather
             _weatherForTrepliev = new WeatherDescription();
             _weatherForTrepliev.SetTemperature(27f);

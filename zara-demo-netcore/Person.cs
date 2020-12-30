@@ -19,8 +19,7 @@ public class Person : IPerson
     private InventoryController _inventory;
 
     #region Demo app fields
-
-    private readonly System.Random _random;
+    
     private readonly string _name;
     private float _infoUpdateCounter;
     private Func<DateTime?> _getDateTimeFunc;
@@ -30,7 +29,6 @@ public class Person : IPerson
 
     public Person(string name){
         _name = name;
-        _random = new Random(DateTime.Now.Millisecond);
     }
 
     public void Initialize(WeatherDescription weather, Func<DateTime?> getDateTimeFunc, Func<TimesOfDay> getTimeOfDayFunc)
@@ -39,8 +37,6 @@ public class Person : IPerson
         _getTimeOfDayFunc = getTimeOfDayFunc;
 
         /* Zara Initialization code start =======>> */
-
-        ZaraEngine.Helpers.InitializeRandomizer((a, b) => (float)(a + ((b-a) * _random.NextDouble())));
 
         _health = new HealthController(this);
         _body = new BodyStatusController(this);
