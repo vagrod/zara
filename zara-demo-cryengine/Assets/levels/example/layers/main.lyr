@@ -1,0 +1,14 @@
+<ObjectLayer>
+ <Layer Name="Main" FullName="Main" GUID="1e2c9967-0f2e-0199-df9a-1531ebe4ab8e" Hidden="0" Frozen="0" Expanded="0" Type="0" Exportable="1" ExportLayerPak="1" DefaultLoaded="0" HavePhysics="1" IsDefaultColor="1" Color="4671303" Timestamp="1609680685">
+  <LayerObjects>
+   <Object Type="EntityWithComponent" Layer="Main" LayerGUID="1e2c9967-0f2e-0199-df9a-1531ebe4ab8e" Id="8033929b-7f3a-8575-c754-d86c8f248418" Name="SamplePerson" Rotate="1,0,0,0" Scale="1,1,1" ColorRGB="65535" UseCustomLevelLayerColor="0" MinSpec="0" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Entity" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component CryXmlVersion="2" TypeGUID="254a1019-1cbd-d49a-f7e9-94716e82b90c" TypeName="PersonEntity" GUID="13ff296b-fb48-9e11-399c-5073283d9139" Name="" UserAdded="true">
+      <properties />
+     </Component>
+    </Components>
+   </Object>
+  </LayerObjects>
+ </Layer>
+</ObjectLayer>

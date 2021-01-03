@@ -1,0 +1,12 @@
+<AssetMetadata version="0" type="Material" guid="af9285dd-9258-d9a5-6e41-77de6f03913e">
+ <Files>
+  <File path="sphere.mtl"/>
+ </Files>
+ <Details>
+  <Detail name="subMaterialCount">0</Detail>
+  <Detail name="textureCount">1</Detail>
+ </Details>
+ <Dependencies>
+  <Path usageCount="1">textures/marble_gen_068_diff.dds</Path>
+ </Dependencies>
+</AssetMetadata>

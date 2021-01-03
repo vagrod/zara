@@ -1,0 +1,11 @@
+{
+	"SeamlessEdit": false,
+	"KeepPivotCenter": false,
+	"HighlightElements": true,
+	"HighlightBoxSize": 0.024,
+	"DisplayDimensionHelper": true,
+	"DisplayTriangulation": false,
+	"DisplaySubdividedResult": true,
+	"DisplayVertexNormals": false,
+	"DisplayPolygonNormals": false
+}

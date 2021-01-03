@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="da07018a-2586-bdc4-3c9d-6dfb41dbc182">
+ <Files>
+  <File path="marble_gen_068_spec.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">512</Detail>
+  <Detail name="height">512</Detail>
+  <Detail name="mipCount">8</Detail>
+ </Details>
+</AssetMetadata>

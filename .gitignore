@@ -60,6 +60,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+*.bak
+
 /Bin
 /obj
 /zara-demo-unity/obj
@@ -67,5 +69,13 @@ crashlytics-build.properties
 /zara-demo-unity/Temp
 /zara-demo-netcore/obj
 /zara-demo-netcore/bin/Debug/netcoreapp3.1
+
 !ZaraEngine.NetCore.Demo.csproj
 !ZaraEngine.NetCore.Demo.sln
+
+/zara-demo-cryengine/bin
+/zara-demo-cryengine/Code/Game/obj
+/zara-demo-cryengine/logbackups
+/zara-demo-cryengine/user/shaders/cache
+/zara-demo-cryengine/user/testresults
+/zara-demo-cryengine/Game.lnk

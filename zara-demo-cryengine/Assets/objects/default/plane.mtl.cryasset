@@ -1,0 +1,12 @@
+<AssetMetadata version="0" type="Material" guid="5752ff9e-4b9d-44b1-0b99-cb8f76ef0648">
+ <Files>
+  <File path="plane.mtl"/>
+ </Files>
+ <Details>
+  <Detail name="subMaterialCount">0</Detail>
+  <Detail name="textureCount">1</Detail>
+ </Details>
+ <Dependencies>
+  <Path usageCount="1">textures/marble_gen_068_diff.dds</Path>
+ </Dependencies>
+</AssetMetadata>
