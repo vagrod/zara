@@ -3,11 +3,11 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/vagrod/zara/blob/master/LICENSE)
 [![made-with-csharp](https://img.shields.io/badge/Made%20with-C%23%207.3-%23239120.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-7)
 [![Unity-tested](https://img.shields.io/badge/Tested%20with-Unity%20-%23000000.svg?&logo=unity)](https://unity.com)
-[![cryengine-tested](https://img.shields.io/badge/Works%20with-CryEngine-blue?&logo=cryengine)](https://www.cryengine.com)
+[![cryengine-tested](https://img.shields.io/badge/Works%20with-CRYENGINE-blue?&logo=cryengine)](https://cryengine.com)
  
 Zara is written in independent C#. Demos available for:
 - Unity
-- CryEngine ([more on CryEngine example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
+- CRYENGINE ([more on CryEngine example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
 - .Net Core 3.1 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
 
 If you want to download only Zara code without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
