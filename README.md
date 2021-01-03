@@ -7,7 +7,7 @@
  
 Zara is written in independent C#. Demos available for:
 - Unity
-- CRYENGINE ([more on CryEngine example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
+- CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
 - .Net Core 3.1 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
 
 If you want to download only Zara code without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
