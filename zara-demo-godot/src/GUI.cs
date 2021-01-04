@@ -7,31 +7,31 @@ public class GUI : Node2D
 
     private const float StatsUpdateInterval = 1f; // real seconds
 
-	private PlayerNode _player;
-	private bool _isReady;
+    private PlayerNode _player;
+    private bool _isReady;
 
     private float _statsUpdateCounter;
 
-	private Label _vitalsData;
+    private Label _vitalsData;
     private Label _statsData;
     private Label _diseasesData;
 
     public override void _Ready()
     {
-		_vitalsData = GetNode<Label>("GUI/Holder/Left-column/Vitals-data");
+        _vitalsData = GetNode<Label>("GUI/Holder/Left-column/Vitals-data");
         _statsData = GetNode<Label>("GUI/Holder/Left-column/Stats-data");
         _diseasesData = GetNode<Label>("GUI/Holder/Left-column/Diseases-data");
     }
 
     public void SetPlayer(PlayerNode player)
     {
-		_player = player;
-		_isReady = true;
-	}
+        _player = player;
+        _isReady = true;
+    }
 
-	public override void _Process(float delta)
-	{
-		if (!_isReady) return;
+    public override void _Process(float delta)
+    {
+        if (!_isReady) return;
 
         _statsUpdateCounter += delta;
 
@@ -54,7 +54,7 @@ public class GUI : Node2D
             sb.AppendLine($"  - Fatigue: {stats.FatiguePercentage:0.0} %");
             sb.AppendLine($"  - Oxygen Level: {stats.OxygenPercentage:0.0} %");
             sb.AppendLine($"  - Wetness Level: {_player.Body.WetnessLevel:0.0} %");
-            
+
             _vitalsData.Text = sb.ToString();
 
             sb.Clear();
