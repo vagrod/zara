@@ -1,0 +1,80 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://fonts/Montserrat-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://src/GUI.cs" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 20
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 1 )
+
+[node name="Overlay" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="GUI" type="MarginContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 50.0
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Holder" type="HBoxContainer" parent="GUI"]
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 212.0
+margin_bottom = 186.0
+
+[node name="Left-column" type="VBoxContainer" parent="GUI/Holder"]
+margin_right = 187.0
+margin_bottom = 161.0
+
+[node name="Vitals-header" type="Label" parent="GUI/Holder/Left-column"]
+margin_right = 187.0
+margin_bottom = 26.0
+custom_fonts/font = SubResource( 1 )
+text = "Vitals:"
+
+[node name="Vitals-data" type="Label" parent="GUI/Holder/Left-column"]
+margin_top = 30.0
+margin_right = 187.0
+margin_bottom = 51.0
+custom_fonts/font = SubResource( 2 )
+
+[node name="Stats-header" type="Label" parent="GUI/Holder/Left-column"]
+margin_top = 55.0
+margin_right = 187.0
+margin_bottom = 81.0
+custom_fonts/font = SubResource( 3 )
+text = "Stats:"
+
+[node name="Stats-data" type="Label" parent="GUI/Holder/Left-column"]
+margin_top = 85.0
+margin_right = 187.0
+margin_bottom = 106.0
+custom_fonts/font = SubResource( 4 )
+
+[node name="Diseases-header" type="Label" parent="GUI/Holder/Left-column"]
+margin_top = 110.0
+margin_right = 187.0
+margin_bottom = 136.0
+custom_fonts/font = SubResource( 3 )
+text = "Diseases / Injuries:"
+
+[node name="Diseases-data" type="Label" parent="GUI/Holder/Left-column"]
+margin_top = 140.0
+margin_right = 187.0
+margin_bottom = 161.0
+custom_fonts/font = SubResource( 4 )
