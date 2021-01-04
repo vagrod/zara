@@ -1,4 +1,4 @@
-![Zara Survival Engine](http://imw.su/zaralogo_gh.png)
+![Zara Survival Engine](http://imw.su/zaralogo_gh-new.png)
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/vagrod/zara/blob/master/LICENSE)
 [![made-with-csharp](https://img.shields.io/badge/Made%20with-C%23%207.3-%23239120.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-7)
