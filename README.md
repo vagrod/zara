@@ -25,7 +25,7 @@ Zara is a complete package with full implementation of the inventory system with
 ***
 ![Zara Demo app screen](http://imw.su/ZaraDemoScreen_06.png)
 
-See [wiki](https://github.com/vagrod/zara/wiki) for the detailed technical info.
+See [wiki](https://github.com/vagrod/zara/wiki) for the detailed technical info. 
 
 Zara includes:
 + [Health Engine](https://github.com/vagrod/zara/wiki/Health-Controller) that controls dozen of parameters
