@@ -79,7 +79,12 @@ crashlytics-build.properties
 /zara-demo-cryengine/user/shaders/cache
 /zara-demo-cryengine/user/testresults
 /zara-demo-cryengine/Game.lnk
+
 /zara-demo-godot/.import
 /zara-demo-godot/.mono/assemblies
 /zara-demo-godot/.mono
+
+!zara-demo-godot.csproj
+!zara-demo-godot.sln
+
 *.old
