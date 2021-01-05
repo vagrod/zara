@@ -15,7 +15,7 @@ Zara is written in independent C#. Demos available for:
 If you want to download only Zara code without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
 It is also available in the Unity Asset format: [here](https://assetstore.unity.com/packages/templates/systems/zara-survival-engine-182386#description).
 
-Zara will be useful for you if you want your game to have weather-aware health control with ton of intertwined parameters, sleeping, fatigue, diseases (flu, food poisoning, venom poisoning, angina and so on), injuries (cuts, fractures), food spoiling, water disinfecting, inventory, crafting, clothes with different water/cold resistance levels and more. On a surface, it is really easy to [set up](https://github.com/vagrod/zara/wiki/Getting-Started) and use.
+Zara will be useful for you if you want your game to have weather-aware **health control** with ton of intertwined parameters, **sleeping**, **fatigue**, **diseases** (flu, food poisoning, venom poisoning, angina and so on), **injuries** (cuts, fractures), **food spoiling**, **water disinfecting**, **inventory**, **crafting**, **clothes** with different water/cold resistance levels and more. On a surface, it is really easy to [set up](https://github.com/vagrod/zara/wiki/Getting-Started) and use.
 
 Code is open, so you can customize everything for your particular game needs.
 
@@ -64,3 +64,6 @@ Zara will not eat your game performance: it is re-evaluating health state and al
 Zara is aware of the [game surroundings](https://github.com/vagrod/zara/wiki/Setting-Up-Weather-Description) if provided (air temperature, wind speed, rain intensity, time of day), and will adjust its parameters dynamically (in a hot day water will drain faster; in rainy cold day it is more likely to get flu, and so on.)
 
 If you have any technical questions about Zara, contact me: zara-survival (at) imw (dot) su
+
+Project is supported by [JetBrains Opensource Licensing Program](https://www.jetbrains.com/opensource/?from=ZaraSurvivalEngine)\
+![JetBrains](http://imw.su/jetbrains-variant-3.png)
