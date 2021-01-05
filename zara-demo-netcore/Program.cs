@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace ZaraEngine.NetCore.Demo
 {
@@ -75,24 +76,20 @@ namespace ZaraEngine.NetCore.Demo
         // Our "game loop"
         private static void LoopThread(object state)
         {
-            var time = DateTime.Now;
             var deltaTime = 0f;
-
+            var sw = new Stopwatch();
+            
             // Update warmth levels right away, so on a first "frame" we already have one calculated
             _person1.Body.UpdateWarmthLevelCacheImmediately();
             _person2.Body.UpdateWarmthLevelCacheImmediately();
-
+            
             while (true)
             {
-                // Calculate our delta time
-                deltaTime = (float)(DateTime.Now - time).TotalSeconds;
+                sw.Start();
 
                 // Update our persons
                 _person1.Update(deltaTime);
                 _person2.Update(deltaTime);
-
-                // Remember the new time
-                time = DateTime.Now;
 
                 // Progress our in-game time. We'll not change time of day to make everything simplier
                 _dateTimeCounter += deltaTime;
@@ -103,8 +100,15 @@ namespace ZaraEngine.NetCore.Demo
                     _dateTimeCounter = 0f;
                 }
 
-                // Cap the "framerate"
-                System.Threading.Thread.Sleep(33);
+                // Cap the "framerate" a little
+                System.Threading.Thread.Sleep(5);
+                
+                sw.Stop();
+
+                // Calculate our delta time
+                deltaTime = sw.ElapsedMilliseconds / 1000f;
+                
+                sw.Reset();
             }
         }
     }
