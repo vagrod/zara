@@ -7,10 +7,10 @@
 [![godot-tested](https://img.shields.io/badge/Works%20with-Godot-darkgreen?&logo=godot)](https://godotengine.org)
  
 Zara is written in independent C#. Demos available for:
-- Unity
-- CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
-- Godot ([more on Godot example](https://github.com/vagrod/zara/wiki/Godot-Demo-Notes))
-- .Net Core 3.1 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
+- ![Unity](http://imw.su/logo-unity.png) Unity
+- ![CRYENGINE](http://imw.su/logo-cry-.png) CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
+- ![Godot](http://imw.su/logo-godot.png) Godot ([more on Godot example](https://github.com/vagrod/zara/wiki/Godot-Demo-Notes))
+- ![netcore](http://imw.su/logo-net-.png) .Net Core 3.1 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
 
 If you want to download only Zara code without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
 It is also available in the Unity Asset format: [here](https://assetstore.unity.com/packages/templates/systems/zara-survival-engine-182386#description).
@@ -61,6 +61,6 @@ Zara is talking to your outside game world via [events](https://github.com/vagro
 
 Zara will not eat your game performance: it is re-evaluating health state and all needed internals only once a second (you can customize this to be any number).
 
-Zara is aware of the [game surroundings](https://github.com/vagrod/zara/wiki/Setting-Up-Weather-Desctiption) if provided (air temperature, wind speed, rain intensity, time of day), and will adjust its parameters dynamically (in a hot day water will drain faster; in rainy cold day it is more likely to get flu, and so on.)
+Zara is aware of the [game surroundings](https://github.com/vagrod/zara/wiki/Setting-Up-Weather-Description) if provided (air temperature, wind speed, rain intensity, time of day), and will adjust its parameters dynamically (in a hot day water will drain faster; in rainy cold day it is more likely to get flu, and so on.)
 
 If you have any technical questions about Zara, contact me: zara-survival (at) imw (dot) su
