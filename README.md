@@ -5,7 +5,7 @@
 [![Unity-tested](https://img.shields.io/badge/Tested%20with-Unity%20-%23000000.svg?&logo=unity)](https://unity.com)
 [![cryengine-tested](https://img.shields.io/badge/Works%20with-CRYENGINE-blue?&logo=cryengine)](https://cryengine.com)
 [![godot-tested](https://img.shields.io/badge/Works%20with-Godot-darkgreen?&logo=godot)](https://godotengine.org)
- 
+
 Zara is written in independent C#. Demos available for:
 - ![Unity](http://imw.su/logo-unity.png) Unity
 - ![CRYENGINE](http://imw.su/logo-cry-.png) CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
@@ -25,7 +25,7 @@ Zara is a complete package with full implementation of the inventory system with
 ***
 ![Zara Demo app screen](http://imw.su/ZaraDemoScreen_06.png)
 
-See [wiki](https://github.com/vagrod/zara/wiki) for the detailed technical info. 
+See [wiki](https://github.com/vagrod/zara/wiki) for the detailed technical info.
 
 Zara includes:
 + [Health Engine](https://github.com/vagrod/zara/wiki/Health-Controller) that controls dozen of parameters
@@ -40,9 +40,9 @@ Zara includes:
 + [Inventory Engine](https://github.com/vagrod/zara/wiki/Inventory-Controller) with [crafting](https://github.com/vagrod/zara/wiki/How-to-Combine-Items)
 + [Clothes and Clothes Groups](https://github.com/vagrod/zara/wiki/Clothes)
 + Built-in [Sleeping](https://github.com/vagrod/zara/wiki/How-To-Sleep) mechanics
- 
+
  and more.
- 
+
  Supports the following causes of death:
  ~~~
  Drowning
@@ -54,9 +54,9 @@ Zara includes:
  Heart Failure (can be caused by eating incompatible medicine)
  Blood Loss (injuries)
  Dehydration
- Starvation 
+ Starvation
  ~~~
- 
+
 Zara is talking to your outside game world via [events](https://github.com/vagrod/zara/wiki/Handling-Zara-Events) (you can subscribe and listen to them from anywhere).
 
 Zara will not eat your game performance: it is re-evaluating health state and all needed internals only once a second (you can customize this to be any number).

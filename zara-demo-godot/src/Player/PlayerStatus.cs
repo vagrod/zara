@@ -1,7 +1,7 @@
 using ZaraEngine.Player;
 
-public class PlayerStatus : IPlayerStatus {
-
+public class PlayerStatus : IPlayerStatus
+{
     private bool _isStanding = true;
     private bool _isWalking;
     private bool _isSwimming;
@@ -23,61 +23,72 @@ public class PlayerStatus : IPlayerStatus {
     public float WalkSpeed => _walkSpeed;
     public float CrouchSpeed => _crouchSpeed;
 
-    public void SetRunning(bool value){
-        if(value){
+    public void SetRunning(bool value)
+    {
+        if (value)
+        {
             _isStanding = false;
             _isWalking = false;
             _isRunning = true;
-        } else {
+        }
+        else
+        {
             _isStanding = true;
             _isWalking = false;
             _isRunning = false;
         }
     }
 
-    public void SetWalking(bool value){
+    public void SetWalking(bool value)
+    {
         _isStanding = !value;
         _isWalking = value;
         _isRunning = false;
     }
 
-     public void SetStanding(bool value){
+    public void SetStanding(bool value)
+    {
         _isWalking = !value;
         _isStanding = value;
         _isRunning = false;
     }
 
-    public void SetWalkSpeed(float value){
+    public void SetWalkSpeed(float value)
+    {
         _walkSpeed = value;
     }
 
-    public void SetRunSpeed(float value){
+    public void SetRunSpeed(float value)
+    {
         _runSpeed = value;
     }
 
-    public void SetCrouchSpeed(float value){
+    public void SetCrouchSpeed(float value)
+    {
         _crouchSpeed = value;
     }
 
-    public void SetLimping(bool value){
+    public void SetLimping(bool value)
+    {
         _isLimping = value;
         _isStanding = false;
         _isRunning = false;
         _isWalking = false;
     }
 
-     public void SetSwimming(bool value){
+    public void SetSwimming(bool value)
+    {
         _isSwimming = value;
         _isStanding = false;
         _isRunning = false;
         _isWalking = false;
     }
 
-    public void SetUnderwater(bool value){
+    public void SetUnderwater(bool value)
+    {
         _isUnderWater = value;
         _isStanding = false;
         _isRunning = false;
         _isWalking = false;
     }
-
 }

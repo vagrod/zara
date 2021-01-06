@@ -4,7 +4,6 @@ using System.Text;
 
 public class GUI : Node2D
 {
-
     private const float StatsUpdateInterval = 1f; // real seconds
 
     private PlayerNode _player;
@@ -31,7 +30,7 @@ public class GUI : Node2D
 
     public override void _Process(float delta)
     {
-        if (!_isReady) return;
+        if (!_isReady) { return; }
 
         _statsUpdateCounter += delta;
 
@@ -72,6 +71,5 @@ public class GUI : Node2D
 
             _diseasesData.Text = sb.ToString();
         }
-
     }
 }
