@@ -63,7 +63,9 @@ Zara will not eat your game performance: it is re-evaluating health state and al
 
 Zara is aware of the [game surroundings](https://github.com/vagrod/zara/wiki/Setting-Up-Weather-Description) if provided (air temperature, wind speed, rain intensity, time of day), and will adjust its parameters dynamically (in a hot day water will drain faster; in rainy cold day it is more likely to get flu, and so on.)
 
-If you have any technical questions about Zara, contact me: zara-survival (at) imw (dot) su
+If you have any technical questions about Zara, contact me: zara-survival (at) imw (dot) su.\
+[Dedicated Unity thread](https://forum.unity.com/threads/zara-survival-engine-c.989233/)\
+[Dedicated Godot thread](https://godotforums.org/discussion/25104/zara-survival-engine-c)
 
 Project is supported by [JetBrains Opensource Licensing Program](https://www.jetbrains.com/opensource/?from=ZaraSurvivalEngine)\
 ![JetBrains](http://imw.su/jetbrains-variant-3.png)
