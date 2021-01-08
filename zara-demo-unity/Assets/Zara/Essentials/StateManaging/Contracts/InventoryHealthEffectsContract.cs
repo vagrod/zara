@@ -9,6 +9,8 @@ namespace ZaraEngine.StateManaging
         public float PlayerWalkSpeedBonus;
         public float PlayerRunSpeedBonus;
         public float PlayerCrouchSpeedBonus;
+        public float FatigueDrainBonus;
+        public float StaminaDrainBonus;
         public bool IsFreezed;
 
         public FixedEventContract FreezedByInventoryOverloadEvent;

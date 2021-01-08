@@ -68,6 +68,8 @@ namespace ZaraEngine.HealthEngine
                 PlayerRunSpeedBonus = this.PlayerRunSpeedBonus,
                 PlayerWalkSpeedBonus = this.PlayerWalkSpeedBonus,
                 PlayerCrouchSpeedBonus = this.PlayerCrouchSpeedBonus,
+                FatigueDrainBonus = this.FatigueDrainBonus,
+                StaminaDrainBonus = this.StaminaDrainBonus,
                 IsFreezed = this.IsFreezed
             };
 
@@ -83,6 +85,8 @@ namespace ZaraEngine.HealthEngine
             PlayerRunSpeedBonus = state.PlayerRunSpeedBonus;
             PlayerWalkSpeedBonus = state.PlayerWalkSpeedBonus;
             PlayerCrouchSpeedBonus = state.PlayerCrouchSpeedBonus;
+            FatigueDrainBonus = state.FatigueDrainBonus;
+            StaminaDrainBonus = state.StaminaDrainBonus;
             IsFreezed = state.IsFreezed;
 
             _freezedByInventoryOverloadEvent.RestoreState(state.ChildStates["FreezedByInventoryOverloadEvent"]);

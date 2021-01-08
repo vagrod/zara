@@ -11,6 +11,8 @@
         public float PlayerWalkSpeedBonus { get; set; }
         public float PlayerRunSpeedBonus { get; set; }
         public float PlayerCrouchSpeedBonus { get; set; }
+        public float FatigueDrainBonus { get; set; }
+        public float StaminaDrainBonus { get; set; }
         public bool IsFreezed { get; set; }
 
         #endregion 
@@ -22,6 +24,8 @@
                 PlayerWalkSpeedBonus = this.PlayerWalkSpeedBonus,
                 PlayerRunSpeedBonus = this.PlayerRunSpeedBonus,
                 PlayerCrouchSpeedBonus = this.PlayerCrouchSpeedBonus,
+                FatigueDrainBonus = this.FatigueDrainBonus,
+                StaminaDrainBonus = this.StaminaDrainBonus,
                 IsFreezed = this.IsFreezed
             };
 
@@ -37,6 +41,8 @@
             PlayerWalkSpeedBonus = c.PlayerWalkSpeedBonus;
             PlayerRunSpeedBonus = c.PlayerRunSpeedBonus;
             PlayerCrouchSpeedBonus = c.PlayerCrouchSpeedBonus;
+            FatigueDrainBonus = c.FatigueDrainBonus;
+            StaminaDrainBonus = c.StaminaDrainBonus;
             IsFreezed = c.IsFreezed;
 
             ChildStates.Clear();
