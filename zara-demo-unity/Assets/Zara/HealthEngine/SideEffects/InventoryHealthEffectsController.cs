@@ -56,7 +56,7 @@ namespace ZaraEngine.HealthEngine
             PlayerWalkSpeedBonus = -Helpers.Lerp(0f, _gc.Player.WalkSpeed / 2f, invPerc);
             PlayerCrouchSpeedBonus = -Helpers.Lerp(0f, _gc.Player.CrouchSpeed / 3f, invPerc);
             FatigueDrainBonus = Helpers.Lerp(0f, MaxFatigueDrainBonus, invPerc);
-            StaminaDrainBonus = Helpers.Lerp(0f, MaxStaminaDrainBonus, 1f);
+            StaminaDrainBonus = Helpers.Lerp(0f, MaxStaminaDrainBonus, invPerc);
         }
 
         #region State Manage
