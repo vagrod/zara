@@ -10,7 +10,7 @@ using ZaraEngine.Inventory;
 using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.HealthEngine {
-    [Serializable]
+    
     public class HealthController : IAcceptsStateChange {
 
         private readonly IGameController _gc;
@@ -448,8 +448,10 @@ namespace ZaraEngine.HealthEngine {
 
             var gameSecondsSinceLastCheck = (float)(_gc.WorldTime.Value - newState.CheckTime).TotalSeconds;
 
+            // Base fatigue value calculation
             _actualFatigueValue += (gameSecondsSinceLastCheck / (3600f * HoursToReach100Fatigue)) * 100;
 
+            // How Medical agents affect fatigue
             if (Medicine.IsEpinephrineActive)
             {
                 newState.FatiguePercentage = _actualFatigueValue * (1f - Medicine.EpinephrineAgent.PercentOfActivity / 100f);
@@ -466,6 +468,32 @@ namespace ZaraEngine.HealthEngine {
             else
             {
                 newState.FatiguePercentage = _actualFatigueValue;
+            }
+            
+            // How inventory weight affects fatigue and stamina
+            // It does not if epinephrine is active in the blood
+            if (!Medicine.IsEpinephrineActive || Medicine.EpinephrineAgent.PercentOfActivity < 50f)
+            {
+                var multiplier = 0f;
+
+                if (_gc.Player.IsWalking || _gc.Player.IsSwimming || _gc.Player.IsUnderWater)
+                    multiplier = 1f;
+                
+                if (_gc.Player.IsRunning)
+                    multiplier = 2f;
+                    
+                var d = _inventoryEffects.FatigueDrainBonus * multiplier;
+                
+                _actualFatigueValue += d * gameSecondsSinceLastCall;
+                newState.FatiguePercentage += d * gameSecondsSinceLastCall;
+                
+                // ("Added fatigue " + (d * gameSecondsSinceLastCall));
+
+                d = _inventoryEffects.StaminaDrainBonus * multiplier;
+                
+                newState.SetStaminaLevel(newState.StaminaPercentage -= d * gameSecondsSinceLastCall);
+                
+                // ("Decreased stamina " + (d * gameSecondsSinceLastCall));
             }
 
             if (newState.FatiguePercentage > 100f)

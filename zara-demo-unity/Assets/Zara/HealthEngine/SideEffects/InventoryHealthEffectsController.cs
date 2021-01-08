@@ -6,6 +6,9 @@ namespace ZaraEngine.HealthEngine
     public class InventoryHealthEffectsController : IAcceptsStateChange
     {
 
+        private const float MaxFatigueDrainBonus = 0.01f; // percents per game second
+        private const float MaxStaminaDrainBonus = 0.02f; // percents per game second
+        
         private readonly IGameController _gc;
 
         private readonly FixedEvent _freezedByInventoryOverloadEvent;
@@ -13,6 +16,8 @@ namespace ZaraEngine.HealthEngine
         public float PlayerWalkSpeedBonus { get; private set; }
         public float PlayerRunSpeedBonus { get; private set; }
         public float PlayerCrouchSpeedBonus { get; private set; }
+        public float FatigueDrainBonus { get; private set; } // percents per game second
+        public float StaminaDrainBonus { get; private set; } // percents per game second
 
         public bool IsFreezed { get; private set; }
 
@@ -50,6 +55,8 @@ namespace ZaraEngine.HealthEngine
             PlayerRunSpeedBonus = -Helpers.Lerp(0f, _gc.Player.RunSpeed / 2f, invPerc);
             PlayerWalkSpeedBonus = -Helpers.Lerp(0f, _gc.Player.WalkSpeed / 2f, invPerc);
             PlayerCrouchSpeedBonus = -Helpers.Lerp(0f, _gc.Player.CrouchSpeed / 3f, invPerc);
+            FatigueDrainBonus = Helpers.Lerp(0f, MaxFatigueDrainBonus, invPerc);
+            StaminaDrainBonus = Helpers.Lerp(0f, MaxStaminaDrainBonus, 1f);
         }
 
         #region State Manage
