@@ -7,8 +7,7 @@ using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Injuries
 {
-
-    [Serializable]
+    
     public class ActiveInjury : IAcceptsStateChange
     {
 

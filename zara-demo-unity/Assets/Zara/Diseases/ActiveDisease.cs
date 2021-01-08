@@ -9,7 +9,7 @@ using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Diseases
 {
-    [Serializable]
+    
     public class ActiveDisease: IAcceptsStateChange
     {
 

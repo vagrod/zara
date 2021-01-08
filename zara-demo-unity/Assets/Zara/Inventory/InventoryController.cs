@@ -5,11 +5,11 @@ using ZaraEngine.StateManaging;
 
 namespace ZaraEngine.Inventory
 {
-    [Serializable]
+    
     public class InventoryController : IAcceptsStateChange
     {
 
-        public const float MaximumInventoryWeight = 55000f; // gramms
+        public const float MaximumInventoryWeight = 55000f; // grams
 
         public float RoughWeight { get; private set; }
 
