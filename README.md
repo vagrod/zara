@@ -17,7 +17,7 @@ Zara is written in independent C#. Demos available for:
 If you want to download only Zara code without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
 It is also available in the Unity Asset format: [here](https://assetstore.unity.com/packages/templates/systems/zara-survival-engine-182386#description).
 
-[What is cooking for v1.05?](https://github.com/vagrod/zara/wiki/Release-Notes)
+[What's cooking for v1.05?](https://github.com/vagrod/zara/wiki/Release-Notes)
 
 Zara will be useful for you if you want your game to have weather-aware **health control** with ton of intertwined parameters, **sleeping**, **fatigue**, **diseases** (flu, food poisoning, venom poisoning, angina and so on), **injuries** (cuts, fractures), **food spoiling**, **water disinfecting**, **inventory**, **crafting**, **clothes** with different water/cold resistance levels and more. On a surface, it is really easy to [set up](https://github.com/vagrod/zara/wiki/Getting-Started) and use.
 
