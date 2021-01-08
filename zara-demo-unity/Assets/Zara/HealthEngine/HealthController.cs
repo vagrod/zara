@@ -491,7 +491,7 @@ namespace ZaraEngine.HealthEngine {
 
                 d = _inventoryEffects.StaminaDrainBonus * multiplier;
                 
-                newState.SetStaminaLevel(newState.StaminaPercentage -= d * gameSecondsSinceLastCall);
+                newState.SetStaminaLevel(newState.StaminaPercentage - d * gameSecondsSinceLastCall);
                 
                 // ("Decreased stamina " + (d * gameSecondsSinceLastCall));
             }
@@ -871,10 +871,10 @@ namespace ZaraEngine.HealthEngine {
 
             if (!UnconsciousMode) {
                 if (superStage.StaminaDrainPerSecond.HasValue)
-                    newState.SetStaminaLevel(newState.StaminaPercentage -= superStage.StaminaDrainPerSecond.Value * gameSecondsSinceLastCall);
+                    newState.SetStaminaLevel(newState.StaminaPercentage - superStage.StaminaDrainPerSecond.Value * gameSecondsSinceLastCall);
 
                 if (superStage.FoodDrainPerSecond.HasValue)
-                    newState.SetFoodLevel(newState.FoodPercentage -= superStage.FoodDrainPerSecond.Value * gameSecondsSinceLastCall);
+                    newState.SetFoodLevel(newState.FoodPercentage - superStage.FoodDrainPerSecond.Value * gameSecondsSinceLastCall);
 
                 if (superStage.WaterDrainPerSecond.HasValue)
                     newState.SetWaterLevel(newState.WaterPercentage - superStage.WaterDrainPerSecond.Value * gameSecondsSinceLastCall);
