@@ -7,6 +7,8 @@
 [![godot-tested](https://img.shields.io/badge/Works%20with-Godot-darkgreen?&logo=godot)](https://godotengine.org)
 [![flax-tested](https://img.shields.io/badge/Works%20with-Flax-blue?&logo=flax)](https://flaxengine.com)
 
+## Platforms
+
 Zara is written in independent C#. Demos available for:
 - ![Unity](http://imw.su/logo-unity.png) Unity
 - ![CRYENGINE](http://imw.su/logo-cry-.png) CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
@@ -14,10 +16,16 @@ Zara is written in independent C#. Demos available for:
 - ![Flax](http://imw.su/logo-flax-.png) Flax ([more on Flax example](https://github.com/vagrod/zara/wiki/Flax-Demo-Notes))
 - ![netcore](http://imw.su/logo-net-.png) .Net Core 3.1 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
 
+## Download
+
 If you want to download only Zara code without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
 It is also available in the Unity Asset format: [here](https://assetstore.unity.com/packages/templates/systems/zara-survival-engine-182386#description).
 
+All you need to do to include Zara into your project - is to grab `Zara` folder with its `cs` sources, and you're done!
+
 [What's cooking for v1.05?](https://github.com/vagrod/zara/wiki/Release-Notes)
+
+## Description
 
 Zara will be useful for you if you want your game to have weather-aware **health control** with ton of intertwined parameters, **sleeping**, **fatigue**, **diseases** (flu, food poisoning, venom poisoning, angina and so on), **injuries** (cuts, fractures), **food spoiling**, **water disinfecting**, **inventory**, **crafting**, **clothes** with different water/cold resistance levels and more. On a surface, it is really easy to [set up](https://github.com/vagrod/zara/wiki/Getting-Started) and use.
 
@@ -66,6 +74,8 @@ Zara is talking to your outside game world via [events](https://github.com/vagro
 Zara will not eat your game performance: it is re-evaluating health state and all needed internals only once a second (you can customize this to be any number).
 
 Zara is aware of the [game surroundings](https://github.com/vagrod/zara/wiki/Setting-Up-Weather-Description) if provided (air temperature, wind speed, rain intensity, time of day), and will adjust its parameters dynamically (in a hot day water will drain faster; in rainy cold day it is more likely to get flu, and so on.)
+
+## Links and Contacts
 
 If you have any technical questions about Zara, contact me: zara-survival (at) imw (dot) su.\
 [Dedicated Unity thread](https://forum.unity.com/threads/zara-survival-engine-c.989233/)\
