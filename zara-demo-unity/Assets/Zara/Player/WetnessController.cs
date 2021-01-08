@@ -13,6 +13,9 @@ namespace ZaraEngine.Player
         public const float ColdTemperature   = 10;  // C (and higher)
         public const float FreezeTemperature = -80; // C (and higher)
 
+        private const float WindSpeedForMaxDrying = 7f; // m/s
+        private const float MaxWindDryingRate = 0.08f;  // percent per real second
+        
         public const float HotDryRate    = 0.05f;   // percent per real second
         public const float NormalDryRate = 0.025f;  // percent per real second
         public const float ColdDryRate   = 0.01f;   // percent per real second
@@ -118,10 +121,12 @@ namespace ZaraEngine.Player
             else if (_gc.Weather.Temperature >= HotTemperature)
                 currentRate = HotDryRate;
 
-            var heatBonus = 0f;
-            var dryingRate = currentRate + heatBonus;
+            var windPerc = _gc.Weather.WindSpeed / WindSpeedForMaxDrying;
+            var windBonus = Helpers.Lerp(0f, MaxWindDryingRate, windPerc > 1f ? 1f : windPerc); 
+            
+            var dryingRate = currentRate + windBonus;
 
-            ////("Drying rate " + dryingRate + "% per second");
+            // ("Drying rate " + dryingRate + "% per second");
 
             _wetnessValue -= dryingRate;
 
