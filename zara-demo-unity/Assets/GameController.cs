@@ -123,10 +123,10 @@ public class GameController : MonoBehaviour, IGameController
 
         var meat = new ZaraEngine.Inventory.Meat { Count = 1 };
 
-        // We just gathered two of spoiled Meat. If will spoil in MinutesUntilSpoiled game minutes
+        // We just gathered two of spoiled Meat.
         meat.AddGatheringInfo(WorldTime.Value.AddHours(-5), 2);
         
-        // We just gathered one item on fresh food
+        // We just gathered one item on fresh Meat. If will spoil in MinutesUntilSpoiled game minutes.
         meat.AddGatheringInfo(WorldTime.Value, 1);
 
         _inventory.AddItem(new ZaraEngine.Inventory.Cloth { Count = 20 });
