@@ -613,26 +613,17 @@ namespace ZaraEngine.Inventory
 
             if (HasItem(newItem.Name))
             {
-                var inventoryItem = Items.First(x => x.Name == newItem.Name);    
+                var inventoryItem = Items.First(x => x.Name == newItem.Name);
 
-                var food = inventoryItem as FoodItemBase;
-                if (food != null)
+                if (!(inventoryItem is FoodItemBase))
                 {
-                    food.AddGatheringInfo(_gc.WorldTime.Value, cnt);
+                    inventoryItem.Count += cnt;    
                 }
-
-                inventoryItem.Count += cnt;
 
                 return;
             }
 
             newItem.Count = cnt;
-
-            var newFood = newItem as FoodItemBase;
-            if (newFood != null)
-            {
-                newFood.AddGatheringInfo(_gc.WorldTime.Value, cnt);
-            }
 
             Items.Add(newItem);
 
