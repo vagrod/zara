@@ -426,163 +426,37 @@ namespace ZaraEngine.Inventory
             return item;
         }
 
+        #region Using Items
+        
         public ItemUseResult TryUse(IInventoryItem item, bool checkOnly)
         {
-            var isSpoiledFoodUsedAll = false;
-            var isFreshFoodUsedAll = false;
-            var originalItem = item;
-            // clean the name
-            var itemName = item.Name.Split('$')[0]; 
-            // get the actual item object
-            var inventoryItem = Items.FirstOrDefault(x => x.Name == itemName);
+            var itemName = item.Name.Split('$')[0]; // clean the name 
+            var inventoryItem = Items.FirstOrDefault(x => x.Name == itemName); // get the actual item object
 
-            var food = item as FoodItemBase;
-            if (food != null)
             {
-                var inventoryFood = (FoodItemBase) inventoryItem;
-
-                if(inventoryFood == null)
-                    return new ItemUseResult
-                    {
-                        Item = null,
-                        Result = ItemUseResult.UsageResult.InsufficientResources
-                    };
-                
-                if (!item.Name.Contains('$')) // fresh food use requested
-                {
-                    // We need to check if actually we have any fresh food
-                    var freshCount = inventoryFood.GetCountNormal(_gc.WorldTime.Value);
-
-                    if (freshCount <= 0)
-                    {
-                        // Nope, we don't. Need to switch to spoiled
-                        food = (FoodItemBase)GetByName(itemName + FoodItemBase.SpoiledPostfix);
-                    }
-                }
-                else
-                {
-                    // Requested specifically spoiled food consuming whereas no spoiled pieces left
-                    if (food.IsSpoiled && food.Count == 0)
-                        return new ItemUseResult
-                        {
-                            Item = null,
-                            Result = ItemUseResult.UsageResult.InsufficientResources
-                        };
-                }
-
-                if (food.IsSpoiled)
-                    isSpoiledFoodUsedAll = inventoryFood.TakeOneFromSpoiledGroup(_gc.WorldTime.Value) <= 0;
-                else
-                    isFreshFoodUsedAll = inventoryFood.TakeOneFromNormalGroup(_gc.WorldTime.Value) <= 0;
-
-                item = inventoryFood;
+                var result = TryUseAsFood(item, inventoryItem, itemName, checkOnly);
+                if (result != null) return result;
+            }
+            {
+                var result = TryUseAsWater(item, inventoryItem, itemName, checkOnly);
+                if (result != null) return result;
+            }
+            {
+                var result = TryUseAsMedicalConsumable(item, inventoryItem, itemName, checkOnly);
+                if (result != null) return result;
+            }
+            {
+                var result = TryUseAsMedicalAppliance(item, inventoryItem, itemName, checkOnly);
+                if (result != null) return result;
             }
 
-            var vessel = item as WaterVesselItemBase;
-            if (vessel != null)
-            {
-                if (vessel.DosesLeft < 1)
-                    return new ItemUseResult { Item = vessel, Result = ItemUseResult.UsageResult.InsufficientResources};
+            return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.Unapplicable };
+        }
 
-                if (!checkOnly)
-                {
-                    _gc.Health.OnConsumeItem(vessel);
-
-                    vessel.TakeAwayOneDose();
-
-                    Events.NotifyAll(l => l.Drink(_gc));
-
-                    RefreshRoughWeight();
-
-                    if (vessel.DosesLeft == 0)
-                        return new ItemUseResult { Item = vessel, Result = ItemUseResult.UsageResult.UsedAll };
-                }
-
-                if (checkOnly && vessel.DosesLeft - 1 == 0)
-                    return new ItemUseResult { Item = vessel, Result = ItemUseResult.UsageResult.UsedAll };
-
-                return new ItemUseResult { Item = vessel, Result = ItemUseResult.UsageResult.UsedSingle };
-            }
-
+        private ItemUseResult TryUseAsMedicalAppliance(IInventoryItem item, IInventoryItem inventoryItem, string itemName, bool checkOnly)
+        {
             var medItem = item as InventoryMedicalItemBase;
-            if (item.Type.Contains(InventoryItemType.Organic) || (medItem != null && medItem.MedicineKind == InventoryMedicalItemBase.MedicineKinds.Consumable))
-            {
-                if (!checkOnly)
-                {
-                    if(food != null) // we need to pass the correct one here. because it can be chosen from the spoiled group above
-                        _gc.Health.OnConsumeItem(food);
-                    else 
-                        _gc.Health.OnConsumeItem(originalItem as InventoryConsumableItemBase);
-                }
-
-                if (item.Count == 0)
-                    return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.InsufficientResources };
-
-                if (item.Count == 1)
-                {
-                    if (!(item is IInventoryInfiniteItem))
-                    {
-                        var foodCount = -1;
-
-                        if(food != null){
-                            food = (FoodItemBase) originalItem;
-                            
-                            if (food.IsSpoiled)
-                                foodCount = food.Count - 1; // we ate one just now
-                            else
-                            {
-                                var inventoryFood = ((FoodItemBase) inventoryItem);
-                                
-                                foodCount = inventoryFood.GetCountNormal(_gc.WorldTime.Value) +
-                                            inventoryFood.GetCountSpoiled(_gc.WorldTime.Value);
-                            }
-                        }
-
-                        if (!checkOnly)
-                        {
-                            if (food == null)
-                            {
-                                RemoveItem(item.Name, null);
-                            } else {
-                                if(foodCount <= 0 && !((FoodItemBase) originalItem).IsSpoiled)
-                                    Items.Remove(item);
-                            }
-                        }
-
-                        if(food == null)
-                            return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedAll };
-                        else {
-                            if(foodCount <= 0)
-                                return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedAll };
-                            else 
-                                return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedSingle };
-                        }
-                    }
-                    else
-                    {
-                        return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedSingle };
-                    }
-                }
-                else
-                {
-                    if (!checkOnly)
-                    {
-                        if (!(item is IInventoryInfiniteItem))
-                        {
-                            item.Count--;
-
-                            RefreshRoughWeight();
-                        }
-                    }
-
-                    // Special case: return all/single for spoiled and fresh food separately
-                    if(isFreshFoodUsedAll || isSpoiledFoodUsedAll)
-                        return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedAll };
-                    else
-                        return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedSingle };
-                }
-            }
-
+            
             if (medItem != null && medItem.MedicineKind == InventoryMedicalItemBase.MedicineKinds.Appliance)
             {
                 // Actual applying is handled in a medcenter. Here we know nothing about the body part.
@@ -619,9 +493,218 @@ namespace ZaraEngine.Inventory
                 }
             }
 
-            return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.Unapplicable };
+            return null;
+        }
+        
+        private ItemUseResult TryUseAsMedicalConsumable(IInventoryItem item, IInventoryItem inventoryItem, string itemName, bool checkOnly)
+        {
+            var medItem = item as InventoryMedicalItemBase;
+            if (item.Type.Contains(InventoryItemType.Organic) || (medItem != null && medItem.MedicineKind == InventoryMedicalItemBase.MedicineKinds.Consumable))
+            {
+                if (item.Count == 0)
+                    return new ItemUseResult {Item = item, Result = ItemUseResult.UsageResult.InsufficientResources};
+                
+                if (!checkOnly)
+                    _gc.Health.OnConsumeItem(item as InventoryConsumableItemBase);
+
+                if (item.Count == 1)
+                {
+                    if (!(item is IInventoryInfiniteItem))
+                    {
+                        if (!checkOnly)
+                            RemoveItem(item.Name, null);
+
+                        return new ItemUseResult {Item = item, Result = ItemUseResult.UsageResult.UsedAll};
+                    }
+                    else
+                    {
+                        return new ItemUseResult {Item = item, Result = ItemUseResult.UsageResult.UsedSingle};
+                    }
+                }
+                else
+                {
+                    if (!checkOnly)
+                    {
+                        if (!(item is IInventoryInfiniteItem))
+                        {
+                            item.Count--;
+
+                            RefreshRoughWeight();
+                            
+                            return new ItemUseResult {Item = item, Result = ItemUseResult.UsageResult.UsedSingle};
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
+        private ItemUseResult TryUseAsWater(IInventoryItem item, IInventoryItem inventoryItem, string itemName, bool checkOnly)
+        {
+            var vessel = item as WaterVesselItemBase;
+            if (vessel != null)
+            {
+                if (vessel.DosesLeft < 1)
+                    return new ItemUseResult { Item = vessel, Result = ItemUseResult.UsageResult.InsufficientResources};
+
+                if (!checkOnly)
+                {
+                    _gc.Health.OnConsumeItem(vessel);
+
+                    vessel.TakeAwayOneDose();
+
+                    Events.NotifyAll(l => l.Drink(_gc));
+
+                    RefreshRoughWeight();
+
+                    if (vessel.DosesLeft == 0)
+                        return new ItemUseResult { Item = vessel, Result = ItemUseResult.UsageResult.UsedAll };
+                }
+
+                if (checkOnly && vessel.DosesLeft - 1 == 0)
+                    return new ItemUseResult { Item = vessel, Result = ItemUseResult.UsageResult.UsedAll };
+
+                return new ItemUseResult { Item = vessel, Result = ItemUseResult.UsageResult.UsedSingle };
+            }
+
+            return null;
+        }
+
+        private ItemUseResult TryUseAsFood(IInventoryItem item, IInventoryItem inventoryItem, string itemName, bool checkOnly)
+        {
+            var worldTime = _gc.WorldTime.Value;
+            
+            ItemUseResult tryUseSpoiledPiece(FoodItemBase spoiledPiece)
+            {
+                if(spoiledPiece.Count <= 0)
+                    return new ItemUseResult
+                    {
+                        Item = null,
+                        Result = ItemUseResult.UsageResult.InsufficientResources
+                    };
+
+                var inventoryFood = (FoodItemBase) inventoryItem;
+
+                if (!checkOnly)
+                {
+                    inventoryFood.TakeOneFromSpoiledGroup(worldTime);
+                    _gc.Health.OnConsumeItem(spoiledPiece);
+                }
+
+                if (spoiledPiece.Count == 1) // Ate the last piece
+                    return new ItemUseResult { Item = spoiledPiece, Result = ItemUseResult.UsageResult.UsedAll };
+                else
+                    return new ItemUseResult { Item = spoiledPiece, Result = ItemUseResult.UsageResult.UsedSingle };
+            }
+            
+            ItemUseResult tryUseFreshPiece(FoodItemBase freshPiece)
+            {
+                if(freshPiece.Count <= 0)
+                    return new ItemUseResult
+                    {
+                        Item = null,
+                        Result = ItemUseResult.UsageResult.InsufficientResources
+                    };
+
+                var inventoryFood = (FoodItemBase) inventoryItem;
+
+                if (!checkOnly)
+                {
+                    inventoryFood.TakeOneFromNormalGroup(worldTime);
+                    _gc.Health.OnConsumeItem(freshPiece);
+                }
+
+                if (freshPiece.Count == 1) // Ate the last piece
+                    return new ItemUseResult { Item = freshPiece, Result = ItemUseResult.UsageResult.UsedAll };
+                else
+                    return new ItemUseResult { Item = freshPiece, Result = ItemUseResult.UsageResult.UsedSingle };
+            }
+
+            bool doesFoodHavePieces(FoodItemBase foodItem)
+            {
+                return foodItem.GetCountNormal(worldTime) + foodItem.GetCountSpoiled(worldTime) > 0;
+            }
+            
+            var food = item as FoodItemBase;
+            if (food != null)
+            {
+                var inventoryFood = (FoodItemBase) inventoryItem;
+
+                // No such thing in the inventory
+                if(inventoryFood == null)
+                    return new ItemUseResult
+                    {
+                        Item = null,
+                        Result = ItemUseResult.UsageResult.InsufficientResources
+                    };
+                
+                if (!food.IsSpoiled)
+                {
+                    // Fresh food use requested
+                    // We need to check if actually we have any fresh food
+                    var freshCount = inventoryFood.GetCountNormal(_gc.WorldTime.Value);
+
+                    if (freshCount <= 0)
+                    {
+                        // We don't have fresh pieces. Will try to use spoiled instead
+                        var result = tryUseSpoiledPiece((FoodItemBase)GetByName($"{itemName}{FoodItemBase.SpoiledPostfix}"));
+
+                        if (!checkOnly)
+                        {
+                            if (result.Result == ItemUseResult.UsageResult.InsufficientResources ||
+                                result.Result == ItemUseResult.UsageResult.UsedAll )
+                            {
+                                // No meat left
+                                Items.Remove(inventoryItem);
+                            }
+                        }
+
+                        return result;
+                    }
+                    else
+                    {
+                        // We have something in a fresh group
+
+                        var result = tryUseFreshPiece((FoodItemBase) GetByName(food.OriginalName));
+
+                        if (!checkOnly)
+                        {
+                            if (!doesFoodHavePieces(inventoryFood))
+                            {
+                                // No meat left
+                                Items.Remove(inventoryItem);
+                            }
+                        }
+
+                        return result;
+                    }
+                }
+                else
+                {
+                    // Spoiled food use requested
+                    var result = tryUseSpoiledPiece((FoodItemBase)GetByName($"{itemName}{FoodItemBase.SpoiledPostfix}"));
+
+                    if (!checkOnly)
+                    {
+                        if (!doesFoodHavePieces(inventoryFood))
+                        {
+                            // No meat left
+                            Items.Remove(inventoryItem);
+                        }
+                    }
+
+                    return result;
+                }
+            }
+
+            return null;
+        }
+        
+        #endregion 
+
+        #region Adding Items
+        
         public void AddItem(IInventoryItem newItem)
         {
             var cnt = newItem.Count;
@@ -649,7 +732,11 @@ namespace ZaraEngine.Inventory
 
             RefreshRoughWeight();
         }
+        
+        #endregion
 
+        #region Removing Items
+        
         public void RemoveItem(string itemName, int? count)
         {
             var item = GetByName(itemName);
@@ -680,6 +767,8 @@ namespace ZaraEngine.Inventory
 
             RefreshRoughWeight();
         }
+        
+        #endregion
 
         public int CountOf(string name)
         {
