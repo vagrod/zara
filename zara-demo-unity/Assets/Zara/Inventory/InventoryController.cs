@@ -439,7 +439,18 @@ namespace ZaraEngine.Inventory
 
                 if (item.Name.Contains('$'))
                     itemName = item.Name.Split('$')[0];
+                else
+                {
+                    // We need to check if actually we have any fresh food
+                    var freshCount = food.GetCountNormal(_gc.WorldTime.Value);
 
+                    if (freshCount <= 0)
+                    {
+                        // Nope, we don't. Need to switch to spoiled
+                        food = (FoodItemBase)GetByName(itemName + FoodItemBase.SpoiledPostfix);
+                    }
+                }
+                
                 var inventoryObject = (FoodItemBase)Items.FirstOrDefault(x => x.Name == itemName);
 
                 if (inventoryObject == null)
@@ -488,7 +499,10 @@ namespace ZaraEngine.Inventory
             {
                 if (!checkOnly)
                 {
-                    _gc.Health.OnConsumeItem(originalItem as InventoryConsumableItemBase);
+                    if(food != null) // we need to pass the correct one here. because it can be chosen from the spoiled group above
+                        _gc.Health.OnConsumeItem(food);
+                    else 
+                        _gc.Health.OnConsumeItem(originalItem as InventoryConsumableItemBase);
                 }
 
                 if (item.Count == 0)
@@ -501,6 +515,8 @@ namespace ZaraEngine.Inventory
                         var foodCount = -1;
 
                         if(food != null){
+                            // need to point to the actual food instance, not its spoiled copy before this check
+                            food = (FoodItemBase) originalItem;
                             foodCount = food.GetCountNormal(_gc.WorldTime.Value) + food.GetCountSpoiled(_gc.WorldTime.Value);
                         }
 

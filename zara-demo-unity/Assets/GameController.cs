@@ -123,8 +123,8 @@ public class GameController : MonoBehaviour, IGameController
 
         var meat = new ZaraEngine.Inventory.Meat { Count = 1 };
 
-        // We just gathered two of Meat. If will spoil in MinutesUntilSpoiled game minutes
-        meat.AddGatheringInfo(WorldTime.Value, 2);
+        // We just gathered two more Meat. If will spoil in MinutesUntilSpoiled game minutes
+        meat.AddGatheringInfo(WorldTime.Value.AddHours(-5), 2);
 
         _inventory.AddItem(new ZaraEngine.Inventory.Cloth { Count = 20 });
         _inventory.AddItem(meat);
@@ -180,23 +180,23 @@ public class GameController : MonoBehaviour, IGameController
         {
             SpeedText.text = $"Speed: Running = {_player.RunSpeed:0.0}, Walking = {_player.WalkSpeed:0.0}, Crouching = {_player.CrouchSpeed:0.0}";
             LimpText.text = $"Is Limping? {(_player.IsLimping ? "yes" : "no")}";
-            WeightText.text = $"({_inventory.CurrentWeight.ToString("# ### ##0").Trim()} grams)";
-            CurrentTimeText.text = $"World time is {WorldTime.Value.ToString("MMMM dd, HH:mm:ss")}";
+            WeightText.text = $"{($"{ _inventory.CurrentWeight:# ### ##0}".Trim())} grams";
+            CurrentTimeText.text = $"World time is {WorldTime.Value:MMMM dd, HH:mm:ss}";
 
-            BodyTempText.text = $"Body Temp.: {_health.Status.BodyTemperature.ToString("#0.0")} deg C";
-            BloodPressureText.text = $"Blood Pressure: {_health.Status.BloodPressureTop.ToString("000")}/{_health.Status.BloodPressureBottom.ToString("#00")}";
-            FatigueLevelText.text = $"Fatigue: {_health.Status.FatiguePercentage.ToString("#0.0")}%";
-            HeartRateText.text = $"Heart Rate: {_health.Status.HeartRate.ToString("00")}bpm";
-            FoodLevelText.text = $"Foood Level: {_health.Status.FoodPercentage.ToString("#0.0")}%";
-            WaterLevelText.text = $"Water Level: {_health.Status.WaterPercentage.ToString("#0.0")}%";
-            WetnessLevelText.text = $"Is Wet? {(_body.IsWet ? "yes" : "no")} (Wetness Level is {_body.WetnessLevel.ToString("#0.0")}%)";
-            WarmthLevelText.text = $"Warmth Score is {_body.GetWarmthLevel().ToString("0.0")} [-5..+5 is a comfort warm feel]";
-            BloodLevelText.text = $"Blood Level: {_health.Status.BloodPercentage.ToString("#0.0")}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
-            StaminaText.text = $"Stamina Level: {_health.Status.StaminaPercentage.ToString("#0.0")}%";
-            OxygenLevelText.text = $"Oxygen Level: {_health.Status.OxygenPercentage.ToString("#0.0")}%";
+            BodyTempText.text = $"Body Temp.: {_health.Status.BodyTemperature:#0.0} deg C";
+            BloodPressureText.text = $"Blood Pressure: {_health.Status.BloodPressureTop:000}/{_health.Status.BloodPressureBottom:#00}";
+            FatigueLevelText.text = $"Fatigue: {_health.Status.FatiguePercentage:#0.0}%";
+            HeartRateText.text = $"Heart Rate: {_health.Status.HeartRate:00}bpm";
+            FoodLevelText.text = $"Foood Level: {_health.Status.FoodPercentage:#0.0}%";
+            WaterLevelText.text = $"Water Level: {_health.Status.WaterPercentage:#0.0}%";
+            WetnessLevelText.text = $"Is Wet? {(_body.IsWet ? "yes" : "no")} (Wetness Level is {_body.WetnessLevel:#0.0}%)";
+            WarmthLevelText.text = $"Warmth Score is {_body.GetWarmthLevel():0.0} [-5..+5 is a comfort warm feel]";
+            BloodLevelText.text = $"Blood Level: {_health.Status.BloodPercentage:#0.0}% (Blood Loss? {(_health.Status.IsBloodLoss ? "yes" : "no")})";
+            StaminaText.text = $"Stamina Level: {_health.Status.StaminaPercentage:#0.0}%";
+            OxygenLevelText.text = $"Oxygen Level: {_health.Status.OxygenPercentage:#0.0}%";
 
-            LastSleepTimeText.text = $"Last Time Slept: {_health.Status.LastSleepTime.ToString("MMMM dd, HH:mm")}";
-            LastHealthCheckTimeText.text = $"Last Health Update: {_health.Status.CheckTime.ToString("MMMM dd, HH:mm:ss")}";
+            LastSleepTimeText.text = $"Last Time Slept: {_health.Status.LastSleepTime:MMMM dd, HH:mm}";
+            LastHealthCheckTimeText.text = $"Last Health Update: {_health.Status.CheckTime:MMMM dd, HH:mm:ss}";
 
             CanEatText.text = $"Can Eat? {(_health.Status.IsFoodDisgust ? "no" : "yes")}";
             CanSleepText.text = $"Has Sleep Disorder? {(_health.Status.IsSleepDisorder ? "yes" : "no")}";
@@ -249,7 +249,7 @@ public class GameController : MonoBehaviour, IGameController
                 } else
                 {
                     // Active disease
-                    sb.AppendLine($"\t  {(d.TreatedStage == null ? "Active" : "Getting Better")}. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
+                    sb.AppendLine($"\t  {(d.TreatedStage == null ? "Active" : "Getting Better")}. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? $"{st.WillEndAt.Value:HH:mm}" : "n/a")}");
                 }
 
                 if(d.LinkedInjury != null){
@@ -273,14 +273,14 @@ public class GameController : MonoBehaviour, IGameController
 
                 if(st == null){
                     // Scheduled injury
-                    sb.AppendLine($"\t  Scheduled for {(inj.InjuryTriggerTime.ToString("HH:mm"))}");
+                    sb.AppendLine($"\t  Scheduled for {inj.InjuryTriggerTime:HH:mm}");
                 } else {
                     // Active Injury
                     if(st.SelfHealAt.HasValue){
-                        sb.AppendLine($"\t  Active. Current stage is {st.Level}, will self-heal at {st.SelfHealAt.Value.ToString("HH:mm")}");
+                        sb.AppendLine($"\t  Active. Current stage is {st.Level}, will self-heal at {st.SelfHealAt.Value:HH:mm}");
                     } else
                     {
-                        sb.AppendLine($"\t  {(inj.TreatedStage == null ? "Active" : "Getting Better")}. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? st.WillEndAt.Value.ToString("HH:mm") : "n/a")}");
+                        sb.AppendLine($"\t  {(inj.TreatedStage == null ? "Active" : "Getting Better")}. Current stage is {st.Level}, stage will end at {(st.WillEndAt.HasValue ? $"{st.WillEndAt.Value:HH:mm}": "n/a")}");
                     }
                 }
 
@@ -297,12 +297,12 @@ public class GameController : MonoBehaviour, IGameController
             if(_health.Medicine.ActiveAgents.Any()){
                 foreach(var medicine in _health.Medicine.ActiveAgents){
                     sb.AppendLine($"• {medicine.MedicalGroup.Name} is active");    
-                    sb.AppendLine($"  Percent of presence in blood: {medicine.PercentOfPresence.ToString("0")}%");
-                    sb.AppendLine($"  Percent of activity in blood: {medicine.PercentOfActivity.ToString("0")}%");
+                    sb.AppendLine($"  Percent of presence in blood: {medicine.PercentOfPresence:0}%");
+                    sb.AppendLine($"  Percent of activity in blood: {medicine.PercentOfActivity:0}%");
                     sb.AppendLine($"  Active doses count: {medicine.ActiveDosesCount}");
 
                     if(medicine.LastTaken.HasValue){
-                        sb.AppendLine($"  Last Taken: {medicine.LastTaken.Value.ToString("HH.mm")}");
+                        sb.AppendLine($"  Last Taken: {medicine.LastTaken.Value:HH.mm}");
                     }
                 }
             } else {
@@ -480,7 +480,7 @@ public class GameController : MonoBehaviour, IGameController
 
             if(item is ZaraEngine.Inventory.Meat){
                 var meat = (item as ZaraEngine.Inventory.Meat);
-                s += $" ({meat.GetCountNormal(WorldTime.Value) + meat.GetCountSpoiled(WorldTime.Value)} pieces)";
+                s += $" ({meat.GetCountNormal(WorldTime.Value)} fr. / {meat.GetCountSpoiled(WorldTime.Value)} sp. pieces)";
             }
 
             FirstInventoryItemsList.options.Add(new Dropdown.OptionData() { text = $"{item.Name}: {s}" });
@@ -729,6 +729,9 @@ public class GameController : MonoBehaviour, IGameController
 
     public void OnAdvanceTimeClick(){
         _dateTime = _dateTime.AddHours(1);
+
+        // Some food may spoil during this hour
+        RefreshConsumablesUICombo();
     }
 
     #endregion
