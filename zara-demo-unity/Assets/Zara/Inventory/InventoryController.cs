@@ -526,7 +526,7 @@ namespace ZaraEngine.Inventory
                             {
                                 RemoveItem(item.Name, null);
                             } else {
-                                if(foodCount == 0)
+                                if(foodCount <= 0)
                                     Items.Remove(item);
                             }
                         }
