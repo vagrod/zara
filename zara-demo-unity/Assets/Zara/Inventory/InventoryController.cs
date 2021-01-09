@@ -431,18 +431,27 @@ namespace ZaraEngine.Inventory
             var isSpoiledFoodUsedAll = false;
             var isFreshFoodUsedAll = false;
             var originalItem = item;
+            // clean the name
+            var itemName = item.Name.Split('$')[0]; 
+            // get the actual item object
+            var inventoryItem = Items.FirstOrDefault(x => x.Name == itemName);
 
             var food = item as FoodItemBase;
             if (food != null)
             {
-                var itemName = item.Name;
+                var inventoryFood = (FoodItemBase) inventoryItem;
 
-                if (item.Name.Contains('$'))
-                    itemName = item.Name.Split('$')[0];
-                else
+                if(inventoryFood == null)
+                    return new ItemUseResult
+                    {
+                        Item = null,
+                        Result = ItemUseResult.UsageResult.InsufficientResources
+                    };
+                
+                if (!item.Name.Contains('$')) // fresh food use requested
                 {
                     // We need to check if actually we have any fresh food
-                    var freshCount = food.GetCountNormal(_gc.WorldTime.Value);
+                    var freshCount = inventoryFood.GetCountNormal(_gc.WorldTime.Value);
 
                     if (freshCount <= 0)
                     {
@@ -450,22 +459,13 @@ namespace ZaraEngine.Inventory
                         food = (FoodItemBase)GetByName(itemName + FoodItemBase.SpoiledPostfix);
                     }
                 }
-                
-                var inventoryObject = (FoodItemBase)Items.FirstOrDefault(x => x.Name == itemName);
-
-                if (inventoryObject == null)
-                    return new ItemUseResult
-                    {
-                        Item = null,
-                        Result = ItemUseResult.UsageResult.InsufficientResources
-                    };
 
                 if (food.IsSpoiled)
-                    isSpoiledFoodUsedAll = inventoryObject.TakeOneFromSpoiledGroup(_gc.WorldTime.Value) <= 0;
+                    isSpoiledFoodUsedAll = inventoryFood.TakeOneFromSpoiledGroup(_gc.WorldTime.Value) <= 0;
                 else
-                    isFreshFoodUsedAll = inventoryObject.TakeOneFromNormalGroup(_gc.WorldTime.Value) <= 0;
+                    isFreshFoodUsedAll = inventoryFood.TakeOneFromNormalGroup(_gc.WorldTime.Value) <= 0;
 
-                item = inventoryObject;
+                item = inventoryFood;
             }
 
             var vessel = item as WaterVesselItemBase;
@@ -516,7 +516,7 @@ namespace ZaraEngine.Inventory
 
                         if(food != null){
                             // need to point to the actual food instance, not its spoiled copy before this check
-                            food = (FoodItemBase) originalItem;
+                            food = (FoodItemBase) inventoryItem;
                             foodCount = food.GetCountNormal(_gc.WorldTime.Value) + food.GetCountSpoiled(_gc.WorldTime.Value);
                         }
 

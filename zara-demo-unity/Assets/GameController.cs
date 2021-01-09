@@ -526,7 +526,7 @@ public class GameController : MonoBehaviour, IGameController
         if(string.IsNullOrEmpty(itemName))
             return null;
 
-        return _inventory.Items.FirstOrDefault(x => x.Name.ToLower() == itemName.ToLower()) as ZaraEngine.Inventory.IInventoryItem;
+        return _inventory.GetByName(itemName);
     }
 
     /* Food/Water/Pills consuming example code */
