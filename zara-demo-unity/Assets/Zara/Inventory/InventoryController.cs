@@ -615,19 +615,19 @@ namespace ZaraEngine.Inventory
             {
                 var inventoryItem = Items.First(x => x.Name == newItem.Name);
 
+                // Increse items count for non-food item.
+                // Because food operates with pieces and not items
                 if (!(inventoryItem is FoodItemBase))
-                {
                     inventoryItem.Count += cnt;    
-                }
-
-                return;
             }
+            else
+            {
+                newItem.Count = cnt;
 
-            newItem.Count = cnt;
+                Items.Add(newItem);
 
-            Items.Add(newItem);
-
-            _itemsAvailabilityCache.Clear();
+                RebuildCache();
+            }
 
             RefreshRoughWeight();
         }
