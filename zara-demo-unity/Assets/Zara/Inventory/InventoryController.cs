@@ -459,6 +459,16 @@ namespace ZaraEngine.Inventory
                         food = (FoodItemBase)GetByName(itemName + FoodItemBase.SpoiledPostfix);
                     }
                 }
+                else
+                {
+                    // Requested specifically spoiled food consuming whereas no spoiled pieces left
+                    if (food.IsSpoiled && food.Count == 0)
+                        return new ItemUseResult
+                        {
+                            Item = null,
+                            Result = ItemUseResult.UsageResult.InsufficientResources
+                        };
+                }
 
                 if (food.IsSpoiled)
                     isSpoiledFoodUsedAll = inventoryFood.TakeOneFromSpoiledGroup(_gc.WorldTime.Value) <= 0;
@@ -515,9 +525,17 @@ namespace ZaraEngine.Inventory
                         var foodCount = -1;
 
                         if(food != null){
-                            // need to point to the actual food instance, not its spoiled copy before this check
-                            food = (FoodItemBase) inventoryItem;
-                            foodCount = food.GetCountNormal(_gc.WorldTime.Value) + food.GetCountSpoiled(_gc.WorldTime.Value);
+                            food = (FoodItemBase) originalItem;
+                            
+                            if (food.IsSpoiled)
+                                foodCount = food.Count - 1; // we ate one just now
+                            else
+                            {
+                                var inventoryFood = ((FoodItemBase) inventoryItem);
+                                
+                                foodCount = inventoryFood.GetCountNormal(_gc.WorldTime.Value) +
+                                            inventoryFood.GetCountSpoiled(_gc.WorldTime.Value);
+                            }
                         }
 
                         if (!checkOnly)
@@ -526,7 +544,7 @@ namespace ZaraEngine.Inventory
                             {
                                 RemoveItem(item.Name, null);
                             } else {
-                                if(foodCount <= 0)
+                                if(foodCount <= 0 && !((FoodItemBase) originalItem).IsSpoiled)
                                     Items.Remove(item);
                             }
                         }
