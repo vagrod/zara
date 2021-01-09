@@ -85,7 +85,7 @@ public class GameController : MonoBehaviour, IGameController
     {
         /* Zara Initialization code start =======>> */
 
-        ZaraEngine.Helpers.InitializeRandomizer((a, b) => UnityEngine.Random.Range(a, b));
+        ZaraEngine.Helpers.InitializeRandomizer(UnityEngine.Random.Range);
 
         _dateTime = DateTime.Now;
         _timeOfDay = TimesOfDay.Evening;
@@ -149,7 +149,7 @@ public class GameController : MonoBehaviour, IGameController
 
         // Defaults
         _weather.SetTemperature(27f);
-        _weather.SetWindSpeed(0.1f);
+        _weather.SetWindSpeed(2f);
         _weather.SetRainIntensity(0f);
 
         #endregion
