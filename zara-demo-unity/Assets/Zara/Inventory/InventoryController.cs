@@ -461,9 +461,9 @@ namespace ZaraEngine.Inventory
                     };
 
                 if (food.IsSpoiled)
-                    isSpoiledFoodUsedAll = inventoryObject.TakeOneFromSpoiledGroup(_gc.WorldTime.Value) == 0;
+                    isSpoiledFoodUsedAll = inventoryObject.TakeOneFromSpoiledGroup(_gc.WorldTime.Value) <= 0;
                 else
-                    isFreshFoodUsedAll = inventoryObject.TakeOneFromNormalGroup(_gc.WorldTime.Value) == 0;
+                    isFreshFoodUsedAll = inventoryObject.TakeOneFromNormalGroup(_gc.WorldTime.Value) <= 0;
 
                 item = inventoryObject;
             }
@@ -534,7 +534,7 @@ namespace ZaraEngine.Inventory
                         if(food == null)
                             return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedAll };
                         else {
-                            if(foodCount == 0)
+                            if(foodCount <= 0)
                                 return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedAll };
                             else 
                                 return new ItemUseResult { Item = item, Result = ItemUseResult.UsageResult.UsedSingle };
