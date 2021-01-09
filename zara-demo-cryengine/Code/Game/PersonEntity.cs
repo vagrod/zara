@@ -58,7 +58,7 @@ namespace CryEngine.Projects.Game
             if(_worldTimeCounter >= 0.05f)
             {
                 // World time is 10x the real time
-                _worldTime = _worldTime.AddSeconds(0.5f);
+                _worldTime = _worldTime.AddSeconds(_worldTimeCounter * 10f);
 
                 _worldTimeCounter = 0f;
             }

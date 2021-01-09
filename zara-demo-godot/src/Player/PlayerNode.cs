@@ -77,7 +77,7 @@ public class PlayerNode : Node2D, IGameController
 
         if (_dateTimeCounter >= 0.05f)
         {
-            _dateTime = _dateTime.AddSeconds(0.5d); // in-game time is 10x the real one
+            _dateTime = _dateTime.AddSeconds(_dateTimeCounter * 10f); // in-game time is 10x the real one
             _dateTimeCounter = 0f;
         }
     }
