@@ -287,8 +287,10 @@ namespace ZaraEngine.Inventory
                 var vessel = (WaterVesselItemBase)item;
 
                 if (vessel.DosesLeft < countToWaste)
+                {
                     return new WasteCheckInfo {Item = item, Result = WasteCheckInfo.WasteResult.InsufficientResources}; // Insufficient resources
-
+                }
+                
                 if (!checkOnly)
                 {
                     for (int i = 0; i < countToWaste; i++)
