@@ -78,6 +78,8 @@ public class GameController : MonoBehaviour, IGameController
     public Text SpeedText;
     public Text LimpText;
 
+    public Canvas SleepScreen;
+
     #endregion 
 
     // Start is called before the first frame update
@@ -725,8 +727,12 @@ public class GameController : MonoBehaviour, IGameController
 
         var hours = int.Parse(text);
 
-        if(!_body.Sleep(hours /* how many in-game hours should pass */, 6f /* sleeping will take 6 real seconds */, () => Debug.Log("Woke up!") /* wake up callback */, newTime => _dateTime = newTime /* function to advance game time in big chunks */)){
+        if(!_body.Sleep(hours /* how many in-game hours should pass */, 6f /* sleeping will take 6 real seconds */, () => SleepScreen.gameObject.SetActive(false) /* wake up callback */, newTime => _dateTime = newTime /* function to advance game time in big chunks */)){
             Debug.Log("Cannot sleep or not tired");
+        }
+        else
+        {
+            SleepScreen.gameObject.SetActive(true);
         }
     }
 
