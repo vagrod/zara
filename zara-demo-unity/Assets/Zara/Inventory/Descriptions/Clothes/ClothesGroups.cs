@@ -7,14 +7,10 @@ namespace ZaraEngine.Inventory
     public class ClothesGroups
     {
 
-        private readonly IGameController _gc;
-
         public List<ClothesGroup> Groups { get; private set; }
 
-        private ClothesGroups(IGameController gc)
+        private ClothesGroups()
         {
-            _gc = gc;
-
             Groups = new List<ClothesGroup>(new[]
             {
                 new ClothesGroup
@@ -37,32 +33,22 @@ namespace ZaraEngine.Inventory
 
         private static ClothesGroups _instance;
 
-        public static ClothesGroups Instance
-        {
-            get { return _instance; }
-        }
+        public static ClothesGroups Instance => _instance ?? (_instance = new ClothesGroups());
 
-        public static void Initialize(IGameController gc)
+        public ClothesGroup GetCompleteClothesGroup(IGameController gc)
         {
-
-            if (_instance == null)
-                _instance = new ClothesGroups(gc);
-        }
-
-        public ClothesGroup GetCompleteClothesGroup()
-        {
-            if (_gc.Body.Clothes.Count == 0)
+            if (gc.Body.Clothes.Count == 0)
                 return null;
 
-            return Groups.FirstOrDefault(x => x.Members.All(member => _gc.Body.Clothes.Any(c => member == c.Name)));
+            return Groups.FirstOrDefault(x => x.Members.All(member => gc.Body.Clothes.Any(c => member == c.Name)));
         }
 
-        public List<ClothesGroup> GetPossibleClothesGroups()
+        public List<ClothesGroup> GetPossibleClothesGroups(IGameController gc)
         {
-            if (_gc.Body.Clothes.Count == 0)
+            if (gc.Body.Clothes.Count == 0)
                 return new List<ClothesGroup>();
 
-            return Groups.Where(x => x.Members.Any(member => _gc.Body.Clothes.Any(c => member == c.Name))).ToList();
+            return Groups.Where(x => x.Members.Any(member => gc.Body.Clothes.Any(c => member == c.Name))).ToList();
         }
 
         public class ClothesGroup

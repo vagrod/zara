@@ -211,7 +211,7 @@ public class GameController : MonoBehaviour, IGameController
 
             sb.AppendLine("Clothes:");
 
-            var cg = ClothesGroups.Instance.GetCompleteClothesGroup();
+            var cg = ClothesGroups.Instance.GetCompleteClothesGroup(this);
             
             sb.AppendLine($"  Has Complete Set of Clothes? {(cg == null ? "no" : ("yes -- " + cg.Name + $"\n  Gives extra Water ({cg.WaterResistanceBonus}%) and Cold Resistance ({cg.ColdResistanceBonus}%) when complete set"))}");
 

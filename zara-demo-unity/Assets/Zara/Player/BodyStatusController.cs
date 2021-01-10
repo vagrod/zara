@@ -80,8 +80,6 @@ namespace ZaraEngine.Player
 
         public void Initialize()
         {
-            ClothesGroups.Initialize(_gc);
-
             _wetnessController.Initialize();
         }
 
@@ -186,9 +184,7 @@ namespace ZaraEngine.Player
             const float maximumWindTemperatureDecrease = 15f; // Degrees in C
 
             var temp = _gc.Weather.Temperature;
-
             var wetnessTemperatureBonus = -(WetnessLevel / 100f) * maximumWetnessTemperatureDecrease;
-
             var windSpeed = _gc.Weather.WindSpeed;
             var windColdness = (windSpeed * (temp / 35f) - windSpeed) / 35f; // -1..+1 scale
             var windTemperatureBonus = windColdness * maximumWindTemperatureDecrease;
@@ -197,9 +193,8 @@ namespace ZaraEngine.Player
                 windTemperatureBonus = 0; // only cold wind counts
 
             var finalTemp = temp + wetnessTemperatureBonus + windTemperatureBonus;
-
             var coldResistance = Clothes.Sum(x => x.ColdResistance);
-            var clothesGroup = ClothesGroups.Instance.GetCompleteClothesGroup();
+            var clothesGroup = ClothesGroups.Instance.GetCompleteClothesGroup(_gc);
 
             if (clothesGroup != null)
                 coldResistance += clothesGroup.ColdResistanceBonus;

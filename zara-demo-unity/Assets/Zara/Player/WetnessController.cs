@@ -67,7 +67,7 @@ namespace ZaraEngine.Player
 
                 // Check for clothes water resistance
                 var waterResistance = _gc.Body.Clothes.Sum(x => x.WaterResistance);
-                var clothesGroup = ClothesGroups.Instance.GetCompleteClothesGroup();
+                var clothesGroup = ClothesGroups.Instance.GetCompleteClothesGroup(_gc);
 
                 if (clothesGroup != null)
                     waterResistance += clothesGroup.WaterResistanceBonus;
