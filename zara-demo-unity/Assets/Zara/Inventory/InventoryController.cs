@@ -581,12 +581,8 @@ namespace ZaraEngine.Inventory
             
             ItemUseResult tryUseSpoiledPiece(FoodItemBase spoiledPiece)
             {
-                if(spoiledPiece.Count <= 0)
-                    return new ItemUseResult
-                    {
-                        Item = null,
-                        Result = ItemUseResult.UsageResult.InsufficientResources
-                    };
+                if(spoiledPiece.Count <= 0) 
+                    return new ItemUseResult { Item = spoiledPiece, Result = ItemUseResult.UsageResult.InsufficientResources };
 
                 var inventoryFood = (FoodItemBase) inventoryItem;
 
@@ -606,12 +602,8 @@ namespace ZaraEngine.Inventory
             
             ItemUseResult tryUseFreshPiece(FoodItemBase freshPiece)
             {
-                if(freshPiece.Count <= 0)
-                    return new ItemUseResult
-                    {
-                        Item = null,
-                        Result = ItemUseResult.UsageResult.InsufficientResources
-                    };
+                if(freshPiece.Count <= 0) 
+                    return new ItemUseResult { Item = freshPiece, Result = ItemUseResult.UsageResult.InsufficientResources };
 
                 var inventoryFood = (FoodItemBase) inventoryItem;
 
@@ -619,7 +611,7 @@ namespace ZaraEngine.Inventory
                 {
                     inventoryFood.TakeOneFromNormalGroup(worldTime);
                     _gc.Health.OnConsumeItem(freshPiece);
-                    
+
                     Events.NotifyAll(l => l.Eat(_gc, freshPiece));
                 }
 
@@ -632,6 +624,14 @@ namespace ZaraEngine.Inventory
             bool doesFoodHavePieces(FoodItemBase foodItem)
             {
                 return foodItem.GetCountNormal(worldTime) + foodItem.GetCountSpoiled(worldTime) > 0;
+            }
+
+            void doRemoveFoodItem(IInventoryItem invItem)
+            {
+                Items.Remove(invItem);
+                            
+                RebuildCache();
+                RefreshRoughWeight();
             }
             
             var food = item as FoodItemBase;
@@ -664,7 +664,7 @@ namespace ZaraEngine.Inventory
                                 result.Result == ItemUseResult.UsageResult.UsedAll )
                             {
                                 // No meat left
-                                Items.Remove(inventoryItem);
+                                doRemoveFoodItem(inventoryItem);
                             }
                         }
 
@@ -681,7 +681,7 @@ namespace ZaraEngine.Inventory
                             if (!doesFoodHavePieces(inventoryFood))
                             {
                                 // No meat left
-                                Items.Remove(inventoryItem);
+                                doRemoveFoodItem(inventoryItem);
                             }
                         }
 
@@ -698,7 +698,7 @@ namespace ZaraEngine.Inventory
                         if (!doesFoodHavePieces(inventoryFood))
                         {
                             // No meat left
-                            Items.Remove(inventoryItem);
+                            doRemoveFoodItem(inventoryItem);
                         }
                     }
 
@@ -813,7 +813,7 @@ namespace ZaraEngine.Inventory
             return _itemsAvailabilityCache[name];
         }
 
-        private void RebuildCache()
+        public void RebuildCache()
         {
             _itemsAvailabilityCache.Clear();
 
