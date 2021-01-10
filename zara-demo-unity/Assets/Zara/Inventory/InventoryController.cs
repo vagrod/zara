@@ -503,9 +503,13 @@ namespace ZaraEngine.Inventory
             {
                 if (item.Count == 0)
                     return new ItemUseResult {Item = item, Result = ItemUseResult.UsageResult.InsufficientResources};
-                
+
                 if (!checkOnly)
+                {
                     _gc.Health.OnConsumeItem(item as InventoryConsumableItemBase);
+
+                    Events.NotifyAll(l => l.PillTaken(_gc, medItem));
+                }
 
                 if (item.Count == 1)
                 {
@@ -550,11 +554,11 @@ namespace ZaraEngine.Inventory
 
                 if (!checkOnly)
                 {
-                    _gc.Health.OnConsumeItem(vessel);
-
                     vessel.TakeAwayOneDose();
-
-                    Events.NotifyAll(l => l.Drink(_gc));
+                    
+                    _gc.Health.OnConsumeItem(vessel);
+                    
+                    Events.NotifyAll(l => l.Drink(_gc, vessel));
 
                     RefreshRoughWeight();
 
@@ -590,6 +594,8 @@ namespace ZaraEngine.Inventory
                 {
                     inventoryFood.TakeOneFromSpoiledGroup(worldTime);
                     _gc.Health.OnConsumeItem(spoiledPiece);
+                    
+                    Events.NotifyAll(l => l.Eat(_gc, spoiledPiece));
                 }
 
                 if (spoiledPiece.Count == 1) // Ate the last piece
@@ -613,6 +619,8 @@ namespace ZaraEngine.Inventory
                 {
                     inventoryFood.TakeOneFromNormalGroup(worldTime);
                     _gc.Health.OnConsumeItem(freshPiece);
+                    
+                    Events.NotifyAll(l => l.Eat(_gc, freshPiece));
                 }
 
                 if (freshPiece.Count == 1) // Ate the last piece

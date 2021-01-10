@@ -6,6 +6,7 @@ using ZaraEngine.Diseases;
 using ZaraEngine.Injuries;
 using ZaraEngine.Inventory;
 using ZaraEngine.HealthEngine;
+using ZaraEngine.Player;
 
 public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
 
@@ -57,7 +58,10 @@ public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
 
     public void Sneeze(IGameController sender) { }
     public void Cough(IGameController sender, HealthController.CoughLevels level) { }
-    public void Drink(IGameController sender) { }
+    public void Drink(IGameController sender, IInventoryItem water) { }
+    public void Eat(IGameController sender, IInventoryItem food) { }
+    public void PillTaken(IGameController sender, IInventoryItem pill) { }
+    public void ApplianceTaken(IGameController sender, IInventoryItem appliance, BodyParts bodyPart) { }
 
     public void HighBloodPressureTriggeredOn(IGameController sender) { }
     public void HighBloodPressureTriggeredOff(IGameController sender) { }
@@ -71,7 +75,7 @@ public class ZaraEventsListener : MonoBehaviour, IZaraEventsListener {
     public void DiseaseHealed(IGameController sender, DiseaseDefinitionBase disease) { }
 
     public void InjuryHealed(IGameController sender, InjuryBase injury) { }
-    public void InjectionApplied(IGameController sender, InventoryMedicalItemBase appliance) { }
+    public void InjectionApplied(IGameController sender, IInventoryItem appliance, ZaraEngine.Player.BodyParts bodyPart) { }
 
     public void MovementSpeedChange(IGameController sender, float? newRunSpeed,float? newWalkSpeed, float? newCrouchSpeed) {
         var p = _gc.Player as PlayerStatus;

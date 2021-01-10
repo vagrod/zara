@@ -38,7 +38,10 @@ namespace ZaraEngine {
 
         void Sneeze(IGameController sender);
         void Cough(IGameController sender, HealthEngine.HealthController.CoughLevels level);
-        void Drink(IGameController sender);
+        void Drink(IGameController sender, IInventoryItem water);
+        void Eat(IGameController sender, IInventoryItem food);
+        void PillTaken(IGameController sender, IInventoryItem pill);
+        void ApplianceTaken(IGameController sender, IInventoryItem appliance, Player.BodyParts bodyPart);
 
         void HighBloodPressureTriggeredOn(IGameController sender);
         void HighBloodPressureTriggeredOff(IGameController sender);
@@ -51,7 +54,7 @@ namespace ZaraEngine {
         void DiseaseHealed(IGameController sender, DiseaseDefinitionBase disease);
 
         void InjuryHealed(IGameController sender, InjuryBase injury);
-        void InjectionApplied(IGameController sender, InventoryMedicalItemBase appliance);
+        void InjectionApplied(IGameController sender, IInventoryItem appliance, Player.BodyParts bodyPart);
 
         void MovementSpeedChange(IGameController sender, float? newRunSpeed,float? newWalkSpeed, float? newCrouchSpeed);
         void ApplyMovementSpeedDelta(IGameController sender, float? newRunSpeedDelta,float? newWalkSpeedDelta, float? newCrouchSpeedDelta);

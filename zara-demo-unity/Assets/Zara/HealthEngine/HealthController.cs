@@ -1355,6 +1355,8 @@ namespace ZaraEngine.HealthEngine {
             Status.ActiveInjuries.ForEach(injury => injury.OnApplianceTaken(_gc, applianceItem, bodyPart));
 
             _medicalAgentsMonitors.OnApplianceTaken(applianceItem, bodyPart);
+            
+            Events.NotifyAll(l => l.ApplianceTaken(_gc, applianceItem, bodyPart));
 
             if (applianceItem.Name == InventoryController.MedicalItems.DoripenemSyringe ||
                 applianceItem.Name == InventoryController.MedicalItems.AntiVenomSyringe ||
@@ -1364,7 +1366,7 @@ namespace ZaraEngine.HealthEngine {
                 applianceItem.Name == InventoryController.MedicalItems.Plasma ||
                 applianceItem.Name == InventoryController.MedicalItems.SuctionPump ||
                 applianceItem.Name == InventoryController.MedicalItems.BioactiveHydrogel)
-                Events.NotifyAll(l => l.InjectionApplied(_gc, applianceItem));
+                Events.NotifyAll(l => l.InjectionApplied(_gc, applianceItem, bodyPart));
         }
 
         #endregion
