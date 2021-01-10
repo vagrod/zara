@@ -323,7 +323,7 @@ namespace ZaraEngine.Inventory
                                 original.RemoveAllNormal(_gc.WorldTime.Value);
                         }
 
-                        original.Count -= countToWaste;
+                        food.Count -= countToWaste;
                     }
                     else
                     {
@@ -347,8 +347,6 @@ namespace ZaraEngine.Inventory
                                 else
                                     original.TakeOneFromNormalGroup(_gc.WorldTime.Value);
                             }
-
-                            original.Count -= countToWaste;
                         }
                     }
 
