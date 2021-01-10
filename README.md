@@ -21,7 +21,8 @@ Zara is written in independent C#. Demos available for:
 If you want to download latest Zara release without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
 It is also available in the Unity Asset format: [here](https://assetstore.unity.com/packages/templates/systems/zara-survival-engine-182386#description).
 
-If you want to grab latest bleeding-edge Zara, download this folder from the repo: `/master/zara-demo-unity/Assets/Zara`\
+If you want to grab latest bleeding-edge Zara, download this folder from the repo:\
+`/master/zara-demo-unity/Assets/Zara`\
 [Changes since 1.05](https://github.com/vagrod/zara/wiki/Release-Notes)
 
 All you need to do to include Zara into your project - is to grab `Zara` folder with its `cs` sources, and you're done!
