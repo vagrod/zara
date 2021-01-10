@@ -23,7 +23,7 @@ It is also available in the Unity Asset format: [here](https://assetstore.unity.
 
 All you need to do to include Zara into your project - is to grab `Zara` folder with its `cs` sources, and you're done!
 
-[See changelog](https://github.com/vagrod/zara/wiki/Release-Notes)
+[Changes since 1.05](https://github.com/vagrod/zara/wiki/Release-Notes)
 
 ## Description
 
