@@ -78,7 +78,7 @@ namespace ZaraEngine.Inventory
 
                 Members.ForEach(itemName =>
                 {
-                    var item = (IInventoryItem)Activator.CreateInstance(Type.GetType("ZaraEngine.Inventory." + itemName));
+                    var item = (IInventoryItem)Activator.CreateInstance(Type.GetType($"ZaraEngine.Inventory.{itemName}"));
 
                     var clothes = item as ClothesItemBase;
                     if (clothes != null)
