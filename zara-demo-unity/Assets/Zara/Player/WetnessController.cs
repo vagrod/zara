@@ -14,14 +14,14 @@ namespace ZaraEngine.Player
         public const float FreezeTemperature = -80; // C (and higher)
 
         private const float WindSpeedForMaxDrying = 7f; // m/s
-        private const float MaxWindDryingRate = 0.08f;  // percent per real second
+        private const float MaxWindDryingRate = 0.422f;  // percent per real second
         
-        public const float HotDryRate    = 0.05f;   // percent per real second
-        public const float NormalDryRate = 0.025f;  // percent per real second
-        public const float ColdDryRate   = 0.01f;   // percent per real second
-        public const float FreezeDryRate = 0.005f;  // percent per real second
+        public const float HotDryRate    = 0.75f;   // percent per real second
+        public const float NormalDryRate = 0.325f;  // percent per real second
+        public const float ColdDryRate   = 0.11f;   // percent per real second
+        public const float FreezeDryRate = 0.065f;  // percent per real second
 
-        public const float RainWetnessGainRate = 80.7f; // max percent per real second
+        public const float RainWetnessGainRate = 1.93f; // max percent per real second
 
         public bool IsWet { get; private set; }
 
@@ -54,7 +54,7 @@ namespace ZaraEngine.Player
             if (!_lastGettingWetTime.HasValue)
                 return;
 
-            CheckForDrying();
+            CheckForDrying(deltaTime);
         }
 
         private void CheckForRain(float deltaTime)
@@ -63,7 +63,7 @@ namespace ZaraEngine.Player
             {
                 IsWet = _wetnessValue >= 1f;
 
-                var wetRate = _gc.Weather.RainIntensity * deltaTime * RainWetnessGainRate;
+                var wetRate = _gc.Weather.RainIntensity * RainWetnessGainRate;
 
                 // Check for clothes water resistance
                 var waterResistance = _gc.Body.Clothes.Sum(x => x.WaterResistance);
@@ -74,10 +74,10 @@ namespace ZaraEngine.Player
 
                 wetRate *= (1 - waterResistance / 100f);
 
-                ////("Wet rate " + wetRate + "% per second");
+                _wetnessValue += wetRate * deltaTime;
 
-                _wetnessValue += wetRate;
-
+                ////("Wet rate " + wetRate * deltaTime + "% per second");
+                
                 if (_wetnessValue > 100f)
                     _wetnessValue = 100f;
 
@@ -102,7 +102,7 @@ namespace ZaraEngine.Player
             return false;
         }
 
-        private void CheckForDrying()
+        private void CheckForDrying(float deltaTime)
         {
             if (_gc.Weather.RainIntensity > 0.001f)
                 return;
@@ -126,10 +126,10 @@ namespace ZaraEngine.Player
             
             var dryingRate = currentRate + windBonus;
 
-            // ("Drying rate " + dryingRate + "% per second");
+            _wetnessValue -= dryingRate * deltaTime;
 
-            _wetnessValue -= dryingRate;
-
+            // ("Drying rate " + dryingRate * deltaTime + "% per second");
+            
             IsWet = _wetnessValue >= 1f;
 
             if (_wetnessValue <= 0f)

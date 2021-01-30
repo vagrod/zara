@@ -296,9 +296,9 @@ namespace ZaraEngine.Player
 
             if (_wetnessLevelTimeoutCounter >= WetnessLevelUpdateInterval)
             {
+                _wetnessController.Check(_wetnessLevelTimeoutCounter);
+                
                 _wetnessLevelTimeoutCounter = 0f;
-
-                _wetnessController.Check(deltaTime);
             }
 
             #endregion
