@@ -16,6 +16,8 @@ Zara is written in independent C#. Demos available for:
 - ![Flax](http://imw.su/logo-flax-.png) Flax ([more on Flax example](https://github.com/vagrod/zara/wiki/Flax-Demo-Notes))
 - ![netcore](http://imw.su/logo-net-.png) .Net Core 3.1 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
 
+There is also full-featured Zara rewritten from scratch in [Rust](https://www.rust-lang.org): it's [here](https://github.com/vagrod/zara-rust) if you're interested :)
+
 ## Download
 
 If you want to download latest Zara release without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
