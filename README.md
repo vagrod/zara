@@ -23,9 +23,7 @@ There is also full-featured Zara rewritten from scratch in [Rust](https://www.ru
 If you want to download latest Zara release without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
 It is also available in the Unity Asset format: [here](https://assetstore.unity.com/packages/templates/systems/zara-survival-engine-182386#description).
 
-If you want to use latest bleeding-edge Zara, grab this folder from the repo:\
-`/master/zara-demo-unity/Assets/Zara`\
-[What are the differences between this and latest release?](https://github.com/vagrod/zara/wiki/Release-Notes)
+The code in repo represents release `v1.06` with no changes on top.
 
 All you need to do to include Zara into your project - is to grab `Zara` folder with its `cs` sources, and you're done!
 
