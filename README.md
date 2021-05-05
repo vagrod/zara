@@ -10,20 +10,20 @@
 ## Platforms
 
 Zara is written in independent C#. Demos available for:
-- ![Unity](http://imw.su/logo-unity.png) Unity
-- ![CRYENGINE](http://imw.su/logo-cry-.png) CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
+- ![Unity](http://imw.su/logo-unity--.png) Unity
+- ![CRYENGINE](http://imw.su/logo-cry.png) CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
 - ![Godot](http://imw.su/logo-godot.png) Godot ([more on Godot example](https://github.com/vagrod/zara/wiki/Godot-Demo-Notes))
-- ![Flax](http://imw.su/logo-flax-.png) Flax ([more on Flax example](https://github.com/vagrod/zara/wiki/Flax-Demo-Notes))
-- ![netcore](http://imw.su/logo-net-.png) .Net Core 3.1 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
+- ![Flax](http://imw.su/logo-flax--.png) Flax ([more on Flax example](https://github.com/vagrod/zara/wiki/Flax-Demo-Notes))
+- ![netcore](http://imw.su/logo-net.png) .Net Core 3.1 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
+
+There is also full-featured Zara rewritten from scratch in [Rust](https://www.rust-lang.org): it's [here](https://github.com/vagrod/zara-rust) if you're interested :)
 
 ## Download
 
 If you want to download latest Zara release without any demos and optional stuff, visit [Releases](https://github.com/vagrod/zara/releases) section.\
 It is also available in the Unity Asset format: [here](https://assetstore.unity.com/packages/templates/systems/zara-survival-engine-182386#description).
 
-If you want to use latest bleeding-edge Zara, grab this folder from the repo:\
-`/master/zara-demo-unity/Assets/Zara`\
-[What are the differences between this and latest release?](https://github.com/vagrod/zara/wiki/Release-Notes)
+The code in repo represents release `v1.06` with no changes on top.
 
 All you need to do to include Zara into your project - is to grab `Zara` folder with its `cs` sources, and you're done!
 
