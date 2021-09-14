@@ -85,6 +85,8 @@ Zara is aware of the [game surroundings](https://github.com/vagrod/zara/wiki/Set
 
 ## Links and Contacts
 
+![YouTube](http://imw.su/yt--24.png) Video Tutorial (YouTube): [link to the playlist](https://youtube.com/playlist?list=PLfoHacQlYzziLtmwfMQiQkCwYztZ-FNMa)
+
 If you have any technical questions about Zara, contact me: zara-survival (at) imw (dot) su.\
 [Dedicated Unity thread](https://forum.unity.com/threads/zara-survival-engine-c.989233/)\
 [Dedicated Godot thread](https://godotforums.org/discussion/25104/zara-survival-engine-c)
