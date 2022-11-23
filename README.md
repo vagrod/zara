@@ -1,3 +1,5 @@
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
+
 ![Zara Survival Engine](http://imw.su/zaralogo_gh.png)
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/vagrod/zara/blob/master/LICENSE)
