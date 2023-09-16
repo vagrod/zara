@@ -6,20 +6,20 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[  ]
-_global_script_class_icons={
-
-}
+config_version=5
 
 [application]
 
 config/name="zara-demo-godot"
 run/main_scene="res://src/Startup.tscn"
+config/features=PackedStringArray("4.1", "C#")
 config/icon="res://icon.png"
+
+[dotnet]
+
+project/assembly_name="zara-demo-godot"
 
 [rendering]
 
+environment/defaults/default_environment="res://default_env.tres"
 quality/driver/driver_name="GLES2"
-environment/default_environment="res://default_env.tres"

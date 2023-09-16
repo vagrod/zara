@@ -1,9 +1,9 @@
-<Project Sdk="Godot.NET.Sdk/3.2.3">
+<Project Sdk="Godot.NET.Sdk/4.1.1">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net6</TargetFramework>
     <RootNamespace>zarademogodot</RootNamespace>
     <Description>ZaraEngine Godot Demo</Description>
-    <Copyright>Vadim Gromov 2021</Copyright>
+    <Copyright>Vadim Gromov 2021-2023</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\zara-demo-unity\Assets\Zara\**\*.cs">

@@ -1,6 +1,6 @@
 using ZaraEngine;
 
-public class WeatherDescription : IWeatherDescription
+public partial class WeatherDescription : IWeatherDescription
 {
     private float _rainIntensity;
     private float _temperature;

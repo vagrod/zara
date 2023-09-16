@@ -1,6 +1,6 @@
 using ZaraEngine.Player;
 
-public class PlayerStatus : IPlayerStatus
+public partial class PlayerStatus : IPlayerStatus
 {
     private bool _isStanding = true;
     private bool _isWalking;
