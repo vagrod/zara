@@ -1,6 +1,6 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
 
-![Zara Survival Engine](http://imw.su/zaralogo_gh.png)
+![Zara Survival Engine](https://github.com/user-attachments/assets/095d4961-9e67-453a-898b-117fcdd86a73)
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/vagrod/zara/blob/master/LICENSE)
 [![made-with-csharp](https://img.shields.io/badge/Made%20with-C%23%207.2-%23239120.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-7)
@@ -12,11 +12,11 @@
 ## Platforms
 
 Zara is written in independent C#. Demos available for:
-- ![Unity](http://imw.su/logo-unity--.png) Unity
-- ![CRYENGINE](http://imw.su/logo-cry.png) CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
-- ![Godot](http://imw.su/logo-godot.png) Godot ([more on Godot example](https://github.com/vagrod/zara/wiki/Godot-Demo-Notes))
-- ![Flax](http://imw.su/logo-flax--.png) Flax ([more on Flax example](https://github.com/vagrod/zara/wiki/Flax-Demo-Notes))
-- ![netcore](http://imw.su/logo-net.png) .Net 6 ([more on .Net Core example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
+- ![Unity](https://github.com/user-attachments/assets/7c0c0e81-de55-4f8a-a125-961a95dcc8d3) Unity
+- ![CRYENGINE](https://github.com/user-attachments/assets/89b55fb5-7b91-4cbf-a371-14c1e8138c2d) CRYENGINE ([more on CRYENGINE example](https://github.com/vagrod/zara/wiki/CryEngine-Demo-Notes))
+- ![Godot](https://github.com/user-attachments/assets/5e93432b-2883-4f46-ace4-9f566dc75d6f) Godot ([more on Godot example](https://github.com/vagrod/zara/wiki/Godot-Demo-Notes))
+- ![Flax](https://github.com/user-attachments/assets/ae163bec-0ebd-40e8-84f9-7d6858c0c28e) Flax ([more on Flax example](https://github.com/vagrod/zara/wiki/Flax-Demo-Notes))
+- ![.Net](https://github.com/user-attachments/assets/1b4336b5-98e7-445d-9185-2922810a0d04).Net ([more on .Net example](https://github.com/vagrod/zara/wiki/.NetCore-Demo-Notes))
 
 There is also full-featured Zara rewritten from scratch in [Rust](https://www.rust-lang.org): it's [here](https://github.com/vagrod/zara-rust) if you're interested :)
 
@@ -39,7 +39,7 @@ Saving/Loading of the engine state is fully supported: more on it [here](https:/
 ***
 Zara is a complete package with full implementation of the inventory system with crafting. Everything, including built-in inventory, will be saved and loaded on your demand, you don't have to worry about this low-level stuff, and you can dedicate more time to the actual game making.
 ***
-![Zara Demo app screen](http://imw.su/ZaraDemoScreen_06.png)
+![Zara Demo app screen](https://github.com/user-attachments/assets/ce72d689-af6c-4b99-9424-3e25a2dcefbc)
 
 See [wiki](https://github.com/vagrod/zara/wiki) for the detailed technical info.
 
@@ -87,11 +87,12 @@ Zara is aware of the [game surroundings](https://github.com/vagrod/zara/wiki/Set
 
 ## Links and Contacts
 
-![YouTube](http://imw.su/yt--24.png) Video Tutorial (YouTube): [link to the playlist](https://youtube.com/playlist?list=PLfoHacQlYzziLtmwfMQiQkCwYztZ-FNMa)
+![YouTube](https://github.com/user-attachments/assets/fe24e4c6-a691-4e99-be4e-cb27c7511e5c) Video Tutorial (YouTube): [link to the playlist](https://youtube.com/playlist?list=PLfoHacQlYzziLtmwfMQiQkCwYztZ-FNMa)
 
 If you have any technical questions about Zara, contact me: zara-survival (at) imw (dot) su.\
 [Dedicated Unity thread](https://forum.unity.com/threads/zara-survival-engine-c.989233/)\
 [Dedicated Godot thread](https://godotforums.org/discussion/25104/zara-survival-engine-c)
 
 Project is supported by [JetBrains Opensource Licensing Program](https://www.jetbrains.com/opensource/?from=ZaraSurvivalEngine)\
-![JetBrains](http://imw.su/jetbrains-variant-3.png)
+![JetBrains](https://github.com/user-attachments/assets/df607c9d-3ce5-454d-bbb7-e0855a0ca466)
+
